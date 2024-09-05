@@ -65,5 +65,5 @@
         {!! $menu !!}
       </div>
     </div>
-  </nav>
+</nav>
   

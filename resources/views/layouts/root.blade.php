@@ -62,6 +62,22 @@
   <script>
     var base_url = "{{ url('').'/' }}"
   </script>
+  <style>
+    .navbar-vertical.navbar-expand-xs
+    {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+
+        display: block;
+        overflow-y: auto;
+
+        width: 100%;
+        max-width: 81px !important;
+        padding-right: 0; 
+        padding-left: 0;
+    }
+  </style>
 </head>
 
 <body>
