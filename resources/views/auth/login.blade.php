@@ -33,6 +33,19 @@
   <link href="{{asset('argon2/assets/css/nucleo-svg.css')}}" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="{{asset('argon2/assets/css/argon-dashboard.css?v=2.0.4')}}" rel="stylesheet" />
+  <style>
+    @media (min-width: 1400px) {
+        .container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+            max-width: 1920px;
+        }
+    }
+
+    @media (max-width: 1200px) and (min-width: 992px) {
+      .hide-on-md {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
 
 <body class="">
@@ -41,7 +54,7 @@
       <div class="page-header min-vh-100">
         <div class="container">
           <div class="row">
-            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+            <div class="col-xl-3 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
               <div class="card card-plain">
                 <div class="card-header pb-0 text-start">
                   <h4 class="font-weight-bolder">Sign In</h4>
@@ -85,9 +98,9 @@
                 </div>
               </div>
             </div>
-            <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-              <div class="position-relative bg-gradient-dark h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('{{asset('argon2/assets/img/tiara.png')}}'); background-size: cover;">
-                <span class="mask bg-gradient-dark opacity-6"></span>
+            <div class="col-9 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column hide-on-md">
+              <div class="position-relative bg-gradient-dark h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('{{asset('argon2/assets/img/heroindex1.jpg')}}'); background-size: cover;">
+                {{-- <span class="mask bg-gradient-dark opacity-6"></span> --}}
                 <h4 class="mt-5 text-white font-weight-bolder position-relative">PT. Tiara Indoprima</h4>
                 <p class="text-white position-relative">PT. Tiara Indoprima is a dynamic private enterprise in the area of co-extruded thermoplastic sheets, films, and laminated decorative surfaces</p>
               </div>
