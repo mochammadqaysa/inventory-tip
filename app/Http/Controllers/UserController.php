@@ -43,7 +43,7 @@ class UserController extends Controller
         $request->validate([
             'profile' => 'mimes:jpg,jpeg,png|max:2048',
             'name' => 'required',
-            'username' => 'required',
+            'username' => 'required|unique:users,username',
             'password' => 'required',
         ]);
 
@@ -51,11 +51,6 @@ class UserController extends Controller
 
         if ($request->hasFile('profile')) {
             $file = $request->file('profile');
-
-            // Validate the new file
-            $request->validate([
-                'profile' => 'mimes:jpg,jpeg,png|max:2048',
-            ]);
 
             // Determine the new file name
             $filename = time() . '.' . $file->getClientOriginalExtension();
@@ -75,29 +70,38 @@ class UserController extends Controller
         $pass = bcrypt($data['password']);
 
         try {
-            $trx = User::create([
-                'uid' => Str::uuid()->toString(),
-                'name' => $data['name'],
-                'username' => $data['username'],
-                'password' => $pass,
-                'role_uid' => $data['role'],
-                'active' => '1',
-                'profile_picture' => $filename,
-                'created_by' => AuthCommon::getUser()->uid
-            ]);
-            if ($trx) {
-                if ($request->hasFile('profile')) {
-                    $path = $file->move(public_path('upload'), $filename);
-                }
-                return response([
-                    'status' => true,
-                    'message' => 'Berhasil Membuat User'
-                ], 200);
-            } else {
+            $isUsernameTaken = User::where('username', $data['username'])->exists();
+            if ($isUsernameTaken) {
                 return response([
                     'status' => false,
-                    'message' => 'Gagal Membuat User'
+                    'message' => 'Username sudah dipakai'
                 ], 400);
+            } else {
+                $trx = User::create([
+                    'uid' => Str::uuid()->toString(),
+                    'name' => $data['name'],
+                    'username' => $data['username'],
+                    'password' => $pass,
+                    'role_uid' => $data['role'],
+                    'active' => '1',
+                    'profile_picture' => $filename,
+                    'created_by' => AuthCommon::getUser()->uid
+                ]);
+
+                if ($trx) {
+                    if ($request->hasFile('profile')) {
+                        $path = $file->move(public_path('upload'), $filename);
+                    }
+                    return response([
+                        'status' => true,
+                        'message' => 'Berhasil Membuat User'
+                    ], 200);
+                } else {
+                    return response([
+                        'status' => false,
+                        'message' => 'Gagal Membuat User'
+                    ], 400);
+                }
             }
         } catch (\Throwable $th) {
             return response([
@@ -171,6 +175,14 @@ class UserController extends Controller
             }
             $formData['role_uid'] = $formData['role'];
             unset($formData['role']);
+
+            $isUsernameTaken = User::where(['username' => $formData['username']])->first();
+            if ($isUsernameTaken->uid != $user->uid) {
+                return response([
+                    'status' => true,
+                    'message' => 'Username sudah terpakai'
+                ], 400);
+            }
 
             $trx = $user->update($formData);
             if ($trx) {
