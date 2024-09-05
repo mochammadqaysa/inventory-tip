@@ -4,11 +4,12 @@
       <input type="text" name="name" class="form-control" placeholder="Name" value="{{ @$data->name }}">
     </div>
   
+    @if (!isset($data))
     <div class="form-group col-md-6">
       <label>Username</label>
       <input type="text" name="username" class="form-control" placeholder="Username" value="{{ @$data->username }}">
     </div>
-
+    
     <div class="col-md-6">
       <div class="form-group" id="group_pw">
         <label>Password</label>
@@ -20,14 +21,20 @@
         </div>
       </div>
     </div>
+    @else
+    <div class="form-group col-md-12">
+      <label>Username</label>
+      <input type="text" name="username" class="form-control" placeholder="Username" value="{{ @$data->username }}">
+    </div>
+    @endif
 
     
     <div class="form-group col-md-12">
       <label>Role</label>
         {{-- <input type="text" name="role" class="form-control" placeholder="User Group" value="{{ @$data->role }}"> --}}
         <select class="form-control" name="role" id="select2-role">
-            @if(isset($data->role->id))
-            <option value="{{ $data->role->id }}">{{ $data->role->role }}</option>
+            @if(isset($data->role->uid))
+            <option value="{{ $data->role->uid }}">{{ $data->role->name }}</option>
             @endif
         </select>
       </div>

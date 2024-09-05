@@ -32,9 +32,9 @@ class User extends Authenticatable
         'updated_by',
     ];
 
-    // protected $casts = [
-    //     'uid' => 'string',
-    // ];
+    protected $casts = [
+        'uid' => 'string',
+    ];
 
     public function role()
     {

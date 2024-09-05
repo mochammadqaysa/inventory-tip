@@ -1,6 +1,6 @@
 @extends('layouts.root')
 
-@section('title', 'User')
+@section('title', 'Role')
 
 @section('breadcrum')
 <div class="col-lg-6 col-7">
@@ -8,7 +8,7 @@
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
       <li class="breadcrumb-item"><a href="#"><i class="ni ni-single-02"></i></a></li>
-      <li class="breadcrumb-item active" aria-current="page">User</li>
+      <li class="breadcrumb-item active" aria-current="page">Role</li>
     </ol>
   </nav>
 </div>
@@ -28,22 +28,6 @@
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="imagePreviewModalLabel">Image Preview</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body text-center">
-        <img id="modal-image" src="" alt="Image Preview" class="img-fluid">
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 
 @section('scripts')
@@ -51,18 +35,11 @@
 {!! $dataTable->scripts() !!}
 <script>
   let _url = {
-    create: `{{ route('user.create') }}`,
-    edit: `{{ route('user.edit', ':id') }}`,
-    show: `{{ route('user.show', ':id') }}`,
-    destroy: `{{ route('user.destroy', ':id') }}`
+    create: `{{ route('role.create') }}`,
+    edit: `{{ route('role.edit', ':id') }}`,
+    show: `{{ route('role.show', ':id') }}`,
+    destroy: `{{ route('role.destroy', ':id') }}`
   }
-
-  function showImagePreview(src) {
-    // Set the source of the image in the modal
-    $('#modal-image').attr('src', src);
-    // Show the modal
-    $('#imagePreviewModal').modal('show');
-}
 
   function create(){
     Ryuna.blockUI()
@@ -132,7 +109,7 @@
           // $('[name="branch"]').val(null).trigger('change')
           // $('[name="jobposition"]').val(null).trigger('change')
         }
-        window.LaravelDataTables["users-table"].draw()
+        window.LaravelDataTables["roles-table"].draw()
       }
     }).fail((xhr) => {
       if(xhr?.status == 422){
@@ -156,7 +133,7 @@
       }
     })
   }
-
+  
   function destroy(id){
     Swal.fire({
       title: 'Apakah anda yakin?',
@@ -183,7 +160,7 @@
             type: 'success',
             confirmButtonColor: '#007bff'
           })
-        window.LaravelDataTables["kabid-table"].draw()
+        window.LaravelDataTables["roles-table"].draw()
         }).fail((xhr) => {
           Swal.fire({
             title: xhr.responseJSON.message,

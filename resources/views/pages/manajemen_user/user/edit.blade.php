@@ -1,7 +1,7 @@
-<form action="{{ route('user.update', $id) }}" method="POST" id="myForm">
+<form action="{{ route('user.update', $uid) }}" method="POST" id="myForm">
     @csrf
     @method('PUT')
-    @include('pages.user.user.form')            
+    @include('pages.manajemen_user.user.form')            
   </form>
   <div id="response_container"></div>
   <script>

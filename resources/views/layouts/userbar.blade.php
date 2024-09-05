@@ -3,8 +3,9 @@
       <div class="media align-items-center">
         <span>
           @php
-            $avatar = null;
-            $avatar = $avatar != null ? $avatar : asset('img/default-avatar.png');
+            use App\Helpers\AuthCommon;
+            $avatar = AuthCommon::user()->profile_picture;
+            $avatar = $avatar != null ? asset('upload/'.$avatar) : asset('img/default-avatar.png');
           @endphp
           <img class="avatar avatar-sm rounded-circle" style="object-fit: cover" alt="Image placeholder" src="{{ $avatar }}">
         </span>
