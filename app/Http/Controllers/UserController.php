@@ -47,10 +47,27 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        $file = $request->file('profile');
+        $filename = null;
 
-        // Menentukan nama file baru (opsional, untuk menghindari nama file yang sama)
-        $filename = time() . '.' . $file->getClientOriginalExtension();
+        if ($request->hasFile('profile')) {
+            $file = $request->file('profile');
+
+            // Validate the new file
+            $request->validate([
+                'profile' => 'mimes:jpg,jpeg,png|max:2048',
+            ]);
+
+            // Determine the new file name
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            // Delete the old profile image if it exists
+
+            // Save the new file
+            // $path = $file->move(public_path('upload'), $filename);
+
+            // Update the form data with the new file name
+            $formData['profile_picture'] = $filename;
+        }
 
 
         // Menyimpan file ke direktori 'public/upload'
@@ -69,8 +86,9 @@ class UserController extends Controller
                 'created_by' => AuthCommon::getUser()->uid
             ]);
             if ($trx) {
-
-                $path = $file->move(public_path('upload'), $filename);
+                if ($request->hasFile('profile')) {
+                    $path = $file->move(public_path('upload'), $filename);
+                }
                 return response([
                     'status' => true,
                     'message' => 'Berhasil Membuat User'
@@ -181,8 +199,30 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uid)
     {
-        //
+        try {
+            $user = User::with('role')->where('uid', $uid)->first();
+            if ($user) {
+                $delete = $user->delete();
+                if ($delete) {
+                    return response()->json([
+                        'message' => 'Berhasil Menghapus Data'
+                    ]);
+                } else {
+                    return response()->json([
+                        'message' => 'Gagal Menghapus Data'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'message' => 'Gagal Menghapus Data'
+                ]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Data Failed, this data is still used in other modules !'
+            ]);
+        }
     }
 }

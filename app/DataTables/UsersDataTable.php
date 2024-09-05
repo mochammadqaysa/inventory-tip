@@ -26,7 +26,7 @@ class UsersDataTable extends DataTable
                 $html = '';
                 $html = '<div class="btn-group btn-group-sm">';
                 $html .= '<button onclick="edit(\'' . $item->uid . '\')" type="button" class="btn btn-sm btn-info" title="Edit"><i class="fas fa-pen"></i></button>';
-                $html .= '<button onclick="destroy(' . $item->uid . ')" type="button" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash"></i></button>';
+                $html .= '<button onclick="destroy(\'' . $item->uid . '\')" type="button" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash"></i></button>';
                 $html .= '</div>';
                 return $html;
             })
