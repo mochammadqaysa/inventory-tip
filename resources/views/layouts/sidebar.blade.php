@@ -54,7 +54,7 @@
             Request::is('inventory/user') ||
             Request::is('inventory/role')
           ))
-          ->item('Manage Role', 'fas fa-users', 'inventory/role', Request::is('inventory/role'),['super_admin'])
+          ->item('Manage Role', 'fas fa-user-astronaut', 'inventory/role', Request::is('inventory/role'),['super_admin'])
           ->item('Manage User', 'ni ni-circle-08', 'inventory/user', Request::is('inventory/user'),['super_admin'])
           ->end_item_accordion()
           ->end_accordion()
