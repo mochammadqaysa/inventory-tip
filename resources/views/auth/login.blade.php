@@ -33,6 +33,12 @@
   <link href="{{asset('argon2/assets/css/nucleo-svg.css')}}" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="{{asset('argon2/assets/css/argon-dashboard.css?v=2.0.4')}}" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet">
+  <style>
+      body{
+        font-family: 'Lexend Deca', sans-serif !important;
+    }
+  </style>
   <style>
     @media (min-width: 1400px) {
         .container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
@@ -92,7 +98,7 @@
                       <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div> --}}
                     <div class="text-center">
-                      <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
+                      <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0" style="background: #0F8CFF !important">Sign in</button>
                     </div>
                   </form>
                 </div>

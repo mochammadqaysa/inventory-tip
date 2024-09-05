@@ -22,7 +22,7 @@
   <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
   <meta name="author" content="PT. Tiara Indoprima">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title') - PT. Tiara Indoprima</title>
+  <title>@yield('title') | PT. Tiara Indoprima</title>
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('argon2/assets/img/logo.png') }}" type="image/png">
   <!-- Fonts -->
