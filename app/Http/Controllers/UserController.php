@@ -41,7 +41,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'profile' => 'required|mimes:jpg,jpeg,png|max:2048',
+            'profile' => 'mimes:jpg,jpeg,png|max:2048',
             'name' => 'required',
             'username' => 'required',
             'password' => 'required',
