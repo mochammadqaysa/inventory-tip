@@ -18,13 +18,13 @@
 <div class="row">
   <div class="col-xl-12 order-xl-1">
     <div class="card">
-      <div class="card-header">
+      {{-- <div class="card-header">
         <form action="{{ route('dashboard.upload') }}" method="post" id="form-upload" enctype="multipart/form-data">
           @csrf
           <input type="file" id="" class="form-control" name="files[]" webkitdirectory directory multiple >
           <button class="btn btn-primary"  type="submit">upload</button>
         </form>
-      </div>
+      </div> --}}
       <div class="card-body">
         {{-- @include('admin.alert') --}}
         <div class="table-responsive py-2">
