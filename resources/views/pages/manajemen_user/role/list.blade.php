@@ -26,7 +26,7 @@
         </form>
       </div> --}}
       <div class="card-body">
-        {{-- @include('admin.alert') --}}
+        {{-- @include('admin.alert') --}} 
         <div class="table-responsive py-2">
           {!! $dataTable->table(['class' => 'table dt_table table-flush table-vertical-align']) !!}
           
