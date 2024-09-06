@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\TiaraAuth;
@@ -18,9 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/login');
-});
+Route::get('/', [LandingPageController::class, 'index']);
+
 
 Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
@@ -30,6 +30,7 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::resources(['user' => UserController::class]);
     Route::resources(['role' => RoleController::class]);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.inventory');
+    Route::post('/upload', [DashboardController::class, 'upload'])->name('dashboard.upload');
 
     Route::prefix('select2')->group(function () {
         Route::get('/role', [RoleController::class, 'select2'])->name('select2.role');
