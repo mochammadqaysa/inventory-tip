@@ -156,9 +156,9 @@
     <div class="gallery-item  design  interior">
         <div class="grid-item-holder">
             <div class="box-item">
-                <img  src="{{asset('balkonimages/folio/gallery/gallery11.jpg')}}"   alt="">
+                <img  src="{{asset('balkon/images/folio/gallery/gallery11.jpg')}}"   alt="">
                 <div class="overlay"></div>
-                <a href="{{asset('balkonimages/folio/gallery/gallery11.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
+                <a href="{{asset('balkon/images/folio/gallery/gallery11.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
             <div class="grid-item">
                 <h3><a href="#">Perez Art Museum</a></h3>
