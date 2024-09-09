@@ -150,6 +150,7 @@
                 updateProgress(100);  // Set to 100% on success
                 $.unblockUI()
                 // setTimeout(, 1000);  // Hide the overlay after a short delay
+                $('#form-upload').trigger("reset");
                 Swal.fire({
                   title: "Berhasil Upload Folder",
                   text: '',
@@ -158,7 +159,8 @@
                 })
             },
             error: function(e) {
-              console.log(e)
+              // console.log(e)
+                $('#form-upload').trigger("reset");
                 $.unblockUI();  // Hide the overlay on error
                 Swal.fire({
                   title: "Gagal Upload Folder",
