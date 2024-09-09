@@ -149,7 +149,7 @@
             success: function(response) {
                 updateProgress(100);  // Set to 100% on success
                 $('#form-upload').trigger("reset");
-                $('#understand').removeProp("checked");
+                $('#understand').prop('checked', false);
                 $.unblockUI()
                 // setTimeout(, 1000);  // Hide the overlay after a short delay
                 Swal.fire({
@@ -162,7 +162,7 @@
             error: function(e) {
               // console.log(e)
                 $('#form-upload').trigger("reset");
-                $('#understand').removeProp("checked");
+                $('#understand').prop('checked', false);
                 $.unblockUI();  // Hide the overlay on error
                 Swal.fire({
                   title: "Gagal Upload Folder",
