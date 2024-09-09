@@ -4,7 +4,7 @@
     <!-- logo end -->  
     <!-- share button-->  
     <div class="show-share-wrap">
-        <a href=""><div class="show-share"><span>Login</span><img src="{{asset('balkon/images/login.png')}}" alt=""></div></a>
+        <a href="{{route('auth.login')}}"><div class="show-share"><span>Login</span><img src="{{asset('balkon/images/login.png')}}" alt=""></div></a>
     </div>
     <!-- share button end-->  		
     <!-- search button--> 	 

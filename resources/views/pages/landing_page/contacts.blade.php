@@ -62,44 +62,46 @@
 
 @section('script')
 
-<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFdSZ3yH3xMyoQhIWgVjnsSd7LaujEHbw"></script>
+<script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFdSZ3yH3xMyoQhIWgVjnsSd7LaujEHbw&callback=initMap"></script>
 <script>
-  $(()=>{
-    $('#map-canvas').gmap3({
-      map: {
-        options: {
-          center: {lat: -6.988728110380635, lng: 107.55494668743424},
-          zoom: 19,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-      },
-      marker: {
-        values: [
-          {latLng: [-6.988728110380635, 107.55494668743424], data: 'Bandung Office'}
-        ],
-        options: {
-          icon: '{{asset("balkon/images/pointmap.svg")}}'
+  function initMap() {
+    $(() => {
+      $('#map-canvas').gmap3({
+        map: {
+          options: {
+            center: {lat: -6.988728110380635, lng: 107.55494668743424},
+            zoom: 19,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          }
         },
-        events: {
-          mouseover: function(marker, event, context){
-            var map = $(this).gmap3("get");
-            var infowindow = $(this).gmap3({get: {name: "infowindow"}});
-            if (infowindow) {
-              infowindow.open(map, marker);
-              infowindow.setContent(context.data);
-            } else {
-              $(this).gmap3({
-                infowindow: {
-                  anchor: marker, 
-                  options: {content: context.data}
-                }
-              });
+        marker: {
+          values: [
+            {latLng: [-6.988728110380635, 107.55494668743424], data: 'Bandung Office'}
+          ],
+          options: {
+            icon: '{{asset("balkon/images/pointmap.svg")}}'
+          },
+          events: {
+            mouseover: function(marker, event, context) {
+              var map = $(this).gmap3("get");
+              var infowindow = $(this).gmap3({get: {name: "infowindow"}});
+              if (infowindow) {
+                infowindow.open(map, marker);
+                infowindow.setContent(context.data);
+              } else {
+                $(this).gmap3({
+                  infowindow: {
+                    anchor: marker, 
+                    options: {content: context.data}
+                  }
+                });
+              }
             }
           }
         }
-      }
+      });
     });
-  })
+  }
 
 </script>
 
