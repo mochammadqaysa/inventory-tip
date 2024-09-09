@@ -21,7 +21,8 @@ class BackupDataController extends Controller
             $uid = $request['uid'];
             $user = User::find($uid);
             $ipAddress = gethostbyname(gethostname());
-            $baseDir = 'C:/Users/kayz/Documents/backup/' . $user->role->name . '/' . $ipAddress . '/';
+            // $baseDir = 'C:/Users/kayz/Documents/backup/' . $user->role->name . '/' . $ipAddress . '/';
+            $baseDir = '/home/server/backup/' . $user->role->name . '/' . $ipAddress . '/';
 
 
             // Check if the base directory exists, if not, create it
