@@ -2715,6 +2715,8 @@ section.parallax-section  .pr-title:after {
 	text-align:left;
 	color:#292929;
 	padding:15px 0;
+	font-weight: bold;
+	font-size : large;
 }
 .parallax-header {
 	padding-bottom:25px;

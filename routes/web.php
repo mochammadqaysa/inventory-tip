@@ -20,7 +20,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [LandingPageController::class, 'index']);
+Route::get('/', [LandingPageController::class, 'index'])->name('landing.index');
+Route::get('/services', [LandingPageController::class, 'services'])->name('landing.services');
+Route::get('/portofolio', [LandingPageController::class, 'portofolio'])->name('landing.portofolio');
+Route::get('/about', [LandingPageController::class, 'about'])->name('landing.about');
+Route::get('/contacts', [LandingPageController::class, 'contacts'])->name('landing.contacts');
 
 
 Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
