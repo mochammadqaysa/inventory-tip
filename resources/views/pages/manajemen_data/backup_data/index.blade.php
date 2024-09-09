@@ -62,7 +62,7 @@
             </div>
             <div class="col-md-5 mt-3 mb-2 py-auto d-flex align-items-center">
                 <label class="custom-toggle mb-0">
-                    <input type="checkbox" onchange="change_status(this)">
+                    <input type="checkbox" id="understand" onchange="change_status(this)">
                     <span class="custom-toggle-slider rounded-circle" data-label-off="" data-label-on=""></span>
                 </label>
                 <span class="ml-2">Saya mengerti dengan ketentuan diatas</span>
@@ -148,9 +148,10 @@
             },
             success: function(response) {
                 updateProgress(100);  // Set to 100% on success
+                $('#form-upload').trigger("reset");
+                $('#understand').removeProp("checked");
                 $.unblockUI()
                 // setTimeout(, 1000);  // Hide the overlay after a short delay
-                $('#form-upload').trigger("reset");
                 Swal.fire({
                   title: "Berhasil Upload Folder",
                   text: '',
@@ -161,6 +162,7 @@
             error: function(e) {
               // console.log(e)
                 $('#form-upload').trigger("reset");
+                $('#understand').removeProp("checked");
                 $.unblockUI();  // Hide the overlay on error
                 Swal.fire({
                   title: "Gagal Upload Folder",
