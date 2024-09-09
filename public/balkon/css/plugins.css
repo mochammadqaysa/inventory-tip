@@ -251,7 +251,7 @@ source {
   color: #FFF;
 }
 .lg-toolbar .lg-close:after {
-  content: "\e070";
+  content: "\2716";
 }
 .lg-toolbar .lg-download:after {
   content: "\e0f2";
@@ -580,7 +580,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 #lg-zoom-in:after {
-  content: "\e311";
+  content: "\1F50D";
 }
 
 #lg-zoom-out {
@@ -588,7 +588,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   pointer-events: none;
 }
 #lg-zoom-out:after {
-  content: "\e312";
+  content: "\1F50E";
 }
 .lg-zoomed #lg-zoom-out {
   opacity: 1;
