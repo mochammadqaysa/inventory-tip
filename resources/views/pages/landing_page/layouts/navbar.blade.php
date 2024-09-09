@@ -23,13 +23,13 @@
                     <a href="/" class="{{ (Request::is('/') ? 'act-link' : '') }}">Home </a>
                 </li>
                 <li>
-                    <a href="portfolio.html" class="{{ (Request::is('/services') ? 'act-link' : '') }}">Services</a>
+                    <a href="{{route('landing.services')}}" class="{{ (Request::is('services') ? 'act-link' : '') }}">Services</a>
                 </li>
                 <li>
-                    <a href="portfolio.html" class="{{ (Request::is('/portofolio') ? 'act-link' : '') }}">Portfolio</a>
+                    <a href="{{route('landing.portofolio')}}" class="{{ (Request::is('portofolio') ? 'act-link' : '') }}">Portfolio</a>
                 </li>
                 <li>
-                    <a href="about.html" class="{{ (Request::is('/about') ? 'act-link' : '') }}">About</a>
+                    <a href="{{route('landing.about')}}" class="{{ (Request::is('about') ? 'act-link' : '') }}">About</a>
                 </li>
                 <li>
                     <a href="{{route('landing.contacts')}}" class=" {{ (Request::is('contacts') ? 'act-link' : '') }}">Contacts </a>

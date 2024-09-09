@@ -13,7 +13,7 @@ class LandingPageController extends Controller
 
     public function services()
     {
-        return view('pages.landing_page.index');
+        return view('pages.landing_page.services');
     }
 
     public function portofolio()
@@ -23,7 +23,7 @@ class LandingPageController extends Controller
 
     public function about()
     {
-        return view('pages.landing_page.index');
+        return view('pages.landing_page.about');
     }
 
     public function contacts()

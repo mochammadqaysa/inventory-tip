@@ -25,7 +25,6 @@
                             <div class="clearfix"></div>
                             <p>Imagination, Innovation, Collaboration</p>
                             <div class="clearfix"></div>
-                            {{-- <a href="portfolio.html" class="btn float-btn flat-btn">Our portfolio</a> --}}
                         </div>
                     </div>
                 </div>
@@ -46,7 +45,7 @@
                             <div class="clearfix"></div>
                             <p>Architects, contractors, cabinet makers (joinery), and homeowners are constantly seeking for new materials to give interior an added touch of glamorous with elegant look and feel.</p>
                             <div class="clearfix"></div>
-                            <a href="portfolio-single.html" class="btn float-btn flat-btn">View Project</a>
+                            <a href="{{route('landing.portofolio')}}" class="btn float-btn flat-btn">View Portofolio</a>
                         </div>
                     </div>
                 </div>
@@ -67,7 +66,7 @@
                             <div class="clearfix"></div>
                             <p>In-mold decoration is a manufacturing process used to apply decorative elements or finishes directly onto a product's surface during its molding process. This technique is commonly used in industries like automotive, consumer electronics, and packaging.</p>
                             <div class="clearfix"></div>
-                            <a href="portfolio-single.html" class="btn float-btn flat-btn">View Project</a>
+                            <a href="{{route('landing.portofolio')}}" class="btn float-btn flat-btn">View Portofolio</a>
                         </div>
                     </div>
                 </div>
@@ -88,7 +87,7 @@
                             <div class="clearfix"></div>
                             <p>We approach product development as a collaborative journey with our clients, customizing our high gloss solution to suit the needs of different industries & application</p>
                             <div class="clearfix"></div>
-                            <a href="services.html" class="btn float-btn flat-btn">Our Services</a>
+                            <a href="{{route('landing.services')}}" class="btn float-btn flat-btn">Our Services</a>
                         </div>
                     </div>
                 </div>
@@ -111,7 +110,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <div class="content-wrap about-wrap">
-                        <h3 class="bold-title"> We are Tiara Indo Prima .  <br>   Plastic Extrusion Manufacturing <br> From Bandung</h3>
+                        <h3 class="bold-title"> We are Tiara Indoprima .  <br>   Plastic Extrusion Manufacturing <br> From Bandung</h3>
                         <p>PT. Tiara Indoprima is a dynamic private enterprise in the area of co-extruded thermoplastic sheets, films, and laminated decorative surfaces. Our semi-finished products stand for high quality, UV stability, heat and chemical resistance, and environment friendly. We have sourced the best raw materials in the market and are using latest technologies supplied by world’s leading manufacturers, to ensure our product quality exceeds your expectations. Our products has been sold worldwide and we are confident to see growth in the future.
                         </p>
                         <br><br>
@@ -127,7 +126,7 @@
                         </div>
                         <span class="bold-separator"></span>
                         <div class="clearfix"></div>
-                        <a href="portfolio.html" class="btn float-btn flat-btn">Our portfolio</a>
+                        <a href="{{route('landing.portofolio')}}" class="btn float-btn flat-btn">Our portfolio</a>
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -150,8 +149,8 @@
     <div class="container">
         <div class="intro-text fl-wrap">
             <h2>Entrust your project <br>to our team of  <br>professionals</h2>
-            <a href="services.html" class="btn float-btn flat-btn">Our Services</a>
-            <a href="contact.html" class="btn float-btn flat-btn">Get in Touch</a>
+            <a href="{{route('landing.services')}}" class="btn float-btn flat-btn">Our Services</a>
+            <a href="{{route('landing.contacts')}}" class="btn float-btn flat-btn">Get in Touch</a>
         </div>
     </div>
 </section>
@@ -180,9 +179,9 @@
                     </div>
                     <img  src="{{asset('balkon/images/folio/advertise1.jpg')}}"   alt="">
                     <div class="parallax-text left-pos" data-scrollax="properties: { translateY: '-250px' }">
-                        <h3><a href="portfolio-single.html">Advertising</a></h3>
+                        <h3><a href="">Advertising</a></h3>
                         <h4>When advertising has become a necessity in marketing your business, we offer a range of products suitable for indoor signage, display, showcase, and other interior goods.</h4>
-                        <a href="portfolio-single.html" class="btn float-btn flat-btn">View project</a>
+                        <a href="" class="btn float-btn flat-btn">View project</a>
                     </div>
                 </div>
             </div>
@@ -195,15 +194,15 @@
                     <div class="parallax-header fl-wrap">
                         <span>02.</span>
                         <ul>
-                            <li><a href="#">Design</a></li>
-                            <li><a href="#">Architecture </a></li>
+                            <li><a href="#">Furniture</a></li>
+                            <li><a href="#">Interior </a></li>
                         </ul>
                     </div>
                     <img  src="{{asset('balkon/images/folio/kitchen6.jpg')}}"   alt="">
                     <div class="parallax-text right-pos" data-scrollax="properties: { translateY: '-250px' }">
-                        <h3><a href="portfolio-single.html">Furniture & Interior Products</a></h3>
+                        <h3><a href="">Furniture & Interior Products</a></h3>
                         <h4>Architects, contractors, cabinet makers (joinery), and homeowners are constantly seeking for new materials to give interior an added touch of glamorous with elegant look and feel.</h4>
-                        <a href="portfolio-single.html" class="btn float-btn flat-btn">View project</a>
+                        <a href="" class="btn float-btn flat-btn">View project</a>
                     </div>
                 </div>
             </div>
@@ -217,15 +216,14 @@
                     <div class="parallax-header fl-wrap">
                         <span>03.</span>
                         <ul>
-                            <li><a href="#">Design</a></li>
-                            <li><a href="#">Architecture </a></li>
+                            <li><a href="#">In-Mold Decoration</a></li>
                         </ul>
                     </div>
                     <img  src="{{asset('balkon/images/folio/inmold1.jpg')}}"   alt="">
                     <div class="parallax-text left-pos" data-scrollax="properties: { translateY: '-250px' }">
-                        <h3><a href="portfolio-single.html">In-Mold Decoration</a></h3>
+                        <h3><a href="">In-Mold Decoration</a></h3>
                         <h4>For In-Mold Decoration substrate, low-gel ABS sheet is required with thickness ranging 300 – 500 microns. Just to name a few, its usage is for laptop and mobile phone covers</h4>
-                        <a href="portfolio-single.html" class="btn float-btn flat-btn">View project</a>
+                        <a href="" class="btn float-btn flat-btn">View project</a>
                     </div>
                 </div>
             </div>
@@ -238,15 +236,15 @@
                     <div class="parallax-header fl-wrap">
                         <span>04.</span>
                         <ul>
-                            <li><a href="#">Design</a></li>
-                            <li><a href="#">Architecture </a></li>
+                            <li><a href="#">Automotive</a></li>
+                            <li><a href="#">Transport </a></li>
                         </ul>
                     </div>
                     <img  src="{{asset('balkon/images/folio/carinterior3.jpg')}}"   alt="">
                     <div class="parallax-text right-pos" data-scrollax="properties: { translateY: '-250px' }">
-                        <h3><a href="portfolio-single.html">Automotive & Transport</a></h3>
+                        <h3><a href="">Automotive & Transport</a></h3>
                         <h4>With lots of research and development, we have reinvented co-extruded sheet specifically developed for automotive and transportation industry in areas of interior and exterior parts.</h4>
-                        <a href="portfolio-single.html" class="btn float-btn flat-btn">View project</a>
+                        <a href="" class="btn float-btn flat-btn">View project</a>
                     </div>
                 </div>
             </div>
