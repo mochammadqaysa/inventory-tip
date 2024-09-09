@@ -10,6 +10,7 @@ class BackupDataController extends Controller
     public function index()
     {
         phpinfo();
+        die;
         return view('pages.manajemen_data.backup_data.index');
     }
 
