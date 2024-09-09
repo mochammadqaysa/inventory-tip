@@ -58,7 +58,8 @@ return [
 
         'outside_documents' => [
             'driver' => 'local',
-            'root' => 'C:/Users/kayz/Documents/backup',
+            // 'root' => 'C:/Users/kayz/Documents/backup', // local
+            'root' => '/home/server/backup'
         ],
 
     ],

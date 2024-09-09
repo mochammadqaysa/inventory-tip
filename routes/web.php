@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BackupDataController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\RoleController;
@@ -30,7 +31,8 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::resources(['user' => UserController::class]);
     Route::resources(['role' => RoleController::class]);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.inventory');
-    Route::post('/upload', [DashboardController::class, 'upload'])->name('dashboard.upload');
+    Route::get('/backup_data', [BackupDataController::class, 'index'])->name('backup_data.index');
+    Route::post('/upload', [BackupDataController::class, 'upload'])->name('dashboard.upload');
 
     Route::prefix('select2')->group(function () {
         Route::get('/role', [RoleController::class, 'select2'])->name('select2.role');

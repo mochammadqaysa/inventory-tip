@@ -63,6 +63,59 @@ class Ryuna {
         });
     }
 
+    static progressLoading(percent = 0) {
+        $.blockUI({
+            message: `<div class="progress-wrapper">
+                <div class="progress-info">
+                  <div class="progress-percentage">
+                    <span>Proses Upload: ${percent}%</span>
+                  </div>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100" style="width: 23%;"></div>
+                </div>
+                <button id="cancelBtn" style="display:none; margin-top: 10px;" class="btn btn-danger">Cancel</button>
+              </div>`,
+            baseZ: 10000,
+            overlayCSS: {
+                backgroundColor: "rgba(0, 0, 0, 0.17)",
+                opacity: 1,
+                cursor: "wait",
+                "backdrop-filter": "blur(2px)",
+            },
+            css: {
+                "z-index": 10020,
+                padding: "10px 20px",
+                margin: "0px",
+                width: "50%",
+                top: "40%",
+                left: "25%",
+                "text-align": "center",
+                color: "rgba(82, 95, 127, 1)",
+                border: "0px",
+                "background-color": "rgb(255, 255, 255)",
+                cursor: "wait",
+                "border-radius": "10px",
+                "font-size": "16px",
+                "min-width": "95px",
+            },
+        });
+
+        // Show cancel button after 5 seconds
+        timeoutID = setTimeout(function () {
+            $("#cancelBtn").show();
+        }, 5000);
+
+        // Add event listener for cancel button
+        $("#cancelBtn").click(function () {
+            if (xhr) {
+                xhr.abort(); // Cancel the upload
+                $.unblockUI(); // Hide the overlay
+                alert("Upload canceled!");
+            }
+        });
+    }
+
     static blockElement(element, message) {
         $(element).block({
             message:

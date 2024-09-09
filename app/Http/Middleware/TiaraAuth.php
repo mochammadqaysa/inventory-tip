@@ -18,7 +18,7 @@ class TiaraAuth
     {
         $auth = AuthCommon::user();
         if (!isset($auth->username)) {
-            return redirect('/');
+            return redirect('/login');
         }
         return $next($request);
     }

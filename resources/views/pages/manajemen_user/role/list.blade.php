@@ -18,13 +18,6 @@
 <div class="row">
   <div class="col-xl-12 order-xl-1">
     <div class="card">
-      {{-- <div class="card-header">
-        <form action="{{ route('dashboard.upload') }}" method="post" id="form-upload" enctype="multipart/form-data">
-          @csrf
-          <input type="file" id="" class="form-control" name="files[]" webkitdirectory directory multiple >
-          <button class="btn btn-primary"  type="submit">upload</button>
-        </form>
-      </div> --}}
       <div class="card-body">
         {{-- @include('admin.alert') --}} 
         <div class="table-responsive py-2">
@@ -87,75 +80,6 @@
       })
     })
   }
-
-  function upload() {
-    Ryuna.blockElement('.modal-content');
-    let el_form = $('#form-upload')
-    let target = el_form.attr('action')
-    
-    // Create a new FormData object
-    let formData = new FormData();
-    
-    // Get all file inputs (ensure your HTML has input type="file" with webkitdirectory attribute)
-    let fileInput = el_form.find('input[type="file"]')[0];
-    
-    // Loop through all files and add them to formData
-    for (let i = 0; i < fileInput.files.length; i++) {
-        let file = fileInput.files[i];
-        // Append each file with its relative path
-        formData.append('files[]', file, file.webkitRelativePath);
-    }
-    
-    // You can append other form data if needed
-    el_form.find(':input').each(function() {
-        let input = $(this);
-        if (input.attr('type') !== 'file') {
-            formData.append(input.attr('name'), input.val());
-        }
-    });
-  
-    $.ajax({
-      url: target,
-      data: formData,
-      processData: false,
-      contentType: false,
-      type: 'POST',
-    }).done((res) => {
-      if (res?.status == true) {
-        let html = '<div class="alert alert-success alert-dismissible fade show">';
-        html += `${res?.message}`;
-        html += '</div>';
-        Ryuna.noty('success', '', res?.message);
-        $('#response_container').html(html);
-        Ryuna.unblockElement('.modal-content');
-  
-        if ($('[name="_method"]').val() == undefined) {
-          el_form[0].reset();
-        }
-      }
-    }).fail((xhr) => {
-      if (xhr?.status == 422) {
-        let errors = xhr.responseJSON.errors;
-        let html = '<div class="alert alert-danger alert-dismissible fade show">';
-        html += '<ul>';
-        for (let key in errors) {
-          html += `<li>${errors[key]}</li>`;
-        }
-        html += '</ul>';
-        html += '</div>';
-        $('#response_container').html(html);
-        Ryuna.unblockElement('.modal-content');
-      } else {
-        let html = '<div class="alert alert-danger alert-dismissible fade show">';
-        html += `${xhr?.responseJSON?.message}`;
-        html += '</div>';
-        Ryuna.noty('error', '', xhr?.responseJSON?.message);
-        $('#response_container').html(html);
-        Ryuna.unblockElement('.modal-content');
-      }
-    });
-}
-
 
   function save(){
     $('#response_container').empty();

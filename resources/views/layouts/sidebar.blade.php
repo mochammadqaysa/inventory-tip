@@ -49,6 +49,17 @@
 
           $obj_menu->start_group()
           ->start_accordion()
+          ->sub_item_accordion('Data Management','data-management',['super_admin','exim'],'fas fa-server')
+          ->start_item_accordion('data-management', (
+            Request::is('inventory/backup_data')
+          ))
+          ->item('Backup Data', 'fas fa-digital-tachograph', 'inventory/backup_data', Request::is('inventory/backup_data'),['super_admin','exim'])
+          ->end_item_accordion()
+          ->end_accordion()
+          ->end_group();
+
+          $obj_menu->start_group()
+          ->start_accordion()
           ->sub_item_accordion('Manajemen User','user-management',['super_admin'], 'ni ni-badge')
           ->start_item_accordion('user-management', (
             Request::is('inventory/user') ||
