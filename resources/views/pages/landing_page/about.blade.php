@@ -59,18 +59,6 @@
                           <p>With a strong global presence and a reputation for reliability, PT. Tiara Indoprima is well-positioned for future growth. We value our partnerships and strive to build long-lasting relationships with our clients by delivering superior products and outstanding customer service. As we continue to expand our market reach, we remain focused on innovation and quality, ensuring that we stay at the forefront of the industry and continue to meet the evolving needs of our customers worldwide.
                           </p>
                           <br><br>
-                          <h3 class="bold-title">What we do</h3>
-                          <div class="pr-tags fl-wrap">
-                              <span>Services : </span>
-                              <ul>
-                                  <li><a href="#">Architecture</a></li>
-                                  <li><a href="#">Design</a></li>
-                                  <li><a href="#">Photography</a></li>
-                              </ul>
-                          </div>
-                          <span class="bold-separator"></span>
-                          <div class="clearfix"></div>
-                          <a href="portfolio.html" class="btn float-btn flat-btn">Our portfolio</a>
                       </div>
                   </div>
               </div>
