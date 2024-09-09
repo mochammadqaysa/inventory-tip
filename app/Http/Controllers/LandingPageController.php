@@ -18,7 +18,7 @@ class LandingPageController extends Controller
 
     public function portofolio()
     {
-        return view('pages.landing_page.index');
+        return view('pages.landing_page.portofolio');
     }
 
     public function about()
