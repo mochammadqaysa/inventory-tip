@@ -41,11 +41,6 @@
     destroy: `{{ route('barang.destroy', ':id') }}`
   }
 
-  $(() => {
-    setTimeout(() => {
-      $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-    }, 500);
-  })
 
   function create(){
     Ryuna.blockUI()
