@@ -19,10 +19,10 @@
   <div class="col-xl-12 order-xl-1">
     <div class="card">
       <div class="card-body">
-        {{-- @include('admin.alert') --}} 
+        {{-- @include('admin.alert') --}}
         <div class="table-responsive py-2">
           {!! $dataTable->table(['class' => 'table dt_table table-flush table-vertical-align']) !!}
-          
+
         </div>
       </div>
     </div>
@@ -40,6 +40,8 @@
     show: `{{ route('barang.show', ':id') }}`,
     destroy: `{{ route('barang.destroy', ':id') }}`
   }
+
+  $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 
   function create(){
     Ryuna.blockUI()
