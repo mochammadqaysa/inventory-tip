@@ -39,16 +39,22 @@
           ->sub_item_accordion('Master Data','master',['super_admin','exim'],'fas fa-database')
           ->start_item_accordion('master', (
             Request::is('inventory/bahan') ||
-            Request::is('inventory/barang')
+            Request::is('inventory/barang') ||
+            Request::is('inventory/jenis-waste') ||
+            Request::is('inventory/waste') ||
+            Request::is('inventory/supplier') ||
+            Request::is('inventory/customer') ||
+            Request::is('inventory/gudang') ||
+            Request::is('inventory/bagian') 
           ))
           ->item('Bahan Baku', 'fas fa-cube', 'inventory/bahan', Request::is('inventory/bahan'),['super_admin','exim'])
           ->item('Barang Jadi', 'fas fa-box-open', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
-          ->item('Jenis Waste', 'fas fa-biohazard', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
-          ->item('Waste', 'fas fa-dumpster', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
-          ->item('Supplier', 'fas fa-parachute-box', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
-          ->item('Customer', 'fas fa-address-card', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
-          ->item('Gudang', 'fas fa-warehouse', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
-          ->item('Bagian', 'fas fa-people-carry', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Jenis Waste', 'fas fa-biohazard', 'inventory/jenis-waste', Request::is('inventory/jenis-waste'),['super_admin','exim'])
+          ->item('Waste', 'fas fa-dumpster', 'inventory/waste', Request::is('inventory/waste'),['super_admin','exim'])
+          ->item('Supplier', 'fas fa-parachute-box', 'inventory/supplier', Request::is('inventory/supplier'),['super_admin','exim'])
+          ->item('Customer', 'fas fa-address-card', 'inventory/customer', Request::is('inventory/customer'),['super_admin','exim'])
+          ->item('Gudang', 'fas fa-warehouse', 'inventory/gudang', Request::is('inventory/gudang'),['super_admin','exim'])
+          ->item('Bagian', 'fas fa-people-carry', 'inventory/bagian', Request::is('inventory/bagian'),['super_admin','exim'])
           ->end_item_accordion()
           ->end_accordion()
           ->end_group();
@@ -57,9 +63,9 @@
           ->start_accordion()
           ->sub_item_accordion('Manajemen Data','data-management',['super_admin','exim'],'fas fa-server')
           ->start_item_accordion('data-management', (
-            Request::is('inventory/backup_data')
+            Request::is('inventory/backup-data')
           ))
-          ->item('Backup Data', 'fas fa-digital-tachograph', 'inventory/backup_data', Request::is('inventory/backup_data'),['super_admin','exim'])
+          ->item('Backup Data', 'fas fa-digital-tachograph', 'inventory/backup-data', Request::is('inventory/backup-data'),['super_admin','exim'])
           ->end_item_accordion()
           ->end_accordion()
           ->end_group();
@@ -73,6 +79,18 @@
           ))
           ->item('Manage Role', 'fas fa-user-astronaut', 'inventory/role', Request::is('inventory/role'),['super_admin'])
           ->item('Manage User', 'ni ni-circle-08', 'inventory/user', Request::is('inventory/user'),['super_admin'])
+          ->end_item_accordion()
+          ->end_accordion()
+          ->end_group();
+
+          $obj_menu->start_group()
+          ->start_accordion()
+          ->sub_item_accordion('Settings','settings',['super_admin'], 'fas fa-cogs')
+          ->start_item_accordion('settings', (
+            Request::is('inventory/profile') 
+          ))
+          ->item('Profile', 'fas fa-id-badge', 'inventory/profile', Request::is('inventory/profile'),['super_admin'])
+          // ->item('Change Password', 'fas fa-key', 'inventory/user', Request::is('inventory/user'),['super_admin'])
           ->end_item_accordion()
           ->end_accordion()
           ->end_group();

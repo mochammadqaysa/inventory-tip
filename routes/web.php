@@ -2,10 +2,18 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackupDataController;
+use App\Http\Controllers\BagianController;
+use App\Http\Controllers\BahanController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GudangController;
+use App\Http\Controllers\JenisWasteController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WasteController;
 use App\Http\Middleware\TiaraAuth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,9 +42,19 @@ Route::post('/login_process', [AuthController::class, 'login_process'])->name('a
 Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::resources(['user' => UserController::class]);
     Route::resources(['role' => RoleController::class]);
+    Route::resources(['bahan' => BahanController::class]);
+    Route::resources(['barang' => BarangController::class]);
+    Route::resources(['jenis-waste' => JenisWasteController::class]);
+    Route::resources(['waste' => WasteController::class]);
+    Route::resources(['supplier' => SupplierController::class]);
+    Route::resources(['customer' => CustomerController::class]);
+    Route::resources(['gudang' => GudangController::class]);
+    Route::resources(['bagian' => BagianController::class]);
+
+    Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.inventory');
-    Route::get('/backup_data', [BackupDataController::class, 'index'])->name('backup_data.index');
-    Route::post('/upload', [BackupDataController::class, 'upload'])->name('dashboard.upload');
+    Route::get('/backup-data', [BackupDataController::class, 'index'])->name('backup-data.index');
+    Route::post('/upload', [BackupDataController::class, 'upload'])->name('backup-data.upload');
 
     Route::prefix('select2')->group(function () {
         Route::get('/role', [RoleController::class, 'select2'])->name('select2.role');

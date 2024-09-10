@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\User;
+use App\Models\Waste;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,12 +12,13 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UsersDataTable extends DataTable
+class WasteDataTable extends DataTable
 {
     /**
-     * Build the DataTable class.
+     * Build DataTable class.
      *
      * @param QueryBuilder $query Results from query() method.
+     * @return \Yajra\DataTables\EloquentDataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
@@ -30,44 +31,30 @@ class UsersDataTable extends DataTable
                 $html .= '</div>';
                 return $html;
             })
-            ->addColumn('profile', function ($data) {
-                $image = $data->profile_picture == '' ? asset('img/default-avatar.png') : asset('upload/' . $data->profile_picture);
-                return '<img class="avatar rounded-circle" src="' . $image . '" id="preview-image" style="cursor: pointer;" onclick="showImagePreview(this.src)">';
-            })
-            ->addColumn('role', function ($data) {
-                $role = "";
-                if (isset($data->role)) {
-                    $role = $data->role->name;
-                }
-                return '<span class="badge badge-primary">' . $role . '</span>';
-            })
-            ->filterColumn('role', function ($query, $keyword) {
-                // Assuming you have a relationship between the user and role (e.g., user->role->name)
-                $query->whereHas('role', function ($q) use ($keyword) {
-                    $q->where('name', 'like', "%{$keyword}%");
-                });
-            })
-            ->rawColumns(['role', 'action', 'profile']);
-        // ->setRowId('uid');
+            ->rawColumns(['action']);
     }
 
     /**
-     * Get the query source of dataTable.
+     * Get query source of dataTable.
+     *
+     * @param \App\Models\Waste $model
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(User $model): QueryBuilder
+    public function query(Waste $model): QueryBuilder
     {
         return $model->newQuery();
     }
 
     /**
-     * Optional method if you want to use the html builder.
+     * Optional method if you want to use html builder.
+     *
+     * @return \Yajra\DataTables\Html\Builder
      */
     public function html(): HtmlBuilder
     {
         $button = [];
-        $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
-        $button[] = Button::raw('<i class="fa fa-plus"></i> Create User')->action('function() { create() }');
-
+        // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
+        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Waste')->action('function() { create() }');
         return $this->builder()
             ->parameters([
                 'language' => [
@@ -75,12 +62,11 @@ class UsersDataTable extends DataTable
                     'infoFiltered' => ''
                 ],
             ])
-
-            ->setTableId('users-table')
+            ->setTableId('waste-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom("<'row'<'col-sm-6'B><'col-sm-3'f><'col-sm-3'l>> <'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>")
-            ->orderBy(2)
+            ->orderBy(1)
             ->scrollY(350)
             // ->selectStyleSingle()
             ->buttons($button);
@@ -88,6 +74,8 @@ class UsersDataTable extends DataTable
 
     /**
      * Get the dataTable columns definition.
+     *
+     * @return array
      */
     public function getColumns(): array
     {
@@ -97,22 +85,18 @@ class UsersDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
-            Column::computed('profile')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
-            Column::make('name'),
-            Column::make('username'),
-            Column::make('role'),
+            Column::make('kode'),
+            Column::make('nama')->title("Nama Waste"),
         ];
     }
 
     /**
-     * Get the filename for export.
+     * Get filename for export.
+     *
+     * @return string
      */
     protected function filename(): string
     {
-        return 'Users_' . date('YmdHis');
+        return 'Waste_' . date('YmdHis');
     }
 }

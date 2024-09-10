@@ -18,13 +18,6 @@
 <div class="row">
   <div class="col-xl-12 order-xl-1">
     <div class="card">
-      {{-- <div class="card-header">
-        <form action="{{ route('dashboard.upload') }}" method="post" id="form-upload" enctype="multipart/form-data">
-          @csrf
-          <input type="file" id="" class="form-control" name="files[]" webkitdirectory directory multiple >
-          <button class="btn btn-primary"  type="submit">upload</button>
-        </form>
-      </div> --}}
       <div class="card-body">
         {{-- @include('admin.alert') --}} 
         <div class="row">
@@ -68,7 +61,7 @@
                 <span class="ml-2">Saya mengerti dengan ketentuan diatas</span>
             </div>
             <div class="form-group col-md-12">
-              <form action="{{route('dashboard.upload')}}" method="POST" id="form-upload" enctype="multipart/form-data">
+              <form action="{{route('backup-data.upload')}}" method="POST" id="form-upload" enctype="multipart/form-data">
                 @php
                   use App\Helpers\Menu;
                   use App\Helpers\AuthCommon;
@@ -84,12 +77,6 @@
               </form>
             </div>
         </div>
-
-        {{-- <form action="{{ route('dashboard.upload') }}" method="post" id="form-upload" enctype="multipart/form-data">
-          @csrf
-          <input type="file" id="" class="form-control" name="files[]" webkitdirectory directory multiple >
-          <button class="btn btn-primary"  type="submit">upload</button>
-        </form> --}}
         <div class="table-responsive py-2">
           
         </div>

@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\RolesDataTable;
-use App\Helpers\Utils;
-use App\Models\Role;
+use App\DataTables\JenisWasteDataTable;
+use App\Helpers\AuthCommon;
+use App\Models\JenisWaste;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 
-class RoleController extends Controller
+class JenisWasteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(RolesDataTable $dataTable)
+    public function index(JenisWasteDataTable $dataTable)
     {
-        return $dataTable->render('pages.manajemen_user.role.list');
+        return $dataTable->render('pages.master_data.jenis_waste.list');
     }
 
     /**
@@ -25,12 +23,12 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $body = view('pages.manajemen_user.role.create')->render();
+        $body = view('pages.master_data.jenis_waste.create')->render();
         $footer = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" onclick="save()">Save</button>';
 
         return [
-            'title' => 'Create Role',
+            'title' => 'Create Jenis Waste',
             'body' => $body,
             'footer' => $footer
         ];
@@ -42,29 +40,32 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'nama' => 'required',
+            'kode' => 'required',
         ]);
         $data = $request->except('_token');
-        $slug = Utils::formatSlug($data['name']);
         try {
-            $trx = Role::create([
+
+            $user = AuthCommon::getUser();
+            $trx = JenisWaste::create([
                 'uid' => Str::uuid()->toString(),
-                'name' => $data['name'],
-                'slug' => $slug,
-                'description' => $data['description'],
+                'nama' => $data['nama'],
+                'kode' => $data['kode'],
+                'created_by' => $user->uid,
             ]);
             if ($trx) {
                 return response([
                     'status' => true,
-                    'message' => 'Berhasil Membuat Role'
+                    'message' => 'Berhasil Membuat Jenis Waste'
                 ], 200);
             } else {
                 return response([
                     'status' => false,
-                    'message' => 'Gagal Membuat Role'
+                    'message' => 'Gagal Membuat Jenis Waste'
                 ], 400);
             }
         } catch (\Throwable $th) {
+            throw $th;
             return response([
                 'status' => false,
                 'message' => 'Terjadi Kesalahan Internal'
@@ -80,7 +81,7 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(JenisWaste $jenisWaste)
     {
         //
     }
@@ -88,16 +89,16 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role)
+    public function edit(JenisWaste $jenisWaste)
     {
-        if ($role) {
-            $uid = $role->uid;
-            $data = $role;
-            $body = view('pages.manajemen_user.role.edit', compact('uid', 'data'))->render();
+        if ($jenisWaste) {
+            $uid = $jenisWaste->uid;
+            $data = $jenisWaste;
+            $body = view('pages.master_data.jenis_waste.edit', compact('uid', 'data'))->render();
             $footer = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="save()">Save</button>';
             return [
-                'title' => 'Edit Role',
+                'title' => 'Edit Jenis Waste',
                 'body' => $body,
                 'footer' => $footer
             ];
@@ -112,15 +113,18 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, JenisWaste $jenisWaste)
     {
         $request->validate([
-            'name' => 'required',
+            'nama' => 'required',
+            'kode' => 'required',
         ]);
         $formData = $request->except(["_token", "_method"]);
+
         try {
-            $formData['slug'] = Utils::formatSlug($formData['name']);
-            $trx = $role->update($formData);
+            $user = AuthCommon::getUser();
+            $formData['updated_by'] = $user->uid;
+            $trx = $jenisWaste->update($formData);
             if ($trx) {
                 return response([
                     'status' => true,
@@ -136,7 +140,7 @@ class RoleController extends Controller
             //throw $th;
             return response([
                 'status' => false,
-                'message' => 'Terjadi Kesalahan Internal',
+                'message' => 'Kesalahan Internal'
             ], 400);
         } catch (\Illuminate\Database\QueryException $e) {
             return response([
@@ -149,10 +153,10 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(JenisWaste $jenisWaste)
     {
         try {
-            $delete = $role->delete();
+            $delete = $jenisWaste->delete();
             if ($delete) {
                 return response()->json([
                     'message' => 'Berhasil Menghapus Data'
@@ -166,46 +170,11 @@ class RoleController extends Controller
             return response()->json([
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response([
+                'status' => false,
+                'message' => 'Terjadi Kesalahan Internal',
+            ], 400);
         }
-    }
-
-    public function select2(Request $request)
-    {
-        $request->validate([
-            'limit' => 'required',
-            'page' => 'required'
-        ]);
-
-        $limit = $request->limit;
-        $start = $limit * $request->page;
-        $term = isset($request->term) ? $request->term : '';
-
-        $roles = Role::all();
-        if ($start) {
-            $roles->skip($start);
-        }
-
-        if ($limit) {
-            $roles->take($limit);
-        }
-
-        if ($term != '' && $term) {
-            $roles = Role::where('name', 'like', '%' . $term . '%')->skip($start)->take($limit)->get();
-        }
-
-        $run = DataTables::of($roles)->addColumn('id', function ($role) {
-            $uid = $role->uid;
-            return (string) $uid; // Explicitly cast to string
-        })->make(true);
-        $decode = json_encode($run);
-        $encode = json_decode($decode, true);
-
-        $res['items'] = [];
-        $res['total'] = 0;
-        if (count($roles) > 0) {
-            $res['items'] = $encode['original']['data'];
-            $res['total'] = $encode['original']['recordsFiltered'];
-        }
-        return $res;
     }
 }

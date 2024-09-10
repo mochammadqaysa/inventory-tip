@@ -108,6 +108,11 @@ class UserController extends Controller
                 'status' => false,
                 'message' => 'Terjadi Kesalahan Internal'
             ], 400);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response([
+                'status' => false,
+                'message' => 'Terjadi Kesalahan Internal',
+            ], 400);
         }
     }
 
@@ -147,63 +152,75 @@ class UserController extends Controller
      */
     public function update(Request $request, string $uid)
     {
-        $formData = $request->except(["_token", "_method"]);
-        $user = User::with('role')->where('uid', $uid)->first();
-        if ($user) {
+        try {
+            $formData = $request->except(["_token", "_method"]);
+            $user = User::with('role')->where('uid', $uid)->first();
+            if ($user) {
 
-            if ($request->hasFile('profile')) {
-                $file = $request->file('profile');
-
-                // Validate the new file
-                $request->validate([
-                    'profile' => 'mimes:jpg,jpeg,png|max:2048',
-                ]);
-
-                // Determine the new file name
-                $filename = time() . '.' . $file->getClientOriginalExtension();
-
-                // Delete the old profile image if it exists
-                if ($user->profile_picture && file_exists(public_path('upload/' . $user->profile_picture))) {
-                    unlink(public_path('upload/' . $user->profile_picture));
-                }
-
-                // Save the new file
-                // $path = $file->move(public_path('upload'), $filename);
-
-                // Update the form data with the new file name
-                $formData['profile_picture'] = $filename;
-            }
-            $formData['role_uid'] = $formData['role'];
-            unset($formData['role']);
-
-            $isUsernameTaken = User::where(['username' => $formData['username']])->first();
-            if ($isUsernameTaken->uid != $user->uid) {
-                return response([
-                    'status' => true,
-                    'message' => 'Username sudah terpakai'
-                ], 400);
-            }
-
-            $trx = $user->update($formData);
-            if ($trx) {
                 if ($request->hasFile('profile')) {
                     $file = $request->file('profile');
-                    $path = $file->move(public_path('upload'), $formData['profile_picture']);
+
+                    // Validate the new file
+                    $request->validate([
+                        'profile' => 'mimes:jpg,jpeg,png|max:2048',
+                    ]);
+
+                    // Determine the new file name
+                    $filename = time() . '.' . $file->getClientOriginalExtension();
+
+                    // Delete the old profile image if it exists
+                    if ($user->profile_picture && file_exists(public_path('upload/' . $user->profile_picture))) {
+                        unlink(public_path('upload/' . $user->profile_picture));
+                    }
+
+                    // Save the new file
+                    // $path = $file->move(public_path('upload'), $filename);
+
+                    // Update the form data with the new file name
+                    $formData['profile_picture'] = $filename;
                 }
-                return response([
-                    'status' => true,
-                    'message' => 'Data Berhasil Diubah'
-                ], 200);
+                $formData['role_uid'] = $formData['role'];
+                unset($formData['role']);
+
+                $isUsernameTaken = User::where(['username' => $formData['username']])->first();
+                if ($isUsernameTaken->uid != $user->uid) {
+                    return response([
+                        'status' => true,
+                        'message' => 'Username sudah terpakai'
+                    ], 400);
+                }
+
+                $trx = $user->update($formData);
+                if ($trx) {
+                    if ($request->hasFile('profile')) {
+                        $file = $request->file('profile');
+                        $path = $file->move(public_path('upload'), $formData['profile_picture']);
+                    }
+                    return response([
+                        'status' => true,
+                        'message' => 'Data Berhasil Diubah'
+                    ], 200);
+                } else {
+                    return response([
+                        'status' => true,
+                        'message' => 'Data Gagal Diubah'
+                    ], 400);
+                }
             } else {
                 return response([
-                    'status' => true,
-                    'message' => 'Data Gagal Diubah'
+                    'status' => false,
+                    'message' => 'Kesalahan Internal'
                 ], 400);
             }
-        } else {
+        } catch (\Throwable $th) {
             return response([
                 'status' => false,
-                'message' => 'Kesalahan Internal'
+                'message' => 'Terjadi Kesalahan Internal',
+            ], 400);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response([
+                'status' => false,
+                'message' => 'Terjadi Kesalahan Internal',
             ], 400);
         }
     }
@@ -236,5 +253,11 @@ class UserController extends Controller
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
         }
+    }
+
+    public function profile()
+    {
+        $user = AuthCommon::getUser();
+        return view('pages.settings.profile.index', compact('user'));
     }
 }
