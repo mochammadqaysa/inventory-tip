@@ -31,7 +31,7 @@
         var $negaraInput = $('#negara');
         
         if (tipe === 'lokal') {
-            $negaraInput.val('Indonesia').prop('readonly', true);
+            $negaraInput.val('INDONESIA').prop('readonly', true);
         } else if (tipe === 'impor') {
             $negaraInput.val('{{ @$data->negara }}').prop('readonly', false);
         }
