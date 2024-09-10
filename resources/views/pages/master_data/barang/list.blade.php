@@ -44,7 +44,7 @@
   $(() => {
     setTimeout(() => {
       $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-    }, 1000);
+    }, 500);
   })
 
   function create(){
