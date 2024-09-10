@@ -2408,7 +2408,7 @@ class BarangController extends Controller
             ];
         }
         // dd($insert);
-        Barang::insert($insert);
+        // Barang::insert($insert);
         $body = view('pages.master_data.barang.create')->render();
         $footer = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" onclick="save()">Save</button>';
