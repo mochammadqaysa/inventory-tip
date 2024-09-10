@@ -68,6 +68,7 @@ class BarangDataTable extends DataTable
             ->dom("<'row'<'col-sm-6'B><'col-sm-3'f><'col-sm-3'l>> <'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>")
             ->orderBy(1)
             ->scrollY(350)
+            ->scrollX(false)
             // ->selectStyleSingle()
             ->buttons($button);
     }
