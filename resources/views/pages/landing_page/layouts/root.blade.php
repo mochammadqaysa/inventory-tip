@@ -48,7 +48,7 @@
                         <div class="footer-inner">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a class="footer-logo" href="index.html"><img src="{{asset('balkon/images/tiaralogo.png')}}" alt=""></a>
+                                    <a class="footer-logo" href="{{route('landing.index')}}"><img src="{{asset('balkon/images/tiaralogo.png')}}" alt=""></a>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="footer-header fl-wrap"><span>Contacts</span></div>

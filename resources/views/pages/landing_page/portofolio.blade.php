@@ -10,10 +10,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery1.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Kitchen Set</a></h3>
-                <span>Interior</span>
-            </div>
+            
         </div>
     </div>
     <!-- 1 end -->
@@ -25,10 +22,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery2.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Kitchen Set</a></h3>
-                <span>Interior</span>
-            </div>
+            
         </div>
     </div>
     <!-- 2 end -->
@@ -40,10 +34,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery3.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">New Acropolis Museum</a></h3>
-                <span>Interior / Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 4 end -->
@@ -55,10 +46,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery4.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Alesia Museum</a></h3>
-                <span>Hoses Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 5 end -->
@@ -70,10 +58,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery5.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">West 57th Street</a></h3>
-                <span>Interior /  Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 7 end -->
@@ -85,10 +70,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery6.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Petronas Tower</a></h3>
-                <span>Apartments / Interior</span>
-            </div>
+            
         </div>
     </div>
     <!-- 8 end -->
@@ -100,10 +82,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery7.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">BOK Centre</a></h3>
-                <span>Hoses  / Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 9 end -->
@@ -115,10 +94,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery8.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Art Cultural Centre</a></h3>
-                <span>Design / Interior</span>
-            </div>
+            
         </div>
     </div>
     <!-- 10 end -->
@@ -130,10 +106,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery9.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">One World Trade Centre</a></h3>
-                <span>Apartments / Interior</span>
-            </div>
+            
         </div>
     </div>
     <!-- 11 end -->
@@ -145,10 +118,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery10.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Spire Edge</a></h3>
-                <span>Hoses Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 12 end -->
@@ -160,10 +130,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery11.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Perez Art Museum</a></h3>
-                <span>Interior /  Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 13 end -->
@@ -175,10 +142,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery12.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">White Walls</a></h3>
-                <span>Apartments</span>
-            </div>
+            
         </div>
     </div>
     <!-- 14 end -->
@@ -190,10 +154,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery13.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Skin Tower</a></h3>
-                <span>Interior /  Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 15 end -->
@@ -205,10 +166,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery14.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Big House</a></h3>
-                <span>Apartments /  Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 16 end --> 
@@ -220,10 +178,7 @@
                 <div class="overlay"></div>
                 <a href="{{asset('balkon/images/folio/gallery/gallery15.jpg')}}" class="image-popup popup-image"><i class="fa fa-search"  ></i></a>
             </div>
-            <div class="grid-item">
-                <h3><a href="#">Pen Tower</a></h3>
-                <span>Hoses Design</span>
-            </div>
+            
         </div>
     </div>
     <!-- 17 end -->                          

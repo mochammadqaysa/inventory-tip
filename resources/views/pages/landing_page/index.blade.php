@@ -181,7 +181,7 @@
                     <div class="parallax-text left-pos" data-scrollax="properties: { translateY: '-250px' }">
                         <h3><a href="">Advertising</a></h3>
                         <h4>When advertising has become a necessity in marketing your business, we offer a range of products suitable for indoor signage, display, showcase, and other interior goods.</h4>
-                        <a href="" class="btn float-btn flat-btn">View project</a>
+                        <a href="{{route('landing.services')}}" class="btn float-btn flat-btn">View services</a>
                     </div>
                 </div>
             </div>
@@ -202,7 +202,7 @@
                     <div class="parallax-text right-pos" data-scrollax="properties: { translateY: '-250px' }">
                         <h3><a href="">Furniture & Interior Products</a></h3>
                         <h4>Architects, contractors, cabinet makers (joinery), and homeowners are constantly seeking for new materials to give interior an added touch of glamorous with elegant look and feel.</h4>
-                        <a href="" class="btn float-btn flat-btn">View project</a>
+                        <a href="{{route('landing.services')}}" class="btn float-btn flat-btn">View services</a>
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
                     <div class="parallax-text left-pos" data-scrollax="properties: { translateY: '-250px' }">
                         <h3><a href="">In-Mold Decoration</a></h3>
                         <h4>For In-Mold Decoration substrate, low-gel ABS sheet is required with thickness ranging 300 – 500 microns. Just to name a few, its usage is for laptop and mobile phone covers</h4>
-                        <a href="" class="btn float-btn flat-btn">View project</a>
+                        <a href="{{route('landing.services')}}" class="btn float-btn flat-btn">View services</a>
                     </div>
                 </div>
             </div>
@@ -244,7 +244,7 @@
                     <div class="parallax-text right-pos" data-scrollax="properties: { translateY: '-250px' }">
                         <h3><a href="">Automotive & Transport</a></h3>
                         <h4>With lots of research and development, we have reinvented co-extruded sheet specifically developed for automotive and transportation industry in areas of interior and exterior parts.</h4>
-                        <a href="" class="btn float-btn flat-btn">View project</a>
+                        <a href="{{route('landing.services')}}" class="btn float-btn flat-btn">View services</a>
                     </div>
                 </div>
             </div>

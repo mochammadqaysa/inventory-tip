@@ -41,15 +41,21 @@
             Request::is('inventory/bahan') ||
             Request::is('inventory/barang')
           ))
-          ->item('Bahan Baku', 'ni ni-briefcase-24', 'inventory/bahan', Request::is('inventory/bahan'),['super_admin','exim'])
-          ->item('Barang Jadi', 'ni ni-briefcase-24', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Bahan Baku', 'fas fa-cube', 'inventory/bahan', Request::is('inventory/bahan'),['super_admin','exim'])
+          ->item('Barang Jadi', 'fas fa-box-open', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Jenis Waste', 'fas fa-biohazard', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Waste', 'fas fa-dumpster', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Supplier', 'fas fa-parachute-box', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Customer', 'fas fa-address-card', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Gudang', 'fas fa-warehouse', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
+          ->item('Bagian', 'fas fa-people-carry', 'inventory/barang', Request::is('inventory/barang'),['super_admin','exim'])
           ->end_item_accordion()
           ->end_accordion()
           ->end_group();
 
           $obj_menu->start_group()
           ->start_accordion()
-          ->sub_item_accordion('Data Management','data-management',['super_admin','exim'],'fas fa-server')
+          ->sub_item_accordion('Manajemen Data','data-management',['super_admin','exim'],'fas fa-server')
           ->start_item_accordion('data-management', (
             Request::is('inventory/backup_data')
           ))

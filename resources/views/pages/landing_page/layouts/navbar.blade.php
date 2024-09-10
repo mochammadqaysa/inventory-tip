@@ -3,9 +3,9 @@
     <a class="logo-holder" href="/"><img src="{{asset('balkon/images/tiaralogo.png')}}" alt=""></a>
     <!-- logo end -->  
     <!-- share button-->  
-    <div class="show-share-wrap">
+    {{-- <div class="show-share-wrap">
         <a href="{{route('auth.login')}}"><div class="show-share"><span>Login</span><img src="{{asset('balkon/images/login.png')}}" alt=""></div></a>
-    </div>
+    </div> --}}
     <!-- share button end-->  		
     <!-- search button--> 	 
     {{-- <div class="show-search show-fixed-search vissearch"><i class="fa fa-search"></i></div> --}}
