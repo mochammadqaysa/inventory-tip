@@ -85,11 +85,11 @@
 
           $obj_menu->start_group()
           ->start_accordion()
-          ->sub_item_accordion('Settings','settings',['super_admin'], 'fas fa-cogs')
+          ->sub_item_accordion('Settings','settings',['super_admin', 'exim'], 'fas fa-cogs')
           ->start_item_accordion('settings', (
             Request::is('inventory/profile') 
           ))
-          ->item('Profile', 'fas fa-id-badge', 'inventory/profile', Request::is('inventory/profile'),['super_admin'])
+          ->item('Profile', 'fas fa-id-badge', 'inventory/profile', Request::is('inventory/profile'),['super_admin','exim'])
           // ->item('Change Password', 'fas fa-key', 'inventory/user', Request::is('inventory/user'),['super_admin'])
           ->end_item_accordion()
           ->end_accordion()
