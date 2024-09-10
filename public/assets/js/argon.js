@@ -46,6 +46,10 @@ var Layout = (function() {
         $('body').removeClass('g-sidenav-pinned').addClass('g-sidenav-hidden');
         $('body').find('.backdrop').remove();
 
+		setTimeout(() => {
+			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+		}, 500);
+
         // Store the sidenav state in a cookie session
         Cookies.set('sidenav-state', 'unpinned');
     }
