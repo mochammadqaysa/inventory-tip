@@ -51,6 +51,10 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::resources(['gudang' => GudangController::class]);
     Route::resources(['bagian' => BagianController::class]);
 
+    Route::get('/form_profile', [UserController::class, 'edit_profile'])->name('form.profile');
+    Route::get('/form_password', [UserController::class, 'form_password'])->name('password.profile');
+    Route::put('/update_profile/{uid}', [UserController::class, 'update_profile'])->name('update.profile');
+    Route::put('/profile/change_password/{uid}', [UserController::class, 'change_password'])->name('changepass.profile');
     Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.inventory');
     Route::get('/backup-data', [BackupDataController::class, 'index'])->name('backup-data.index');

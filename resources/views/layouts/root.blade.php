@@ -185,6 +185,11 @@
     //   )
     //     return false;
     // };
+
+    //clear xhr
+    // if(window.console || window.console.firebug) {
+    //   console.clear();
+    // }
     $('.select2').select2();
 
     $(() => {

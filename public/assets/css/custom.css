@@ -113,3 +113,48 @@ select[readonly].select2-hidden-accessible + .select2-container .select2-selecti
 body{
     font-family: 'Lexend Deca', sans-serif !important;
 }
+
+.navbar-vertical .navbar-nav .nav-link > object
+{
+    margin-right: .7rem;
+}
+
+
+.custom-icon {
+    width: 1.4rem;
+    height: 1.5rem;
+    fill: currentColor !important;
+}
+
+/* .custom-icon-large {
+    width: 2em;
+    height: 2em;
+}
+
+.custom-icon-small {
+    width: 0.75em;
+    height: 0.75em;
+} */
+
+.custom-icon-primary {
+    filter: invert(52%) sepia(77%) saturate(4523%) hue-rotate(191deg) brightness(100%) contrast(103%);
+}
+
+.custom-icon-secondary {
+    filter: invert(38%) sepia(9%) saturate(11%) hue-rotate(50deg) brightness(100%) contrast(91%);
+    /* filter: invert(24%) sepia(83%) saturate(18%) hue-rotate(81deg) brightness(96%) contrast(86%); */
+}
+
+.nav-link:hover .custom-icon-secondary {
+    filter: invert(24%) sepia(83%) saturate(18%) hue-rotate(81deg) brightness(96%) contrast(86%);
+}
+
+.navbar-vertical.navbar-expand-xs .navbar-nav > .accordion > .collapse > .nav-item > .nav-link.active > object
+{
+    filter: invert(93%) sepia(100%) saturate(28%) hue-rotate(41deg) brightness(106%) contrast(107%);
+}
+
+
+.custom-icon-danger {
+    color: #e3342f; /* Danger color */
+}

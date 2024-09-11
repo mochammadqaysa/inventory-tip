@@ -41,30 +41,30 @@
     </div>
 
     <div class="row justify-content-md-start">
-        <div class="col-md-6">
-            <label for="logo">Profile Picture</label>
-            <div class="logo_image_picker my-1 position-relative rounded overflow-hidden d-flex justify-content-center align-items-center" 
-                style="height: 150px; width: 150px; border: 1.5px dotted #dee2e6; cursor: pointer;">
-                
-                <div class="text-center upload-placeholder">
-                    <i class="fas fa-upload fa-2x"></i>
-                    <p class="small">Klik di sini untuk mengunggah gambar</p>
-                </div>
-    
-                <img id="imagePreview" src="" alt="Image Preview" class="img-thumbnail position-absolute w-100 h-100" 
-                    style="object-fit: cover; display: none;">
-    
-                <div class="loading_image_picker position-absolute w-100 h-100 d-none" 
-                    style="backdrop-filter: blur(2px); top: 0; left: 0;">
-                    <div class="d-flex justify-content-center align-items-center h-100">
-                        <img src="{{ asset('img/loading2.gif') }}" style="height: 15px;">
-                        <p class="small fw-bold ms-2">Tunggu Sebentar</p>
-                    </div>
-                </div>
-            </div>
-            <input type="file" name="profile" id="logo" autocomplete="off" style="display: none;">
-        </div>
+      <div class="col-md-6">
+      <label for="logo">Profile Picture</label>
+      <div class="logo_image_picker my-1 position-relative rounded overflow-hidden d-flex justify-content-center align-items-center" 
+          style="height: 150px; width: 150px; border: 1.5px dotted #dee2e6; cursor: pointer;">
+          
+          <div class="text-center upload-placeholder">
+              <i class="fas fa-upload fa-2x"></i>
+              <p class="small">Klik di sini untuk mengunggah gambar</p>
+          </div>
+
+          <img id="imagePreview" src="" alt="Image Preview" class="img-thumbnail position-absolute w-100 h-100" 
+              style="object-fit: cover; display: none;">
+
+          <div class="loading_image_picker position-absolute w-100 h-100 d-none" 
+              style="backdrop-filter: blur(2px); top: 0; left: 0;">
+              <div class="d-flex justify-content-center align-items-center h-100">
+                  <img src="{{ asset('img/loading2.gif') }}" style="height: 15px;">
+                  <p class="small fw-bold ms-2">Tunggu Sebentar</p>
+              </div>
+          </div>
+      </div>
+      <input type="file" name="profile" id="logo" autocomplete="off" style="display: none;">
     </div>
+</div>
   
 <script>
   var _url_select2 = {

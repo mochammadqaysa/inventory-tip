@@ -32,6 +32,20 @@ class Menu
         return $this;
     }
 
+    public function customIconItem($title, $icon, $url, $isActive, $assign)
+    {
+        if (in_array($this->role, $assign)) {
+            $this->html .= '<li class="nav-item">
+                <a class="nav-link ' . ($isActive ? 'active' : '') . '" href="' . url($url) . '">
+                    <object type="image/svg+xml" data="' . $icon . '" class="custom-icon custom-icon-large custom-icon-secondary"></object>
+                    <span class="nav-link-text">' . $title . '</span>
+                </a>
+            </li>';
+        }
+
+        return $this;
+    }
+
     public function divinder()
     {
         $this->html .= '<hr class="my-3">';
