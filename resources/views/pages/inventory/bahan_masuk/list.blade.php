@@ -1,14 +1,14 @@
 @extends('layouts.root')
 
-@section('title', 'Supplier')
+@section('title', 'Bagian')
 
 @section('breadcrum')
 <div class="col-lg-6 col-7">
-  <h6 class="h2 text-white d-inline-block mb-0">Master Data</h6>
+  <h6 class="h2 text-white d-inline-block mb-0">Inventory</h6>
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-      <li class="breadcrumb-item"><a href="#"><i class="fas fa-parachute-box"></i></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Supplier</li>
+      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/import_bahan.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Pemasukan Bahan Baku</li>
     </ol>
   </nav>
 </div>
@@ -35,10 +35,10 @@
 {!! $dataTable->scripts() !!}
 <script>
   let _url = {
-    create: `{{ route('supplier.create') }}`,
-    edit: `{{ route('supplier.edit', ':id') }}`,
-    show: `{{ route('supplier.show', ':id') }}`,
-    destroy: `{{ route('supplier.destroy', ':id') }}`
+    create: `{{ route('bahan-masuk.create') }}`,
+    edit: `{{ route('bahan-masuk.edit', ':id') }}`,
+    show: `{{ route('bahan-masuk.show', ':id') }}`,
+    destroy: `{{ route('bahan-masuk.destroy', ':id') }}`
   }
 
   function create(){
@@ -109,7 +109,7 @@
           // $('[name="branch"]').val(null).trigger('change')
           // $('[name="jobposition"]').val(null).trigger('change')
         }
-        window.LaravelDataTables["supplier-table"].draw()
+        window.LaravelDataTables["bagian-table"].draw()
       }
     }).fail((xhr) => {
       if(xhr?.status == 422){
@@ -155,12 +155,12 @@
           type: 'DELETE',
         }).done((res) => {
           Swal.fire({
-              title: res.message,
-              text: '',
-              type: 'success',
-              confirmButtonColor: '#007bff'
-            })
-        window.LaravelDataTables["supplier-table"].draw()
+            title: res.message,
+            text: '',
+            type: 'success',
+            confirmButtonColor: '#007bff'
+          })
+        window.LaravelDataTables["bagian-table"].draw()
         }).fail((xhr) => {
           Swal.fire({
             title: xhr.responseJSON.message,
@@ -170,6 +170,27 @@
           })
         })
       }
+    })
+  }
+
+  function show(id) {
+    Ryuna.blockUI()
+    $.get(_url.show.replace(':id', id)).done((res) => {
+      Ryuna.modal({
+        title: res?.title,
+        body: res?.body,
+        footer: res?.footer
+      })
+      Ryuna.large_modal()
+      Ryuna.unblockUI()
+    }).fail((xhr) => {
+      Ryuna.unblockUI()
+      Swal.fire({
+        title: 'Whoops!',
+        text: xhr?.responseJSON?.message ? xhr.responseJSON.message : 'Internal Server Error',
+        type: 'error',
+        confirmButtonColor: '#007bff'
+      })
     })
   }
 </script>

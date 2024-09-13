@@ -38,7 +38,7 @@ class Menu
             $this->html .= '<li class="nav-item">
                 <a class="nav-link ' . ($isActive ? 'active' : '') . '" href="' . url($url) . '">
                     <object type="image/svg+xml" data="' . $icon . '" class="custom-icon custom-icon-large custom-icon-secondary"></object>
-                    <span class="nav-link-text">' . $title . '</span>
+                    <span class="nav-link-text" style="font-size: .705rem;">' . $title . '</span>
                 </a>
             </li>';
         }

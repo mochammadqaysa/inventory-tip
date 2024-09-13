@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\SupplierDataTable;
 use App\Helpers\AuthCommon;
+use App\Models\Customer;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -173,8 +174,9 @@ class SupplierController extends Controller
                 ]);
             }
         } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'message' => 'Data Failed, this data is still used in other modules !'
+            return response([
+                'status' => false,
+                'message' => 'Gagal Hapus, Data Terpakai di Modul Lain'
             ]);
         } catch (\Illuminate\Database\QueryException $e) {
             return response([

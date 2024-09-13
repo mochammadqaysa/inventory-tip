@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackupDataController;
 use App\Http\Controllers\BagianController;
 use App\Http\Controllers\BahanController;
+use App\Http\Controllers\BahanMasukController;
+use App\Http\Controllers\BahanMasukItemController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -50,6 +52,7 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::resources(['customer' => CustomerController::class]);
     Route::resources(['gudang' => GudangController::class]);
     Route::resources(['bagian' => BagianController::class]);
+    Route::resources(['bahan-masuk' => BahanMasukController::class]);
 
     Route::get('/form_profile', [UserController::class, 'edit_profile'])->name('form.profile');
     Route::get('/form_password', [UserController::class, 'form_password'])->name('password.profile');

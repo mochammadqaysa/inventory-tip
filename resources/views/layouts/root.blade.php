@@ -38,6 +38,8 @@
   <link rel="stylesheet" href="{{ asset('assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css') }}">
 
   <link rel="stylesheet" href="{{ asset('assets/vendor/datatable-extensions/fixedColumns.bootstrap4.min.css') }}">
+  <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />
+  
 
   <link rel="stylesheet" href="{{ asset('assets/vendor/select2/dist/css/select2.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
@@ -145,6 +147,8 @@
   <script src="{{ asset('assets/vendor/datatables-buttons-excel-styles/buttons.html5.styles.min.js') }}"></script>
   <script src="{{ asset('assets/vendor/datatables-buttons-excel-styles/buttons.html5.styles.templates.min.js') }}"></script>
   <script src="{{ asset('assets/vendor/datatables-selected-box/dataTables.checkboxes.min.js') }}"></script>
+  
+  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
   <!-- Custom js -->
   <script src="{{ asset('js/datatables-language.js') }}"></script>

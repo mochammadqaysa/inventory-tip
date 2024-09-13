@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Supplier;
+use App\Models\BahanMasuk;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class SupplierDataTable extends DataTable
+class BahanMasukDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -31,27 +31,39 @@ class SupplierDataTable extends DataTable
                 $html .= '</div>';
                 return $html;
             })
-            ->addColumn('tipe', function ($data) {
-                if ($data->tipe == 'impor') {
-                    return '<span class="badge badge-info">' . $data->tipe . '</span>';
-                } else {
-                    return '<span class="badge badge-default">' . $data->tipe . '</span>';
+            ->addColumn('pib', function ($data) {
+                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_pib . '</a>';
+            })
+            ->addColumn('supplier', function ($data) {
+                $supplier = "";
+                if (isset($data->supplier)) {
+                    $supplier = $data->supplier->nama;
                 }
+                return $supplier;
+            })
+            ->addColumn('tipe', function ($data) {
+                return '<span class="badge badge-default">' . $data->tipe . '</span>';
             })
             ->filterColumn('tipe', function ($query, $keyword) {
                 // Apply the filter directly to the `tipe` column
                 $query->where('tipe', 'like', "%{$keyword}%");
             })
-            ->rawColumns(['action', 'tipe']);
+            ->filterColumn('supplier', function ($query, $keyword) {
+                // Assuming you have a relationship between the user and role (e.g., user->role->name)
+                $query->whereHas('supplier', function ($q) use ($keyword) {
+                    $q->where('nama', 'like', "%{$keyword}%");
+                });
+            })
+            ->rawColumns(['action', 'tipe', 'pib']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Supplier $model
+     * @param \App\Models\BahanMasuk $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Supplier $model): QueryBuilder
+    public function query(BahanMasuk $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -65,20 +77,15 @@ class SupplierDataTable extends DataTable
     {
         $button = [];
         // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
-        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Supplier')->action('function() { create() }');
+        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Pemasukan Bahan Baku')->action('function() { create() }');
         return $this->builder()
-            ->parameters([
-                'language' => [
-                    'search' => '<i class="fas fa-search"></i>',
-                    'infoFiltered' => ''
-                ],
-            ])
-            ->setTableId('supplier-table')
+            ->setTableId('bahanmasuk-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom("<'row'<'col-sm-6'B><'col-sm-3'f><'col-sm-3'l>> <'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>")
             ->orderBy(1)
             ->scrollY(350)
+            ->scrollX(false)
             // ->selectStyleSingle()
             ->buttons($button);
     }
@@ -96,9 +103,12 @@ class SupplierDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
-            Column::make('nama')->title("Nama Supplier"),
-            Column::make('alamat'),
-            Column::make('negara'),
+
+            Column::make('tanggal_bukti')->title("Tanggal")
+                ->width(80),
+            Column::make('pib'),
+            Column::make('nomor_bukti')->title("Bukti"),
+            Column::make('supplier'),
             Column::make('tipe'),
         ];
     }
@@ -110,6 +120,6 @@ class SupplierDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Supplier_' . date('YmdHis');
+        return 'BahanMasuk_' . date('YmdHis');
     }
 }

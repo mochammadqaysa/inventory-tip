@@ -19,35 +19,37 @@ var Layout = (function () {
         setTimeout(() => {
             $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
             $(() => {
-                if ($("#chart-ekspor").children().length > 0) {
-                    // Chart has been rendered, destroy it
-                    chartEkspor.destroy();
-                    var chartEkspor = new ApexCharts(
-                        document.querySelector("#chart-ekspor"),
-                        optionsEkspor
-                    );
-                    chartEkspor.render();
-                } else {
-                    var chartEkspor = new ApexCharts(
-                        document.querySelector("#chart-ekspor"),
-                        optionsEkspor
-                    );
-                    chartEkspor.render();
-                }
-                if ($("#chart-impor").children().length > 0) {
-                    // Chart has been rendered, destroy it
-                    chartImpor.destroy();
-                    var chartImpor = new ApexCharts(
-                        document.querySelector("#chart-impor"),
-                        optionsImpor
-                    );
-                    chartImpor.render();
-                } else {
-                    var chartImpor = new ApexCharts(
-                        document.querySelector("#chart-impor"),
-                        optionsImpor
-                    );
-                    chartImpor.render();
+                if (window.location.href.includes("/inventory/dashboard")) {
+                    if ($("#chart-ekspor").children().length > 0) {
+                        // Chart has been rendered, destroy it
+                        chartEkspor.destroy();
+                        var chartEkspor = new ApexCharts(
+                            document.querySelector("#chart-ekspor"),
+                            optionsEkspor
+                        );
+                        chartEkspor.render();
+                    } else {
+                        var chartEkspor = new ApexCharts(
+                            document.querySelector("#chart-ekspor"),
+                            optionsEkspor
+                        );
+                        chartEkspor.render();
+                    }
+                    if ($("#chart-impor").children().length > 0) {
+                        // Chart has been rendered, destroy it
+                        chartImpor.destroy();
+                        var chartImpor = new ApexCharts(
+                            document.querySelector("#chart-impor"),
+                            optionsImpor
+                        );
+                        chartImpor.render();
+                    } else {
+                        var chartImpor = new ApexCharts(
+                            document.querySelector("#chart-impor"),
+                            optionsImpor
+                        );
+                        chartImpor.render();
+                    }
                 }
             });
         }, 500);
@@ -65,35 +67,37 @@ var Layout = (function () {
         setTimeout(() => {
             $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
             $(() => {
-                if ($("#chart-ekspor").children().length > 0) {
-                    // Chart has been rendered, destroy it
-                    chartEkspor.destroy();
-                    var chartEkspor = new ApexCharts(
-                        document.querySelector("#chart-ekspor"),
-                        optionsEkspor
-                    );
-                    chartEkspor.render();
-                } else {
-                    var chartEkspor = new ApexCharts(
-                        document.querySelector("#chart-ekspor"),
-                        optionsEkspor
-                    );
-                    chartEkspor.render();
-                }
-                if ($("#chart-impor").children().length > 0) {
-                    // Chart has been rendered, destroy it
-                    chartImpor.destroy();
-                    var chartImpor = new ApexCharts(
-                        document.querySelector("#chart-impor"),
-                        optionsImpor
-                    );
-                    chartImpor.render();
-                } else {
-                    var chartImpor = new ApexCharts(
-                        document.querySelector("#chart-impor"),
-                        optionsImpor
-                    );
-                    chartImpor.render();
+                if (window.location.href.includes("/inventory/dashboard")) {
+                    if ($("#chart-ekspor").children().length > 0) {
+                        // Chart has been rendered, destroy it
+                        chartEkspor.destroy();
+                        var chartEkspor = new ApexCharts(
+                            document.querySelector("#chart-ekspor"),
+                            optionsEkspor
+                        );
+                        chartEkspor.render();
+                    } else {
+                        var chartEkspor = new ApexCharts(
+                            document.querySelector("#chart-ekspor"),
+                            optionsEkspor
+                        );
+                        chartEkspor.render();
+                    }
+                    if ($("#chart-impor").children().length > 0) {
+                        // Chart has been rendered, destroy it
+                        chartImpor.destroy();
+                        var chartImpor = new ApexCharts(
+                            document.querySelector("#chart-impor"),
+                            optionsImpor
+                        );
+                        chartImpor.render();
+                    } else {
+                        var chartImpor = new ApexCharts(
+                            document.querySelector("#chart-impor"),
+                            optionsImpor
+                        );
+                        chartImpor.render();
+                    }
                 }
             });
         }, 500);

@@ -126,15 +126,15 @@ body{
     fill: currentColor !important;
 }
 
-/* .custom-icon-large {
+.custom-icon-large {
     width: 2em;
     height: 2em;
 }
 
 .custom-icon-small {
-    width: 0.75em;
-    height: 0.75em;
-} */
+    width: 1.38em;
+    height: 1.38em;
+}
 
 .custom-icon-primary {
     filter: invert(52%) sepia(77%) saturate(4523%) hue-rotate(191deg) brightness(100%) contrast(103%);
@@ -143,6 +143,10 @@ body{
 .custom-icon-secondary {
     filter: invert(38%) sepia(9%) saturate(11%) hue-rotate(50deg) brightness(100%) contrast(91%);
     /* filter: invert(24%) sepia(83%) saturate(18%) hue-rotate(81deg) brightness(96%) contrast(86%); */
+}
+
+.custom-icon-white {
+    filter: invert(100%) sepia(4%) saturate(523%) hue-rotate(204deg) brightness(115%) contrast(100%);
 }
 
 .nav-link:hover .custom-icon-secondary {
