@@ -8454,6 +8454,18 @@ button.bg-primary:focus
     background-color: #324cdd !important;
 }
 
+.bg-profile {
+    background-color: #108CFE !important;
+}
+
+a.bg-profile:hover,
+a.bg-profile:focus,
+button.bg-profile:hover,
+button.bg-profile:focus
+{
+    background-color: #0385fc !important;
+}
+
 .bg-secondary
 {
     background-color: #f7fafc !important;
