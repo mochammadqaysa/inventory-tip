@@ -44,6 +44,7 @@
   function create(){
     Ryuna.blockUI()
     $.get(_url.create).done((res) => {
+      Ryuna.large_modal()
       Ryuna.modal({
         title: res?.title,
         body: res?.body,
@@ -176,12 +177,12 @@
   function show(id) {
     Ryuna.blockUI()
     $.get(_url.show.replace(':id', id)).done((res) => {
+      Ryuna.large_modal()
       Ryuna.modal({
         title: res?.title,
         body: res?.body,
         footer: res?.footer
       })
-      Ryuna.large_modal()
       Ryuna.unblockUI()
     }).fail((xhr) => {
       Ryuna.unblockUI()

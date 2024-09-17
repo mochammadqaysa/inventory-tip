@@ -17,12 +17,13 @@ class Ryuna {
     }
 
     static large_modal() {
+        $("#myModal .modal-dialog").removeClass("modal-lg");
         $("#myModal .modal-dialog").addClass("modal-xl");
         $("#myModal .modal-dialog").on(
             "click",
             '[data-dismiss="modal"]',
             function () {
-                $("#myModal .modal-dialog").removeClass("modal-xl");
+                // $("#myModal .modal-dialog").removeClass("modal-xl");
             }
         );
     }

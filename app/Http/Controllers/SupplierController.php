@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
 
 class SupplierController extends Controller
 {
@@ -184,5 +185,46 @@ class SupplierController extends Controller
                 'message' => 'Terjadi Kesalahan Internal',
             ], 400);
         }
+    }
+
+    public function select2(Request $request)
+    {
+        $request->validate([
+            'limit' => 'required',
+            'page' => 'required'
+        ]);
+
+        $limit = $request->limit;
+        $start = $limit * $request->page;
+        $term = isset($request->term) ? $request->term : '';
+        $tipe = $request->tipe; // Get the tipe from the request
+
+        $suppliers = Supplier::where('tipe', $tipe)->get();
+        if ($start) {
+            $suppliers->skip($start);
+        }
+
+        if ($limit) {
+            $suppliers->take($limit);
+        }
+
+        if ($term != '' && $term) {
+            $suppliers = Supplier::where('nama', 'like', '%' . $term . '%')->skip($start)->take($limit)->get();
+        }
+
+        $run = DataTables::of($suppliers)->addColumn('id', function ($role) {
+            $uid = $role->uid;
+            return (string) $uid; // Explicitly cast to string
+        })->make(true);
+        $decode = json_encode($run);
+        $encode = json_decode($decode, true);
+
+        $res['items'] = [];
+        $res['total'] = 0;
+        if (count($suppliers) > 0) {
+            $res['items'] = $encode['original']['data'];
+            $res['total'] = $encode['original']['recordsFiltered'];
+        }
+        return $res;
     }
 }

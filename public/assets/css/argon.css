@@ -21749,7 +21749,7 @@ textarea[resize='horizontal']
     overflow-y: auto;
 
     width: 100%;
-    max-width: 81px;
+    max-width: 90px;
     padding-right: 0; 
     padding-left: 0;
 }
@@ -22355,12 +22355,12 @@ textarea[resize='horizontal']
 
 .navbar-vertical.navbar-expand-xs.fixed-left + .main-content
 {
-    margin-left: 62px;
+    margin-left: 90px;
 }
 
 .navbar-vertical.navbar-expand-xs.fixed-right + .main-content
 {
-    margin-right: 62px;
+    margin-right: 90px;
 }
 
 @media (min-width: 576px)
@@ -22553,6 +22553,7 @@ textarea[resize='horizontal']
     .sidenav
     {
         transform: translateX(-62px);
+        max-width: 0 !important;
     }
     .sidenav.fixed-left + .main-content
     {

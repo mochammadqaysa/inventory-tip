@@ -65,5 +65,6 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
 
     Route::prefix('select2')->group(function () {
         Route::get('/role', [RoleController::class, 'select2'])->name('select2.role');
+        Route::get('/supplier', [SupplierController::class, 'select2'])->name('select2.supplier');
     });
 });
