@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\BahanMasukDataTable;
+use App\Models\Bahan;
 use App\Models\BahanMasuk;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -23,8 +24,8 @@ class BahanMasukController extends Controller
      */
     public function create()
     {
-        $supplier = Supplier::all();
-        $body = view('pages.inventory.bahan_masuk.create', compact('supplier'))->render();
+        $bahan = Bahan::all();
+        $body = view('pages.inventory.bahan_masuk.create', compact('bahan'))->render();
         $footer = '<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-prev btn-primary" onclick="prevStep()" style="display: none;">Sebelumnya</button>
                 <button type="button" class="btn btn-next btn-primary" onclick="nextStep()">Lanjut</button>';
@@ -41,7 +42,7 @@ class BahanMasukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

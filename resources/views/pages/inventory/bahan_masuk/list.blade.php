@@ -106,11 +106,8 @@
   
         if($('[name="_method"]').val() == undefined) {
           el_form[0].reset()
-          // $('[name="role"]').val(null).trigger('change')
-          // $('[name="branch"]').val(null).trigger('change')
-          // $('[name="jobposition"]').val(null).trigger('change')
         }
-        window.LaravelDataTables["bagian-table"].draw()
+        window.LaravelDataTables["bahanmasuk-table"].draw()
       }
     }).fail((xhr) => {
       if(xhr?.status == 422){
@@ -161,7 +158,7 @@
             type: 'success',
             confirmButtonColor: '#007bff'
           })
-        window.LaravelDataTables["bagian-table"].draw()
+        window.LaravelDataTables["bahanmasuk-table"].draw()
         }).fail((xhr) => {
           Swal.fire({
             title: xhr.responseJSON.message,
