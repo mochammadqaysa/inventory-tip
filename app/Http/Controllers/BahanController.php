@@ -68,7 +68,7 @@ class BahanController extends Controller
                 ], 400);
             }
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
             return response([
                 'status' => false,
                 'message' => 'Terjadi Kesalahan Internal'
@@ -174,6 +174,26 @@ class BahanController extends Controller
             return response()->json([
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
+        }
+    }
+
+    public function info_bahan(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $bahan = Bahan::find($data['bahan']);
+            return response([
+                'status' => true,
+                'data' => [
+                    "satuan" => $bahan->satuan,
+                    "stok" => 123
+                ]
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            response([
+                'status' => false,
+            ], 400);
         }
     }
 }

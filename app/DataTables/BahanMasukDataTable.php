@@ -31,8 +31,8 @@ class BahanMasukDataTable extends DataTable
                 $html .= '</div>';
                 return $html;
             })
-            ->addColumn('pib', function ($data) {
-                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_pib . '</a>';
+            ->addColumn('nomor_bukti', function ($data) {
+                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_bukti . '</a>';
             })
             ->addColumn('supplier', function ($data) {
                 $supplier = "";
@@ -42,7 +42,11 @@ class BahanMasukDataTable extends DataTable
                 return $supplier;
             })
             ->addColumn('tipe', function ($data) {
-                return '<span class="badge badge-default">' . $data->tipe . '</span>';
+                if (strtolower($data->tipe) == "impor") {
+                    return '<span class="badge badge-info">' . $data->tipe . '</span>';
+                } else {
+                    return '<span class="badge badge-success">' . $data->tipe . '</span>';
+                }
             })
             ->filterColumn('tipe', function ($query, $keyword) {
                 // Apply the filter directly to the `tipe` column
@@ -54,7 +58,7 @@ class BahanMasukDataTable extends DataTable
                     $q->where('nama', 'like', "%{$keyword}%");
                 });
             })
-            ->rawColumns(['action', 'tipe', 'pib']);
+            ->rawColumns(['action', 'tipe', 'nomor_bukti']);
     }
 
     /**
@@ -103,10 +107,8 @@ class BahanMasukDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
-
             Column::make('tanggal_bukti')->title("Tanggal")
                 ->width(80),
-            Column::make('pib'),
             Column::make('nomor_bukti')->title("Bukti"),
             Column::make('supplier'),
             Column::make('tipe'),

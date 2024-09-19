@@ -16,6 +16,11 @@
             <th>{{ @$bahanMasuk->nomor_bukti }}</th>
         </tr>
         <tr>
+            <td>Tanggal Bukti</td>
+            <td>:</td>
+            <th>{{ @$bahanMasuk->tanggal_bukti }}</th>
+        </tr>
+        <tr>
             <td>Nomor PO</td>
             <td>:</td>
             <th>{{ @$bahanMasuk->nomor_po }}</th>
@@ -27,6 +32,11 @@
         </tr>
         <tr>
             <td>Tanggal PIB</td>
+            <td>:</td>
+            <th>{{ @$bahanMasuk->tanggal_pib }}</th>
+        </tr>
+        <tr>
+            <td>Kurs</td>
             <td>:</td>
             <th>{{ @$bahanMasuk->tanggal_pib }}</th>
         </tr>

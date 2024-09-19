@@ -108,6 +108,7 @@
           el_form[0].reset()
         }
         window.LaravelDataTables["bahanmasuk-table"].draw()
+        Ryuna.close_modal()
       }
     }).fail((xhr) => {
       if(xhr?.status == 422){
