@@ -6,6 +6,21 @@ use Illuminate\Support\Facades\DB;
 
 class Utils
 {
+
+    public static function rupiah($nominal, $decimals = 2)
+    {
+        return 'Rp ' . number_format((float) $nominal, $decimals, ',', '.');
+    }
+
+    public static function decimal($nominal = 0, $decimals = 2)
+    {
+        $parse = number_format((float) $nominal, $decimals, ',', '.');
+        $expParse = explode(',',$parse);
+        $decimal = end($expParse);
+        $nominal = array_shift($expParse);
+        return $nominal . '<small>'.",$decimal".'</small>';
+    }
+
     public static function formatSlug($string)
     {
         $string = preg_replace('/[ -]+/', '_', $string);

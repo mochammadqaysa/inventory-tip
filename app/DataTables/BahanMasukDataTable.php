@@ -43,9 +43,9 @@ class BahanMasukDataTable extends DataTable
             })
             ->addColumn('tipe', function ($data) {
                 if (strtolower($data->tipe) == "impor") {
-                    return '<span class="badge badge-info">' . $data->tipe . '</span>';
+                    return '<span class="badge badge-lg badge-info">' . $data->tipe . '</span>';
                 } else {
-                    return '<span class="badge badge-success">' . $data->tipe . '</span>';
+                    return '<span class="badge badge-lg badge-success">' . $data->tipe . '</span>';
                 }
             })
             ->filterColumn('tipe', function ($query, $keyword) {

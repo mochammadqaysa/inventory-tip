@@ -130,7 +130,12 @@
         </div>
         <div class="form-group col-md-12" id="impor-kurs">
           <label>Kurs</label>
-          <input type="number" name="kurs" step=".01" class="form-control" placeholder="Kurs">
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text prepend-currency">IDR</span>
+              </div>
+              <input type="number" name="kurs" step=".01" class="form-control" placeholder="Kurs">
+          </div>
         </div>
       </div>
     </div>
@@ -755,8 +760,12 @@
                         $(this).closest('.form-item').find('.form-group #stok-bahan').slideDown();
                         if (res.data.satuan.toLowerCase() === "kg") {
                           $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideUp();
+                          $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+                          $(this).closest('.form-item').find('input[name="mata_uang[]"]').parent().removeClass("col-md-12").addClass("col-md-6")
                         } else {
                           $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideDown();
+                          $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+                          $(this).closest('.form-item').find('input[name="mata_uang[]"]').parent().removeClass("col-md-6").addClass("col-md-12")
                         }
                       }
                       
