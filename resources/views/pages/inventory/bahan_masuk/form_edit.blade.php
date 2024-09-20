@@ -89,11 +89,11 @@
         <div class="form-group col-md-12">
           <label>Tipe <span class="text-danger">*</span></label><br>
           <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="tipe2" checked name="tipe" class="custom-control-input" value="lokal">
+            <input type="radio" id="tipe2" name="tipe" class="custom-control-input" value="lokal" {{ @$data->tipe == "lokal" ? "checked" : "" }}>
             <label class="custom-control-label" for="tipe2">Lokal</label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="tipe1"  name="tipe" class="custom-control-input" value="impor">
+            <input type="radio" id="tipe1"  name="tipe" class="custom-control-input" value="impor" {{ @$data->tipe == "impor" ? "checked" : "" }}>
             <label class="custom-control-label" for="tipe1">Impor</label>
           </div>
           
@@ -101,32 +101,35 @@
         <div class="form-group col-md-12">
           <label>Supplier <span class="text-danger">*</span></label>
           <select name="supplier" class="form-control select2" disabled id="supplier">
-            <option value="" disabled>Choose One</option>
+            <option></option>
+            @if(isset($data->supplier->uid))
+            <option value="{{ $data->supplier->uid }}" selected data-negara="{{$data->supplier->negara}}">{{ $data->supplier->nama }}</option>
+            @endif
           </select>
         </div>
         <div class="form-group col-md-6">
           <label>Nomor Bukti <span class="text-danger">*</span></label>
-          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti">
+          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}">
         </div>
         <div class="form-group col-md-6 ">
           <label>Tanggal Bukti <span class="text-danger">*</span></label>
           <div class='date'>
-            <input type='text' class="form-control" name="tanggal_bukti" id='tanggal_bukti' style="background-color: white; " placeholder="Pilih Tanggal Bukti" value="" />
+            <input type='text' class="form-control" name="tanggal_bukti" id='tanggal_bukti' style="background-color: white; " placeholder="Pilih Tanggal Bukti" value="{{ @$data->tanggal_bukti }}" />
           </div>
         </div>
         <div class="form-group col-md-6" id="impor-nomor-pib">
           <label>Nomor PIB</label>
-          <input type="text" name="nomor_pib" class="form-control" placeholder="Nomor PIB" >
+          <input type="text" name="nomor_pib" class="form-control" placeholder="Nomor PIB" value="{{ @$data->nomor_pib }}">
         </div>
         <div class="form-group col-md-6" id="impor-tgl-pib">
           <label>Tanggal PIB</label>
           <div class='date'>
-            <input type='text' class="form-control" name="tanggal_pib" id='tanggal_pib' style="background-color: white; " placeholder="Pilih Tanggal PIB" value="" />
+            <input type='text' class="form-control" name="tanggal_pib" id='tanggal_pib' style="background-color: white; " placeholder="Pilih Tanggal PIB" value="{{ @$data->tanggal_pib }}" />
           </div>
         </div>
         <div class="form-group col-md-12">
           <label>Nomor PO</label>
-          <input type="text" name="nomor_po" class="form-control" placeholder="Nomor PO" >
+          <input type="text" name="nomor_po" class="form-control" placeholder="Nomor PO" value="{{ @$data->nomor_po }}">
         </div>
         <div class="form-group col-md-12" id="impor-kurs">
           <label>Kurs</label>
@@ -134,7 +137,7 @@
               <div class="input-group-prepend">
                   <span class="input-group-text prepend-currency">IDR</span>
               </div>
-              <input type="number" name="kurs" step=".01" class="form-control" placeholder="Kurs">
+              <input type="number" name="kurs" step=".01" class="form-control" placeholder="Kurs" value="{{ @$data->kurs }}">
           </div>
         </div>
       </div>
@@ -143,10 +146,12 @@
       <div class="col-md-10 mx-auto mb-5">
         <div id="dynamic-form">
           <!-- Original Form -->
+          @foreach ($bahanMasukItems as $key => $bahanItem)
           <div class="form-item card shadow">
-            <div class="card-header" id="heading1">
+            <input type="hidden" name="bahan_item_uid[]" value="{{ $bahanItem->uid }}">
+            <div class="card-header" id="heading{{$key}}">
               <div class="d-flex align-items-center">
-                  <span class="ml-2 mr-3 item-number">Data 1</span>
+                  <span class="ml-2 mr-3 item-number">Data {{$key}}</span>
                   <hr class="flex-grow-1">
                   <a href="#collapse1" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse1">
                     <i class="fas fa-window-minimize"></i>
@@ -155,31 +160,31 @@
               </div>
             </div>
   
-            <div id="collapse1" class="collapse show" aria-labelledby="heading1" data-parent="#dynamic-form">
+            <div id="collapse1" class="collapse show" aria-labelledby="heading{{$key}}" data-parent="#dynamic-form">
               <div class="card-body">
                 <div class="row">
                   <!-- Kode HS -->
                   <div class="form-group col-md-4 impor-kode-hs">
                       <label>Kode HS</label>
-                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS">
+                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS" value="{{ $bahanItem->kode_hs }}">
                   </div>
                   <!-- Nomor Seri -->
                   <div class="form-group col-md-4 impor-nomor-seri">
                       <label>Nomor Seri</label>
-                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri">
+                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri" value="{{ $bahanItem->nomor_seri }}">
                   </div>
                   <!-- Nomor Lot -->
                   <div class="form-group col-md-4">
                       <label>Nomor Lot </label>
-                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot">
+                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot" value="{{ $bahanItem->nomor_lot }}">
                   </div>
                   <!-- Bahan -->
                   <div class="form-group col-md-12">
                     <label>Bahan <span class="text-danger">*</span></label>
-                    <select name="bahan[0]" class="form-control select2-bahan">
+                    <select name="bahan[{{ $key }}]" class="form-control select2-bahan">
                       <option></option>
                       @foreach ($bahan as $item)
-                          <option value="{{$item->uid}}">{{$item->nama}}</option>
+                          <option value="{{$item->uid}}" {{ $bahanItem->bahan_uid == $item->uid ? "selected" : "" }}>{{$item->nama}}</option>
                       @endforeach
                     </select>
                     <small id="stok-bahan" style="display: none" class="form-text text-muted"></small>
@@ -188,9 +193,9 @@
                   <div class="form-group col-md-6 ">
                       <label>Jumlah <span class="text-danger">*</span></label>
                       <div class="input-group">
-                          <input type="number" step=".001" name="jumlah[]" class="form-control" placeholder="Jumlah">
-                          <div class="input-group-append" style="display: none">
-                              <span class="input-group-text append-satuan"></span>
+                          <input type="number" step=".001" name="jumlah[]" class="form-control" placeholder="Jumlah" value="{{ $bahanItem->jumlah }}">
+                          <div class="input-group-append">
+                              <span class="input-group-text append-satuan">{{ $bahanItem->bahan->satuan }}</span>
                           </div>
                       </div>
                   </div>
@@ -198,7 +203,7 @@
                   <div class="form-group col-md-12 jumlah-kg" style="display: none;">
                       <label>Jumlah KG (Netto) <span class="text-danger">*</span></label>
                       <div class="input-group">
-                          <input type="number" name="jumlah_kg[]" class="form-control" step=".001" placeholder="Jumlah">
+                          <input type="number" name="jumlah_kg[]" class="form-control" step=".001" placeholder="Jumlah KG (Netto)" value="{{ $bahanItem->jumlah_kg }}">
                           <div class="input-group-append">
                               <span class="input-group-text">KG</span>
                           </div>
@@ -207,16 +212,16 @@
                   <!-- Mata Uang -->
                   <div class="form-group col-md-6 impor-mata-uang">
                       <label>Mata Uang </label>
-                      <input type="text" name="mata_uang[]" class="form-control" placeholder="Mata Uang" style="text-transform:uppercase">
+                      <input type="text" name="mata_uang[]" class="form-control" placeholder="Mata Uang" style="text-transform:uppercase" value="{{ $bahanItem->mata_uang }}">
                   </div>
                   <!-- Nilai -->
                   <div class="form-group col-md-4 impor-nilai">
                       <label>Nilai</label>
                       <div class="input-group">
                           <div class="input-group-prepend">
-                              <span class="input-group-text prepend-currency"></span>
+                              <span class="input-group-text prepend-currency">{{ strtoupper($bahanItem->mata_uang) }}</span>
                           </div>
-                          <input type="number" step=".01" name="nilai[]" class="form-control" placeholder="Nilai">
+                          <input type="number" step=".01" name="nilai[]" class="form-control" placeholder="Nilai" value="{{ $bahanItem->nilai }}">
                       </div>
                   </div>
                   <!-- Asuransi -->
@@ -224,9 +229,9 @@
                       <label>Asuransi </label>
                       <div class="input-group">
                           <div class="input-group-prepend">
-                              <span class="input-group-text prepend-currency"></span>
+                              <span class="input-group-text prepend-currency">{{ strtoupper($bahanItem->mata_uang) }}</span>
                           </div>
-                          <input type="number" step=".01" name="asuransi[]" class="form-control" placeholder="Asuransi">
+                          <input type="number" step=".01" name="asuransi[]" class="form-control" placeholder="Asuransi" value="{{ $bahanItem->asuransi }}">
                       </div>
                   </div>
                   <!-- Ongkos -->
@@ -234,9 +239,9 @@
                       <label>Ongkos</label>
                       <div class="input-group">
                           <div class="input-group-prepend">
-                              <span class="input-group-text prepend-currency"></span>
+                              <span class="input-group-text prepend-currency">{{ strtoupper($bahanItem->mata_uang) }}</span>
                           </div>
-                          <input type="number" step=".01" name="ongkos[]" class="form-control" placeholder="Ongkos">
+                          <input type="number" step=".01" name="ongkos[]" class="form-control" placeholder="Ongkos" value="{{ $bahanItem->ongkos }}">
                       </div>
                   </div>
                   <!-- Nilai Total -->
@@ -246,27 +251,27 @@
                           <div class="input-group-prepend">
                               <span class="input-group-text">IDR</span>
                           </div>
-                          <input type="number" step=".01" name="nilai_total[]" class="form-control" placeholder="Nilai Total" readonly>
+                          <input type="number" step=".01" name="nilai_total[]" class="form-control" placeholder="Nilai Total" readonly  value="{{ $bahanItem->nilai_total }}">
                       </div>
                   </div>
                   <!-- Gudang Penyimpanan -->
                   <div class="form-group col-md-12">
                       <label>Gudang Penyimpanan </label>
-                      <select class="form-control select2-gudang" name="gudang_penyimpanan[0]">
+                      <select class="form-control select2-gudang" name="gudang_penyimpanan[{{$key}}]">
                           <option value="" disabled selected>Choose One</option>
                           @foreach ($gudang as $item)
-                              <option value="{{$item->uid}}" {{ $item->uid == "7cd8e26c-b8e0-428e-8433-0adc98239cf5" ? "selected" : "" }}>{{$item->nama}}</option>
+                              <option value="{{$item->uid}}" {{ $item->uid == $bahanItem->gudang_uid ? "selected" : "" }}>{{$item->nama}}</option>
                           @endforeach
                       </select>
                   </div>
                   <div class="form-group col-md-12 impor-fasilitas">
                     <label>Fasilitas</label><br>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="fasilitas[0]" id="fasilitas1" value="ya">
+                      <input class="form-check-input" type="radio" name="fasilitas[{{$key}}]" id="fasilitas{{$key+1}}" value="ya" {{ $bahanItem->fasilitas == 1 ? "checked" : "" }}>
                       <label class="form-check-label" for="fasilitas1">Ya</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="fasilitas[0]" id="fasilitas2" value="tidak">
+                      <input class="form-check-input" type="radio" name="fasilitas[{{$key}}]" id="fasilitas{{$key+2}}" value="tidak" {{ $bahanItem->fasilitas == 0 ? "checked" : "" }}>
                       <label class="form-check-label" for="fasilitas2">Tidak</label>
                     </div>
                   </div>
@@ -274,6 +279,7 @@
               </div>
             </div>
           </div>
+          @endforeach
         </div>
         <!-- Button to add new form -->
         <a href="javascript:void(0)" id="add-form" class="btn btn-success mt-3"><i class="fas fa-plus"></i> Tambah Item</a>
@@ -335,6 +341,12 @@
                   <tbody>
                   </tbody>
               </table>
+            <div class="col-md-12" style="display: none;">
+              <h5>Keterangan : </h5>
+              <h5 class="d-inline pr-5"><i class="fas fa-circle text-success "></i> Data Baru</h5>
+              <h5 class="d-inline pr-5"><i class="fas fa-circle text-info"></i> Data Diubah</h5>
+              <h5 class="d-inline pr-5"><i class="fas fa-circle text-danger "></i> Data Dihapus</h5>
+            </div>
           </div>
       </div>
       
@@ -346,8 +358,8 @@
   function collectAndDisplayData() {
       // Collect data from Step 1
       var tipe = $('input[name="tipe"]:checked').val();
-      var supplier = $("#supplier").select2('data')[0].nama;
-      var negara = $("#supplier").select2('data')[0].negara;
+      var supplier = $("#supplier").select2('data')[0].nama ?? $("#supplier").select2('data')[0].text;
+      var negara = $("#supplier").select2('data')[0].negara ?? $("#supplier option:selected").attr("data-negara");
       var nomor_bukti = $('input[name="nomor_bukti"]').val();
       var nomor_po = $('input[name="nomor_po"]').val();
       var nomor_pib = $('input[name="nomor_pib"]').val();
@@ -361,8 +373,10 @@
 
       // Collect and display dynamic data from Step 2 (loop through forms)
       $('#table-bahanmasuk-ringkasan tbody').empty(); // Clear table body
+      let existingData = @json($bahanMasukItems);
 
       $('#dynamic-form .form-item').each(function(index) {
+          var bahan_item_uid = $(this).find('input[name="bahan_item_uid[]"]').val();
           var kode_hs = $(this).find('input[name="kode_hs[]"]').val();
           var nomor_seri = $(this).find('input[name="nomor_seri[]"]').val();
           var nomor_lot = $(this).find('input[name="nomor_lot[]"]').val();
@@ -373,6 +387,24 @@
           var fasilitasName = `fasilitas[${index}]`  // Dynamic name attribute
           var fasilitas = $(this).find('input[name="' + fasilitasName + '"]:checked').val();
           var penyimpanan = $(this).find(`select[name="gudang_penyimpanan[${index}]"]`).select2('data')[0].text;
+
+          // existingData.forEach(function(item, existingIndex) {
+          //   $('#table-bahanmasuk-ringkasan tbody').append(`
+          //       <tr>
+          //           <td>${bahan_item_uid}</td>
+          //           <td>${item.kode_hs || kode_hs}</td>
+          //           <td>${item.nomor_seri || nomor_seri}</td>
+          //           <td>${item.nomor_lot || nomor_lot}</td>
+          //           <td>${item.bahan || bahan}</td>
+          //           <td>${item.jumlah || jumlah} ${satuan}</td>
+          //           <td>${item.nilai_total || nilai_total}</td>
+          //           <td>${item.fasilitas || fasilitas}</td>
+          //           <td>${item.penyimpanan || penyimpanan}</td>
+          //       </tr>
+          //   `);
+          // });
+
+          
 
           // Append the collected data to the table in Step 3
           $('#table-bahanmasuk-ringkasan tbody').append(`
@@ -656,6 +688,17 @@
           $(".impor-fasilitas").hide()
           $('input[name="nomor_lot[]"]').parent().removeClass("col-md-4").addClass("col-md-12")
           $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+          $('#dynamic-form .form-item').each(function (index) {
+            let satuan = $(this).find('.input-group .append-satuan').text()
+            if (satuan == "kg") {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-12").addClass("col-md-6")
+            } else {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-6").addClass("col-md-12")
+
+            }
+          });
           $('input[name="nilai_total[]"]').prop('readonly', false)
         } else {
           $("#impor-nomor-pib").show()
@@ -672,7 +715,22 @@
           $('input[name="nomor_lot[]"]').parent().removeClass("col-md-12").addClass("col-md-4")
           $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
           $('input[name="nilai_total[]"]').prop('readonly', true)
-          $('input[name="nilai_total[]"]').val('')
+          var bahanMasukItems = @json($bahanMasukItems);
+          $('input[name="nilai_total[]"]').each(function (index) {
+            if (index < bahanMasukItems.length) {
+              $(this).val(bahanMasukItems[index].nilai_total);
+            }
+          })
+          $('#dynamic-form .form-item').each(function (index) {
+            let satuan = $(this).find('.input-group .append-satuan').text()
+            if (satuan == "kg") {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-12").addClass("col-md-6")
+            } else {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-6").addClass("col-md-12")
+            }
+          });
         }
     });
 
@@ -710,7 +768,10 @@
           $('input[name="nomor_lot[]"]').parent().removeClass("col-md-12").addClass("col-md-4")
           $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
           $('input[name="nilai_total[]"]').prop('readonly', true)
-          $('input[name="nilai_total[]"]').val('')
+          let bahanMasukItems = @json($bahanMasukItems);
+          $('input[name="nilai_total[]"]').each(function (index) {
+            $(this).val(bahanMasukItems[index].nilai_total);
+          })
         }
     }
 
@@ -730,7 +791,7 @@
 
     // step 2
 
-    var formCount = 1; // Counter for form numbering
+    var formCount = $('#dynamic-form .form-item').length; // Counter for form numbering
 
     let initializeSelect2 =  function() {
       $('.select2-bahan').select2({
@@ -758,9 +819,14 @@
                         $(this).closest('.form-item').find('.input-group-append .append-satuan').text(res.data.satuan);
                         $(this).closest('.form-item').find('.form-group #stok-bahan').text("Stok : "+res.data.stok+" "+res.data.satuan);
                         $(this).closest('.form-item').find('.form-group #stok-bahan').slideDown();
+                        var tipe = $('input[name="tipe"]:checked').val();
                         if (res.data.satuan.toLowerCase() === "kg") {
                           $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideUp();
-                          $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+                          if (tipe == "impor") {
+                            $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+                          } else {
+                            $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+                          }
                           $(this).closest('.form-item').find('input[name="mata_uang[]"]').parent().removeClass("col-md-12").addClass("col-md-6")
                         } else {
                           $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideDown();

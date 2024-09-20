@@ -65,6 +65,8 @@
   function edit(id){
     Ryuna.blockUI()
     $.get(_url.edit.replace(':id', id)).done((res) => {
+      
+      Ryuna.large_modal()
       Ryuna.modal({
         title: res?.title,
         body: res?.body,

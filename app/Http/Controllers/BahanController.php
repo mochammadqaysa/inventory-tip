@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\BahanDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Bahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -182,11 +183,12 @@ class BahanController extends Controller
         try {
             $data = $request->all();
             $bahan = Bahan::find($data['bahan']);
+            $stok = Utils::saldoAkhir($bahan);
             return response([
                 'status' => true,
                 'data' => [
                     "satuan" => $bahan->satuan,
-                    "stok" => 123
+                    "stok" => $stok
                 ]
             ], 200);
         } catch (\Throwable $th) {
