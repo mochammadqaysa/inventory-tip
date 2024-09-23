@@ -1,14 +1,14 @@
 @extends('layouts.root')
 
-@section('title', 'Pemasukan Bahan Baku')
+@section('title', 'Pengeluaran Bahan Baku')
 
 @section('breadcrum')
 <div class="col-lg-6 col-7">
   <h6 class="h2 text-white d-inline-block mb-0">Inventory</h6>
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/import_bahan.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Pemasukan Bahan Baku</li>
+      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/export_bahan.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Pengeluaran Bahan Baku</li>
     </ol>
   </nav>
 </div>
@@ -35,10 +35,10 @@
 {!! $dataTable->scripts() !!}
 <script>
   let _url = {
-    create: `{{ route('bahan-masuk.create') }}`,
-    edit: `{{ route('bahan-masuk.edit', ':id') }}`,
-    show: `{{ route('bahan-masuk.show', ':id') }}`,
-    destroy: `{{ route('bahan-masuk.destroy', ':id') }}`
+    create: `{{ route('bahan-keluar.create') }}`,
+    edit: `{{ route('bahan-keluar.edit', ':id') }}`,
+    show: `{{ route('bahan-keluar.show', ':id') }}`,
+    destroy: `{{ route('bahan-keluar.destroy', ':id') }}`
   }
 
   function create(){
@@ -109,7 +109,7 @@
         if($('[name="_method"]').val() == undefined) {
           el_form[0].reset()
         }
-        window.LaravelDataTables["bahanmasuk-table"].draw()
+        window.LaravelDataTables["bahankeluar-table"].draw()
         Ryuna.close_modal()
       }
     }).fail((xhr) => {
@@ -161,7 +161,7 @@
             type: 'success',
             confirmButtonColor: '#007bff'
           })
-        window.LaravelDataTables["bahanmasuk-table"].draw()
+        window.LaravelDataTables["bahankeluar-table"].draw()
         }).fail((xhr) => {
           Swal.fire({
             title: xhr.responseJSON.message,

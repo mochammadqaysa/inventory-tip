@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2024 at 12:36 PM
+-- Generation Time: Sep 23, 2024 at 12:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -203,6 +203,58 @@ INSERT INTO `bahan` (`uid`, `nama`, `kode`, `satuan`, `created_at`, `created_by`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bahan_keluar`
+--
+
+CREATE TABLE `bahan_keluar` (
+  `uid` varchar(40) NOT NULL,
+  `transaksi` enum('keluar','retur') DEFAULT NULL,
+  `nomor_bukti` varchar(255) DEFAULT NULL,
+  `tanggal_bukti` date DEFAULT NULL,
+  `nomor_spk` varchar(255) DEFAULT NULL,
+  `bagian_uid` varchar(40) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bahan_keluar`
+--
+
+INSERT INTO `bahan_keluar` (`uid`, `transaksi`, `nomor_bukti`, `tanggal_bukti`, `nomor_spk`, `bagian_uid`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('1f794cdd-19f1-4d5d-98bd-1c20adefd8f8', 'keluar', '123', '2024-09-11', '123', 'd23e865a-5de0-4a7b-9815-59cfae604aea', '2024-09-22 23:40:04', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-23 00:24:16', '10753eb7-45f6-4f8a-a223-a330460f8799');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bahan_keluar_item`
+--
+
+CREATE TABLE `bahan_keluar_item` (
+  `uid` varchar(40) NOT NULL,
+  `bahan_keluar_uid` varchar(40) DEFAULT NULL,
+  `bahan_uid` varchar(40) DEFAULT NULL,
+  `jumlah` decimal(10,3) UNSIGNED DEFAULT NULL,
+  `jumlah_kg` decimal(10,3) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bahan_keluar_item`
+--
+
+INSERT INTO `bahan_keluar_item` (`uid`, `bahan_keluar_uid`, `bahan_uid`, `jumlah`, `jumlah_kg`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('8e739949-6cc9-4d17-9f7d-dd5232650318', '1f794cdd-19f1-4d5d-98bd-1c20adefd8f8', '022f839d-0b17-4f6a-975c-7fe72ba12b67', 234.000, 444.000, '2024-09-23 07:25:33', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-23 00:27:20', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('b3324cde-478a-4357-8f21-9a84dc96c793', '1f794cdd-19f1-4d5d-98bd-1c20adefd8f8', '02fb8ea7-26db-4e31-93ec-a4428356d034', 123.000, 123.000, '2024-09-23 06:40:04', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-23 00:16:52', '10753eb7-45f6-4f8a-a223-a330460f8799');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bahan_masuk`
 --
 
@@ -228,8 +280,9 @@ CREATE TABLE `bahan_masuk` (
 --
 
 INSERT INTO `bahan_masuk` (`uid`, `tipe`, `nomor_bukti`, `nomor_pib`, `nomor_po`, `supplier_uid`, `kurs`, `tanggal_bukti`, `tanggal_pib`, `tanggal_pib_expire`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
-('53c9d535-719f-11ef-a147-d843ae93ec21', 'impor', 'fgh', 'fgh', 'fgh', '04c3e229-1a03-49a4-ab6c-979ec731bf5f', 1234.00, '2024-09-03', '2024-09-11', '2024-09-30', '2024-09-13 07:10:57', NULL, '2024-09-13 07:10:57', NULL),
-('74e8da16-719e-11ef-a147-d843ae93ec21', 'impor', 'asd', 'asd', 'asd', '00bec7ea-c5f9-4ad3-ad77-93a0ee125af1', 1234.00, '2024-09-03', '2024-09-11', '2024-09-30', '2024-09-13 07:04:43', NULL, '2024-09-13 07:04:43', NULL);
+('0e775ec8-bd37-4838-815a-4e8dadf97755', 'impor', 'BPB0039/2024', '930165', '00582-TIP-2408', 'd5e1476f-106d-4780-95ab-f4ede7962b25', 15450.00, '2024-09-09', '2024-09-07', '2025-01-07', '2024-09-18 19:53:14', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-20 02:14:42', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('8f789fdb-c746-4f54-9fd5-584672b50849', 'impor', 'BPB0033/2024', '904680', '00469-TIP-2406', '00bec7ea-c5f9-4ad3-ad77-93a0ee125af1', 15532.00, '2024-09-20', '2024-08-27', '2024-12-27', '2024-09-19 01:04:03', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-20 00:55:10', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('b3809b93-f8cb-4486-8d82-6df14e1c7cbf', 'lokal', 'asd', NULL, '123', '04c3e229-1a03-49a4-ab6c-979ec731bf5f', NULL, '2024-09-18', NULL, NULL, '2024-09-19 00:46:58', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-22 17:54:37', '10753eb7-45f6-4f8a-a223-a330460f8799');
 
 -- --------------------------------------------------------
 
@@ -264,8 +317,12 @@ CREATE TABLE `bahan_masuk_item` (
 --
 
 INSERT INTO `bahan_masuk_item` (`uid`, `bahan_masuk_uid`, `bahan_uid`, `gudang_uid`, `kode_hs`, `nomor_seri`, `nomor_lot`, `jumlah`, `jumlah_kg`, `nilai`, `asuransi`, `ongkos`, `mata_uang`, `nilai_total`, `fasilitas`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
-('90808a35-0dd6-4abd-825c-4fcca2e82f1a ', '74e8da16-719e-11ef-a147-d843ae93ec21', '01cda4a8-3747-4942-887d-57d1811b538d', '1f2e348b-3652-48e0-91b9-901e6ece94c0', 'asd', 'asd', 'asd', 12.000, 12.000, 12.00, 12.00, 12.00, 'USD', 12.00, 1, '2024-09-13 07:05:41', NULL, '2024-09-13 07:05:41', NULL),
-('b22e1c6a-719e-11ef-a147-d843ae93ec21', '74e8da16-719e-11ef-a147-d843ae93ec21', '11b7c5a7-c1f6-451a-9b3b-1f5d48175818', '1f2e348b-3652-48e0-91b9-901e6ece94c0', 'asff', 'ffff', 'ffff', 4.000, 34.000, 34.00, 554.00, 65.00, '45', 43.00, 1, '2024-09-13 07:06:26', NULL, '2024-09-13 07:06:26', NULL);
+('27fa3212-c7e6-4a41-a82e-0f97e97f4852', '8f789fdb-c746-4f54-9fd5-584672b50849', '779deee6-1d47-4077-b755-ec0f036aef49', '7cd8e26c-b8e0-428e-8433-0adc98239cf5', '39033090', '02', 'CN80O3V111', 5500.000, 5500.000, 11165.00, 0.00, 0.00, 'USD', 173414780.00, 1, '2024-09-19 08:04:03', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-20 01:00:11', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('2912042d-aeb5-42b2-9996-41a3eb6d08d1', 'b3809b93-f8cb-4486-8d82-6df14e1c7cbf', '02fb8ea7-26db-4e31-93ec-a4428356d034', '7cd8e26c-b8e0-428e-8433-0adc98239cf5', NULL, NULL, 'lot 1', 10000.000, 10000.000, NULL, NULL, NULL, 'IDR', 234234.00, NULL, '2024-09-19 07:46:58', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-22 17:54:37', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('415595e8-4f23-47d1-81c6-db0721e18533', '0e775ec8-bd37-4838-815a-4e8dadf97755', '945bce1b-8556-4f7e-8a54-566f6bfcdf68', '7cd8e26c-b8e0-428e-8433-0adc98239cf5', '3906.10', '2345', '24E2901-01-06', 8000.000, 8000.000, 58400.00, NULL, NULL, 'USD', 902280000.00, 1, '2024-09-19 02:53:14', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-20 02:15:00', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('a2fd2c21-b91d-443f-837a-44030bae56bd', '8f789fdb-c746-4f54-9fd5-584672b50849', '022f839d-0b17-4f6a-975c-7fe72ba12b67', '7cd8e26c-b8e0-428e-8433-0adc98239cf5', 'hs 3', 'seri 3', 'lot 3', 234.000, 123.000, 200.00, 1.00, 1.00, 'USD', 3137464.00, 1, '2024-09-20 07:54:25', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-20 01:00:11', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('bdec9204-0c28-4486-8997-759793bb6c3d', '8f789fdb-c746-4f54-9fd5-584672b50849', '9f8a050d-248f-4797-b939-91137a561006', '7cd8e26c-b8e0-428e-8433-0adc98239cf5', '39033090', '01', 'CN80O7L111', 9000.000, 9000.000, 17910.00, 0.00, 0.00, 'USD', 278178120.00, 1, '2024-09-19 08:04:03', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-20 01:00:11', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('c2d9f216-a328-46d5-917f-7b6fcf8328c1', 'b3809b93-f8cb-4486-8d82-6df14e1c7cbf', '01cda4a8-3747-4942-887d-57d1811b538d', '7cd8e26c-b8e0-428e-8433-0adc98239cf5', NULL, NULL, 'lot 2', 12.000, 1234.000, NULL, NULL, NULL, 'IDR', 23423.00, NULL, '2024-09-19 07:46:58', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-22 17:54:37', '10753eb7-45f6-4f8a-a223-a330460f8799');
 
 -- --------------------------------------------------------
 
@@ -689,7 +746,11 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`uid`, `name`, `slug`, `description`) VALUES
 ('0e5b2112-12b0-4773-885e-6288386c0586', 'Exim', 'exim', 'Being an export import staff'),
-('731f53cb-5c48-4b5f-add6-bb5e6abc9698', 'Super Admin', 'super_admin', 'Being a super admin');
+('2b56db43-9fef-4da7-8c42-7f3f6611493a', 'Pembelian', 'pembelian', 'Being a pembelian staff'),
+('2feaf458-c9ea-4127-9bb9-af8e6478ea72', 'Penjualan', 'penjualan', 'Being a penjualan staff'),
+('6363abba-bae5-4212-88b3-808b3d82c79d', 'Gudang', 'gudang', 'Being a Gudang Staff'),
+('731f53cb-5c48-4b5f-add6-bb5e6abc9698', 'Super Admin', 'super_admin', 'Being a super admin'),
+('b1b5a46b-c0dc-4c46-abb1-fca5f04cd3c6', 'Bea Cukai', 'bea_cukai', 'Being a Bea Cukai Staff');
 
 -- --------------------------------------------------------
 
@@ -778,6 +839,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `name`, `profile_picture`, `username`, `password`, `active`, `role_uid`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('09e0f4b7-ce63-4e2b-bf51-43919bd0a0cc', 'Gudang', NULL, 'gudang', '$2y$12$oSM1sGzr82.s6swnTXWWO.FDOAuQgM/MMQGo07AKREzFoEmgBkO46', 1, '6363abba-bae5-4212-88b3-808b3d82c79d', '2024-09-23 01:18:01', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-23 01:18:01', NULL),
 ('10753eb7-45f6-4f8a-a223-a330460f8799', 'Admin', NULL, 'admin', '$2y$12$mkClFNf/6iMyPfS7NHsLne9VTbnu8n/UFusb5aaDcQpVZtunN9RwC', 1, '731f53cb-5c48-4b5f-add6-bb5e6abc9698', '2024-09-03 03:30:56', NULL, '2024-09-03 03:30:56', NULL),
 ('d9287e61-0634-4019-a1da-1b35d52361da', 'Exim', '1726038649.jpg', 'exim', '$2y$12$h31x8OdoK0aPRfxoc3QeWuHv.POyufIepWyjseG22YCR8WWcNZVc.', 1, '0e5b2112-12b0-4773-885e-6288386c0586', '2024-09-04 18:30:43', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-11 00:11:09', NULL);
 
@@ -827,6 +889,25 @@ ALTER TABLE `bagian`
 --
 ALTER TABLE `bahan`
   ADD PRIMARY KEY (`uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `bahan_keluar`
+--
+ALTER TABLE `bahan_keluar`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `bagian_uid` (`bagian_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `bahan_keluar_item`
+--
+ALTER TABLE `bahan_keluar_item`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `bahan_keluar_uid` (`bahan_keluar_uid`),
+  ADD KEY `bahan_uid` (`bahan_uid`),
   ADD KEY `created_by` (`created_by`),
   ADD KEY `updated_by` (`updated_by`);
 
@@ -1007,6 +1088,23 @@ ALTER TABLE `bagian`
 ALTER TABLE `bahan`
   ADD CONSTRAINT `bahan_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
   ADD CONSTRAINT `bahan_ibfk_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `bahan_keluar`
+--
+ALTER TABLE `bahan_keluar`
+  ADD CONSTRAINT `bahan_keluar_ibfk_1` FOREIGN KEY (`bagian_uid`) REFERENCES `bagian` (`uid`),
+  ADD CONSTRAINT `bahan_keluar_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `bahan_keluar_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `bahan_keluar_item`
+--
+ALTER TABLE `bahan_keluar_item`
+  ADD CONSTRAINT `bahan_keluar_item_ibfk_1` FOREIGN KEY (`bahan_keluar_uid`) REFERENCES `bahan_keluar` (`uid`),
+  ADD CONSTRAINT `bahan_keluar_item_ibfk_2` FOREIGN KEY (`bahan_uid`) REFERENCES `bahan` (`uid`),
+  ADD CONSTRAINT `bahan_keluar_item_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `bahan_keluar_item_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
 
 --
 -- Constraints for table `bahan_masuk`

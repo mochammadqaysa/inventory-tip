@@ -493,17 +493,17 @@
     
     let validateSupplier = $('[name="supplier"]').val()
     if (!validateSupplier) {
-      kosong += '<li>Kolom Supplier Diisi</li>'
+      kosong += '<li>Kolom Supplier Wajib Diisi</li>'
     }
 
     let validateNomorBukti = $('[name="nomor_bukti"]').val()
     if (!validateNomorBukti) {
-      kosong += '<li>Kolom Nomor Bukti Diisi</li>'
+      kosong += '<li>Kolom Nomor Bukti Wajib Diisi</li>'
     }
 
     let validateTanggalBukti = $('[name="tanggal_bukti"]').val()
     if (!validateTanggalBukti) {
-      kosong += '<li>Kolom Tanggal Bukti Diisi</li>'
+      kosong += '<li>Kolom Tanggal Bukti Wajib Diisi</li>'
     }
 
 
@@ -657,6 +657,17 @@
           $('input[name="nomor_lot[]"]').parent().removeClass("col-md-4").addClass("col-md-12")
           $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
           $('input[name="nilai_total[]"]').prop('readonly', false)
+          $('#dynamic-form .form-item').each(function (index) {
+            let satuan = $(this).find('.input-group .append-satuan').text()
+            if (satuan == "kg") {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-12").addClass("col-md-6")
+            } else {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-6").addClass("col-md-12")
+
+            }
+          });
         } else {
           $("#impor-nomor-pib").show()
           $("#impor-tgl-pib").show()
@@ -673,6 +684,16 @@
           $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
           $('input[name="nilai_total[]"]').prop('readonly', true)
           $('input[name="nilai_total[]"]').val('')
+          $('#dynamic-form .form-item').each(function (index) {
+            let satuan = $(this).find('.input-group .append-satuan').text()
+            if (satuan == "kg") {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-12").addClass("col-md-6")
+            } else {
+              $('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+              $('input[name="mata_uang[]"]').parent().removeClass("col-md-6").addClass("col-md-12")
+            }
+          });
         }
     });
 
@@ -760,7 +781,11 @@
                         $(this).closest('.form-item').find('.form-group #stok-bahan').slideDown();
                         if (res.data.satuan.toLowerCase() === "kg") {
                           $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideUp();
-                          $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+                          if (tipe == "impor") {
+                            $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-12").addClass("col-md-6")
+                          } else {
+                            $(this).closest('.form-item').find('input[name="jumlah[]"]').parent().parent().removeClass("col-md-6").addClass("col-md-12")
+                          }
                           $(this).closest('.form-item').find('input[name="mata_uang[]"]').parent().removeClass("col-md-12").addClass("col-md-6")
                         } else {
                           $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideDown();

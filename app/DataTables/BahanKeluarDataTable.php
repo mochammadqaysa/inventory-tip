@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\BahanMasuk;
+use App\Models\BahanKeluar;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BahanMasukDataTable extends DataTable
+class BahanKeluarDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -31,43 +31,39 @@ class BahanMasukDataTable extends DataTable
                 $html .= '</div>';
                 return $html;
             })
-            ->addColumn('nomor_bukti', function ($data) {
-                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_bukti . '</a>';
-            })
-            ->addColumn('supplier', function ($data) {
-                $supplier = "";
-                if (isset($data->supplier)) {
-                    $supplier = $data->supplier->nama;
+            ->addColumn('bagian', function ($data) {
+                $bagian = "";
+                if (isset($data->bagian)) {
+                    $bagian = $data->bagian->nama;
                 }
-                return $supplier;
+                return $bagian;
             })
-            ->addColumn('tipe', function ($data) {
-                if (strtolower($data->tipe) == "impor") {
-                    return '<span class="badge badge-lg badge-info">' . $data->tipe . '</span>';
+            ->addColumn('transaksi', function ($data) {
+                if (strtolower($data->transaksi) == "keluar") {
+                    return '<span class="badge badge-lg badge-info">' . $data->transaksi . '</span>';
                 } else {
-                    return '<span class="badge badge-lg badge-success">' . $data->tipe . '</span>';
+                    return '<span class="badge badge-lg badge-success">' . $data->transaksi . '</span>';
                 }
             })
-            ->filterColumn('tipe', function ($query, $keyword) {
-                // Apply the filter directly to the `tipe` column
-                $query->where('tipe', 'like', "%{$keyword}%");
-            })
-            ->filterColumn('supplier', function ($query, $keyword) {
+            ->filterColumn('bagian', function ($query, $keyword) {
                 // Assuming you have a relationship between the user and role (e.g., user->role->name)
-                $query->whereHas('supplier', function ($q) use ($keyword) {
+                $query->whereHas('bagian', function ($q) use ($keyword) {
                     $q->where('nama', 'like', "%{$keyword}%");
                 });
             })
-            ->rawColumns(['action', 'tipe', 'nomor_bukti']);
+            ->filterColumn('transaksi', function ($query, $keyword) {
+                $query->where('transaksi', 'like', "%{$keyword}%");
+            })
+            ->rawColumns(['action', 'transaksi']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\BahanMasuk $model
+     * @param \App\Models\BahanKeluar $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(BahanMasuk $model): QueryBuilder
+    public function query(BahanKeluar $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -81,7 +77,7 @@ class BahanMasukDataTable extends DataTable
     {
         $button = [];
         // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
-        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Pemasukan Bahan Baku')->action('function() { create() }');
+        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Pengeluaran Bahan Baku')->action('function() { create() }');
         return $this->builder()
             ->parameters([
                 'language' => [
@@ -89,7 +85,7 @@ class BahanMasukDataTable extends DataTable
                     'infoFiltered' => ''
                 ],
             ])
-            ->setTableId('bahanmasuk-table')
+            ->setTableId('bahankeluar-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom("<'row'<'col-sm-6'B><'col-sm-3'f><'col-sm-3'l>> <'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>")
@@ -107,6 +103,9 @@ class BahanMasukDataTable extends DataTable
      */
     public function getColumns(): array
     {
+        $button = [];
+        // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
+        $button[] = Button::raw('<i class="fa fa-plus"></i> Create')->action('function() { create() }');
         return [
             Column::computed('action')
                 ->exportable(false)
@@ -116,8 +115,8 @@ class BahanMasukDataTable extends DataTable
             Column::make('tanggal_bukti')->title("Tanggal")
                 ->width(80),
             Column::make('nomor_bukti')->title("Bukti"),
-            Column::make('supplier'),
-            Column::make('tipe'),
+            Column::make('transaksi'),
+            Column::make('bagian')->title("Penerima"),
         ];
     }
 
@@ -128,6 +127,6 @@ class BahanMasukDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'BahanMasuk_' . date('YmdHis');
+        return 'BahanKeluar_' . date('YmdHis');
     }
 }

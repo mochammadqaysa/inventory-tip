@@ -77,11 +77,11 @@
     if (res.loading) {
       return res.text;
     }
-    return res.nama;
+    return res.name;
   }
 
   function formatSelection(res) {
-    return res.nama || res.text;
+    return res.name || res.text;
   }
 
   function initSelect2(module){
