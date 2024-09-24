@@ -31,6 +31,9 @@ class BahanKeluarDataTable extends DataTable
                 $html .= '</div>';
                 return $html;
             })
+            ->addColumn('nomor_bukti', function ($data) {
+                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_bukti . '</a>';
+            })
             ->addColumn('bagian', function ($data) {
                 $bagian = "";
                 if (isset($data->bagian)) {
@@ -54,7 +57,10 @@ class BahanKeluarDataTable extends DataTable
             ->filterColumn('transaksi', function ($query, $keyword) {
                 $query->where('transaksi', 'like', "%{$keyword}%");
             })
-            ->rawColumns(['action', 'transaksi']);
+            ->filterColumn('nomor_bukti', function ($query, $keyword) {
+                $query->where('nomor_bukti', 'like', "%{$keyword}%");
+            })
+            ->rawColumns(['action', 'transaksi', 'nomor_bukti']);
     }
 
     /**

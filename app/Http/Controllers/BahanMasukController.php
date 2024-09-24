@@ -240,15 +240,19 @@ class BahanMasukController extends Controller
                 //=================================================== deleting item
                 $existingItem = $bahanMasuk->bahanMasukItems;
 
-                $items = $data['bahan_item_uid'];
-
-                $deletedItem = $existingItem->filter(function ($item) use ($items) {
-                    return !in_array($item['uid'], $items);
-                });
-                if (count($deletedItem) > 0) {
-                    $deletedItem->each(function ($item) {
-                        $item->delete();
+                if (isset($data['bahan_item_uid'])) {
+                    $items = $data['bahan_item_uid'];
+    
+                    $deletedItem = $existingItem->filter(function ($item) use ($items) {
+                        return !in_array($item['uid'], $items);
                     });
+                    if (count($deletedItem) > 0) {
+                        $deletedItem->each(function ($item) {
+                            $item->delete();
+                        });
+                    }
+                } else {
+                    $data['bahan_item_uid'] = [];
                 }
                 //================================================== end deleting item
 

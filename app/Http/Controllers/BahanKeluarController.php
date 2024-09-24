@@ -121,7 +121,16 @@ class BahanKeluarController extends Controller
      */
     public function show(BahanKeluar $bahanKeluar)
     {
-        //
+        $bahanKeluarItems = $bahanKeluar->bahanKeluarItems;
+        $bagian = $bahanKeluar->bagian;
+        $body = view('pages.inventory.bahan_keluar.detail', compact('bahanKeluar', 'bahanKeluarItems', 'bagian'))->render();
+        $footer = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
+
+        return [
+            'title' => 'Detail Pengeluaran Bahan Baku',
+            'body' => $body,
+            'footer' => $footer
+        ];
     }
 
     /**
@@ -269,6 +278,22 @@ class BahanKeluarController extends Controller
      */
     public function destroy(BahanKeluar $bahanKeluar)
     {
-        //
+        try {
+            $delete = $bahanKeluar->delete();
+            if ($delete) {
+                return response()->json([
+                    'message' => 'Berhasil Menghapus Data'
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'Gagal Menghapus Data'
+                ]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            // dd($e);
+            return response()->json([
+                'message' => 'Data Failed, this data is still used in other modules !'
+            ]);
+        }
     }
 }
