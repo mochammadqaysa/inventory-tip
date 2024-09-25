@@ -183,7 +183,7 @@ class BahanController extends Controller
         try {
             $data = $request->all();
             $bahan = Bahan::find($data['bahan']);
-            $stok = Utils::saldoAkhir($bahan);
+            $stok = Utils::saldoAkhir($bahan, 'bahan');
             return response([
                 'status' => true,
                 'data' => [

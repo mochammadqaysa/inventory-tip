@@ -47,50 +47,78 @@ class Utils
         return is_numeric($result) ? (float) $result : $result;
     }
 
-    public static function totalMasukSampai($id, $tanggal, $column = 'jumlah', $operator = '<=')
+    public static function totalMasukSampai($id, $tanggal, $table, $column = 'jumlah', $operator = '<=')
     {
-        return DB::table('bahan_masuk_item')
-            ->join('bahan_masuk', 'bahan_masuk_item.bahan_masuk_uid', '=', 'bahan_masuk.uid')
-            ->where('bahan_masuk_item.bahan_uid', $id)
-            ->where('bahan_masuk.tanggal_bukti', $operator, $tanggal)
+        return DB::table($table . '_masuk_item')
+            ->join($table . '_masuk', $table . '_masuk_item.' . $table . '_masuk_uid', '=', $table . '_masuk.uid')
+            ->where($table . '_masuk_item.' . $table . '_uid', $id)
+            ->where($table . '_masuk.tanggal_bukti', $operator, $tanggal)
             ->sum($column);
     }
 
-    public static function totalKeluarSampai($id, $tanggal, $column = 'jumlah', $operator = '<=')
+    public static function totalKeluarSampai($id, $tanggal, $table, $column = 'jumlah', $operator = '<=')
     {
-        return DB::table('bahan_keluar_item')
-            ->join('bahan_keluar', 'bahan_keluar_item.bahan_keluar_uid', '=', 'bahan_keluar.uid')
-            ->where('bahan_keluar_item.bahan_uid', $id)
-            ->where('bahan_keluar.tanggal_bukti', $operator, $tanggal)
-            ->where('bahan_keluar.transaksi', 'keluar')
+        return DB::table($table . '_keluar_item')
+            ->join($table . '_keluar', $table . '_keluar_item.bahan_keluar_uid', '=', $table . '_keluar.uid')
+            ->where($table . '_keluar_item.' . $table . '_uid', $id)
+            ->where($table . '_keluar.tanggal_bukti', $operator, $tanggal)
+            ->where($table . '_keluar.transaksi', 'keluar')
             ->sum($column);
     }
 
-    public static function totalReturSampai($id, $tanggal, $column = 'jumlah', $operator = '<=')
+    public static function totalReturSampai($id, $tanggal, $table, $column = 'jumlah', $operator = '<=')
     {
-        return DB::table('bahan_keluar_item')
-            ->join('bahan_keluar', 'bahan_keluar_item.bahan_keluar_uid', '=', 'bahan_keluar.uid')
-            ->where('bahan_keluar_item.bahan_uid', $id)
-            ->where('bahan_keluar.tanggal_bukti', $operator, $tanggal)
-            ->where('bahan_keluar.transaksi', 'retur')
+        return DB::table($table . '_keluar_item')
+            ->join($table . '_keluar', $table . '_keluar_item.bahan_keluar_uid', '=', $table . '_keluar.uid')
+            ->where($table . '_keluar_item.' . $table . '_uid', $id)
+            ->where($table . '_keluar.tanggal_bukti', $operator, $tanggal)
+            ->where($table . '_keluar.transaksi', 'retur')
             ->sum($column);
     }
 
-    public static function saldoAkhir($bahan)
+    public static function saldoAkhir($bahan, $tipe)
     {
         try {
-            $now = now()->toDateString(); // Get the current date in SQL format
-            $bahanId = $bahan->uid;
+            if ($tipe == "bahan") {
+                $now = now()->toDateString(); // Get the current date in SQL format
+                $bahanId = $bahan->uid;
 
-            // Retrieve total 'masuk', 'keluar', and 'retur' values
-            $masuk = Utils::totalMasukSampai($bahanId, $now);
-            $keluar = Utils::totalKeluarSampai($bahanId, $now);
-            $retur = Utils::totalReturSampai($bahanId, $now);
+                // Retrieve total 'masuk', 'keluar', and 'retur' values
+                $masuk = Utils::totalMasukSampai($bahanId, $now, 'bahan');
+                $keluar = Utils::totalKeluarSampai($bahanId, $now, 'bahan');
+                $retur = Utils::totalReturSampai($bahanId, $now, 'bahan');
 
-            // Calculate the total: (masuk + retur) - keluar
-            $total = ($masuk + $retur) - $keluar;
+                // Calculate the total: (masuk + retur) - keluar
+                $total = ($masuk + $retur) - $keluar;
 
-            return $total;
+                return $total;
+            } else if ($tipe == "barang") {
+                $now = now()->toDateString(); // Get the current date in SQL format
+                $bahanId = $bahan->uid;
+
+                // Retrieve total 'masuk', 'keluar', and 'retur' values
+                $masuk = Utils::totalMasukSampai($bahanId, $now, 'barang');
+                $keluar = Utils::totalKeluarSampai($bahanId, $now, 'barang');
+                $retur = Utils::totalReturSampai($bahanId, $now, 'barang');
+
+                // Calculate the total: (masuk + retur) - keluar
+                $total = ($masuk + $retur) - $keluar;
+
+                return $total;
+            } else {
+                $now = now()->toDateString(); // Get the current date in SQL format
+                $bahanId = $bahan->uid;
+
+                // Retrieve total 'masuk', 'keluar', and 'retur' values
+                $masuk = Utils::totalMasukSampai($bahanId, $now, 'waste');
+                $keluar = Utils::totalKeluarSampai($bahanId, $now, 'waste');
+                $retur = Utils::totalReturSampai($bahanId, $now, 'waste');
+
+                // Calculate the total: (masuk + retur) - keluar
+                $total = ($masuk + $retur) - $keluar;
+
+                return $total;
+            }
         } catch (\Throwable $th) {
             // throw $th;
             return 0;

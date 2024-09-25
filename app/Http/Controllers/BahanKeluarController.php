@@ -99,7 +99,7 @@ class BahanKeluarController extends Controller
             } else {
                 return response([
                     'status' => false,
-                    'message' => 'Gagal Membuat Pemasukan Bahan Baku'
+                    'message' => 'Gagal Membuat Pengeluaran Bahan Baku'
                 ], 400);
             }
         } catch (\Throwable $th) {
@@ -212,17 +212,17 @@ class BahanKeluarController extends Controller
                     // if = edit, else = create
                     if ($key < count($data['bahan_item_uid'])) {
                         $item_uid = $data['bahan_item_uid'][$key];
-                        $bahanMasukItem = BahanKeluarItem::find($item_uid);
-                        $bahanMasukItem->bahan_uid = $value;
-                        $bahanMasukItem->jumlah = $data['jumlah'][$key];
+                        $bahanKeluarItem = BahanKeluarItem::find($item_uid);
+                        $bahanKeluarItem->bahan_uid = $value;
+                        $bahanKeluarItem->jumlah = $data['jumlah'][$key];
                         $bahan = Bahan::find($value);
                         if (strtolower($bahan->satuan) == 'kg') {
-                            $bahanMasukItem->jumlah_kg = $data['jumlah'][$key];
+                            $bahanKeluarItem->jumlah_kg = $data['jumlah'][$key];
                         } else {
-                            $bahanMasukItem->jumlah_kg = $data['jumlah_kg'][$key];
+                            $bahanKeluarItem->jumlah_kg = $data['jumlah_kg'][$key];
                         }
-                        $bahanMasukItem->updated_by = $user->uid;
-                        $bahanMasukItem->save();
+                        $bahanKeluarItem->updated_by = $user->uid;
+                        $bahanKeluarItem->save();
                     } else {
                         $insertItem[$insertIndex]['uid'] = Str::uuid()->toString();
                         $insertItem[$insertIndex]['bahan_keluar_uid'] = $bahanKeluar->uid;
