@@ -8,6 +8,7 @@ use App\Http\Controllers\BahanKeluarController;
 use App\Http\Controllers\BahanMasukController;
 use App\Http\Controllers\BahanMasukItemController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangMasukItemController;
 use App\Http\Controllers\CustomerController;
@@ -58,7 +59,7 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::resources(['bahan-masuk' => BahanMasukController::class]);
     Route::resources(['bahan-keluar' => BahanKeluarController::class]);
     Route::resources(['barang-masuk' => BarangMasukController::class]);
-    Route::resources(['barang-keluar' => BarangMasukItemController::class]);
+    Route::resources(['barang-keluar' => BarangKeluarController::class]);
 
     Route::post('/info_bahan', [BahanController::class, 'info_bahan'])->name('bahan.info');
     Route::post('/info_barang', [BarangController::class, 'info_barang'])->name('barang.info');
