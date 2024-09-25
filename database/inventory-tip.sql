@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 23, 2024 at 12:11 PM
+-- Generation Time: Sep 25, 2024 at 12:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -523,6 +523,106 @@ INSERT INTO `barang` (`uid`, `nama`, `kode`, `warna`, `panjang`, `lebar`, `tebal
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `barang_keluar`
+--
+
+CREATE TABLE `barang_keluar` (
+  `uid` varchar(40) NOT NULL,
+  `customer_uid` varchar(40) DEFAULT NULL,
+  `tipe` enum('lokal','ekspor') DEFAULT NULL,
+  `nomor_bukti` varchar(255) DEFAULT NULL,
+  `tanggal_bukti` date DEFAULT NULL,
+  `nomor_peb` varchar(255) DEFAULT NULL,
+  `tanggal_peb` date DEFAULT NULL,
+  `ppn` tinyint(2) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barang_keluar_item`
+--
+
+CREATE TABLE `barang_keluar_item` (
+  `uid` varchar(40) NOT NULL,
+  `barang_keluar_uid` varchar(40) DEFAULT NULL,
+  `barang_uid` varchar(40) DEFAULT NULL,
+  `jumlah` int(10) UNSIGNED DEFAULT NULL,
+  `jumlah_sqm` decimal(15,3) UNSIGNED DEFAULT NULL,
+  `bruto` decimal(10,3) UNSIGNED DEFAULT NULL,
+  `netto` decimal(10,3) UNSIGNED DEFAULT NULL,
+  `nilai` decimal(15,2) UNSIGNED DEFAULT NULL,
+  `mata_uang` varchar(255) DEFAULT NULL,
+  `nilai_ppn` decimal(15,2) UNSIGNED DEFAULT NULL,
+  `nilai_total` decimal(15,2) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barang_masuk`
+--
+
+CREATE TABLE `barang_masuk` (
+  `uid` varchar(40) NOT NULL,
+  `gudang_uid` varchar(40) DEFAULT NULL,
+  `nomor_bukti` varchar(255) DEFAULT NULL,
+  `tanggal_bukti` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `barang_masuk`
+--
+
+INSERT INTO `barang_masuk` (`uid`, `gudang_uid`, `nomor_bukti`, `tanggal_bukti`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('2619c12b-7539-4fec-a39a-3a0124fb1339', 'f9f7c4f6-7bca-4aa2-a7c1-b0d4da958d81', 'LHHP24192', '2024-08-22', '2024-09-25 02:31:36', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-25 02:31:36', NULL),
+('b67f65a4-3193-4099-888a-2b1b5a0c46f3', 'f9f7c4f6-7bca-4aa2-a7c1-b0d4da958d81', 'LHHP24200', '2024-09-06', '2024-09-25 00:42:52', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-25 02:01:44', '10753eb7-45f6-4f8a-a223-a330460f8799');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barang_masuk_item`
+--
+
+CREATE TABLE `barang_masuk_item` (
+  `uid` varchar(40) NOT NULL,
+  `barang_masuk_uid` varchar(40) DEFAULT NULL,
+  `barang_uid` varchar(40) DEFAULT NULL,
+  `nomor_spk` varchar(255) DEFAULT NULL,
+  `jumlah` int(10) UNSIGNED DEFAULT NULL,
+  `jumlah_sqm` decimal(15,3) UNSIGNED DEFAULT NULL,
+  `kg_per_item` decimal(10,3) UNSIGNED DEFAULT NULL,
+  `netto` decimal(15,3) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `barang_masuk_item`
+--
+
+INSERT INTO `barang_masuk_item` (`uid`, `barang_masuk_uid`, `barang_uid`, `nomor_spk`, `jumlah`, `jumlah_sqm`, `kg_per_item`, `netto`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('3197abf2-cbd8-4e7b-969d-d72e0104394f', 'b67f65a4-3193-4099-888a-2b1b5a0c46f3', '311e86ff-b01c-4205-9550-603173d5e62d', '004/PPIC-EGO/02/TI/VII/24', 2700, 8037.360, 2.640, 7128.000, '2024-09-25 09:01:44', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-25 09:01:44', NULL),
+('53f866a0-a503-4114-96f6-382587a7cf17', 'b67f65a4-3193-4099-888a-2b1b5a0c46f3', 'a24ec1f7-ebe7-4690-bdc0-42545f0d653e', '021/PPIC-URB/02/TI/VIII/24', 600, 1783.885, 2.720, 1632.000, '2024-09-25 07:42:52', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-25 02:01:44', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('f759bc84-5e29-4d30-be3b-63b6891cc410', '2619c12b-7539-4fec-a39a-3a0124fb1339', '51d4d420-cb3c-4592-b924-00f3ffd74001', '005/PPIC-TZB/04/TI/VII/24', 20, 74.420, 3.500, 70.000, '2024-09-25 09:31:36', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-25 09:31:36', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cache`
 --
 
@@ -940,6 +1040,44 @@ ALTER TABLE `barang`
   ADD KEY `updated_by` (`updated_by`);
 
 --
+-- Indexes for table `barang_keluar`
+--
+ALTER TABLE `barang_keluar`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `customer_uid` (`customer_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `barang_keluar_item`
+--
+ALTER TABLE `barang_keluar_item`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `barang_keluar_uid` (`barang_keluar_uid`),
+  ADD KEY `barang_uid` (`barang_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `barang_masuk`
+--
+ALTER TABLE `barang_masuk`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `gudang_uid` (`gudang_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `barang_masuk_item`
+--
+ALTER TABLE `barang_masuk_item`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `barang_masuk_uid` (`barang_masuk_uid`),
+  ADD KEY `barang_uid` (`barang_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
 -- Indexes for table `cache`
 --
 ALTER TABLE `cache`
@@ -1130,6 +1268,40 @@ ALTER TABLE `bahan_masuk_item`
 ALTER TABLE `barang`
   ADD CONSTRAINT `barang_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
   ADD CONSTRAINT `barang_ibfk_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `barang_keluar`
+--
+ALTER TABLE `barang_keluar`
+  ADD CONSTRAINT `barang_keluar_ibfk_1` FOREIGN KEY (`customer_uid`) REFERENCES `customer` (`uid`),
+  ADD CONSTRAINT `barang_keluar_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `barang_keluar_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `barang_keluar_item`
+--
+ALTER TABLE `barang_keluar_item`
+  ADD CONSTRAINT `barang_keluar_item_ibfk_1` FOREIGN KEY (`barang_keluar_uid`) REFERENCES `barang_keluar` (`uid`) ON DELETE CASCADE,
+  ADD CONSTRAINT `barang_keluar_item_ibfk_2` FOREIGN KEY (`barang_uid`) REFERENCES `barang` (`uid`),
+  ADD CONSTRAINT `barang_keluar_item_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `barang_keluar_item_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `barang_masuk`
+--
+ALTER TABLE `barang_masuk`
+  ADD CONSTRAINT `barang_masuk_ibfk_1` FOREIGN KEY (`gudang_uid`) REFERENCES `gudang` (`uid`),
+  ADD CONSTRAINT `barang_masuk_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `barang_masuk_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `barang_masuk_item`
+--
+ALTER TABLE `barang_masuk_item`
+  ADD CONSTRAINT `barang_masuk_item_ibfk_1` FOREIGN KEY (`barang_masuk_uid`) REFERENCES `barang_masuk` (`uid`) ON DELETE CASCADE,
+  ADD CONSTRAINT `barang_masuk_item_ibfk_2` FOREIGN KEY (`barang_uid`) REFERENCES `barang` (`uid`),
+  ADD CONSTRAINT `barang_masuk_item_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `barang_masuk_item_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
 
 --
 -- Constraints for table `customer`
