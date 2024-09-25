@@ -76,7 +76,7 @@
           </div>
           <div class="step-button" data-tab="2">
               <div class="step-header-number">2</div>
-              <div class="step-header-title">Data Bahan</div>
+              <div class="step-header-title">Data Item</div>
           </div>
           <div class="step-button" data-tab="3">
               <div class="step-header-number">3</div>
@@ -86,53 +86,35 @@
     </div>
     <div class="step-body" data-tab="1">
       <div class="row">
-        <div class="form-group col-md-12">
-          <label>Transaksi <span class="text-danger">*</span></label><br>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="transaksi2" checked name="transaksi" class="custom-control-input" value="keluar" {{ @$data->transaksi == "keluar" ? "checked" : "" }}>
-            <label class="custom-control-label" for="transaksi2">Keluar</label>
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="transaksi1"  name="transaksi" class="custom-control-input" value="retur" {{ @$data->transaksi == "retur" ? "checked" : "" }}>
-            <label class="custom-control-label" for="transaksi1">Retur</label>
-          </div>
-          
-        </div>
         <div class="form-group col-md-6">
           <label>Nomor Bukti <span class="text-danger">*</span></label>
-          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}">
+          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti">
         </div>
         <div class="form-group col-md-6 ">
           <label>Tanggal Bukti <span class="text-danger">*</span></label>
           <div class='date'>
-            <input type='text' class="form-control" name="tanggal_bukti" id='tanggal_bukti' style="background-color: white; " placeholder="Pilih Tanggal Bukti" value="{{ @$data->tanggal_bukti }}" />
+              <input type='text' class="form-control" name="tanggal_bukti" id='tanggal_bukti' style="background-color: white; " placeholder="Pilih Tanggal Bukti" value="" />
           </div>
         </div>
         <div class="form-group col-md-12">
-          <label>Nomor SPK</label>
-          <input type="text" name="nomor_spk" class="form-control" placeholder="Nomor SPK" value="{{ @$data->nomor_spk }}" >
+          <label>Gudang Penyimpanan <span class="text-danger">*</span></label>
+          <select name="gudang" class="form-control select2-gudang" id="gudang">
+            <option></option>
+            @foreach ($gudang as $item)
+                <option value="{{$item->uid}}" {{ $item->nama == "Gudang Barang Jadi" ? "selected" : ""}}>{{$item->nama}}</option>
+            @endforeach
+          </select>
         </div>
-        <div class="form-group col-md-12">
-            <label>Bagian Penerima <span class="text-danger">*</span></label>
-            <select name="bagian" class="form-control select2-bagian" id="bagian">
-              <option></option>
-              @foreach ($bagian as $item)
-                  <option value="{{$item->uid}}" {{@$data->bagian->uid == $item->uid ? "selected" : ""}}>{{$item->nama}}</option>
-              @endforeach
-            </select>
-          </div>
       </div>
     </div>
     <div class="step-body" data-tab="2" style="display: none;">
       <div class="col-md-10 mx-auto mb-5">
         <div id="dynamic-form">
           <!-- Original Form -->
-          @foreach ($bahanKeluarItems as $key => $bahanItem)
           <div class="form-item card shadow">
-            <input type="hidden" name="bahan_item_uid[]" value="{{ $bahanItem->uid }}">
-            <div class="card-header" id="heading{{$key}}">
+            <div class="card-header" id="heading1">
               <div class="d-flex align-items-center">
-                  <span class="ml-2 mr-3 item-number">Data {{$key}}</span>
+                  <span class="ml-2 mr-3 item-number">Data 1</span>
                   <hr class="flex-grow-1">
                   <a href="#collapse1" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse1">
                     <i class="fas fa-window-minimize"></i>
@@ -141,38 +123,51 @@
               </div>
             </div>
   
-            <div id="collapse1" class="collapse show" aria-labelledby="heading{{$key}}" data-parent="#dynamic-form">
+            <div id="collapse1" class="collapse show" aria-labelledby="heading1" data-parent="#dynamic-form">
               <div class="card-body">
                 <div class="row">
-                  <!-- Bahan -->
+                  <!-- Nomor SPK -->
                   <div class="form-group col-md-12">
-                    <label>Bahan <span class="text-danger">*</span></label>
-                    <select name="bahan[{{$key}}]" class="form-control select2-bahan" aria-describedby="validatebahan1">
+                      <label>Nomor SPK </label>
+                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK">
+                  </div>
+                  <!-- Barang -->
+                  <div class="form-group col-md-12">
+                    <label>Barang <span class="text-danger">*</span></label>
+                    <select name="barang[0]" class="form-control select2-barang">
                       <option></option>
-                      @foreach ($bahan as $item)
-                          <option value="{{$item->uid}}" {{ $item->uid == $bahanItem->bahan_uid ? "selected" : "" }}>{{$item->nama}}</option>
+                      @foreach ($barang as $item)
+                          <option value="{{$item->uid}}" data-warna="{{$item->warna}}" data-panjang="{{$item->panjang}}" data-lebar="{{$item->lebar}}" data-tebal="{{$item->tebal}}" data-satuan="{{$item->satuan}}">{{$item->nama}} {{$item->warna}} {{$item->panjang}} x {{$item->lebar}} x {{$item->tebal}}</option>
                       @endforeach
                     </select>
-                    <div id="validatebahan1" class="invalid-feedback">
-                      Stok Bahan Yang Dipilih Sudah Habis
-                    </div>
                     <small id="stok-bahan" style="display: none" class="form-text text-muted"></small>
                   </div>
                   <!-- Jumlah -->
                   <div class="form-group col-md-12 ">
                       <label>Jumlah <span class="text-danger">*</span></label>
                       <div class="input-group">
-                          <input type="number" step=".001" name="jumlah[]" class="form-control" placeholder="Jumlah" value="{{ $bahanItem->jumlah }}">
+                          <input type="number" name="jumlah[]" class="form-control" placeholder="Jumlah">
                           <div class="input-group-append" style="display: none">
                               <span class="input-group-text append-satuan"></span>
                           </div>
                       </div>
                   </div>
-                  <!-- Jumlah KG (Netto) -->
-                  <div class="form-group col-md-12 jumlah-kg" style="display: none;">
-                      <label>Jumlah KG (Netto)</label>
+                  <!-- Jumlah KG / Item -->
+                  <div class="form-group col-md-6 jumlah-kg" style="">
+                      <label>KG / Item <span class="text-danger">*</span></label>
                       <div class="input-group">
-                          <input type="number" name="jumlah_kg[]" class="form-control" step=".001" placeholder="Jumlah Kg" value="{{ $bahanItem->jumlah_kg }}">
+                          <input type="number" name="kg_per_item[]" class="form-control" step=".001" placeholder="KG / Item">
+                          <div class="input-group-append">
+                              <span class="input-group-text">KG</span>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Jumlah KG (Netto) -->
+                  <div class="form-group col-md-6 " style="">
+                      <label>Netto <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                          <input type="number" name="netto[]" class="form-control" step=".001" placeholder="Netto">
                           <div class="input-group-append">
                               <span class="input-group-text">KG</span>
                           </div>
@@ -182,7 +177,6 @@
               </div>
             </div>
           </div>
-          @endforeach
         </div>
         <!-- Button to add new form -->
         <a href="javascript:void(0)" id="add-form" class="btn btn-success mt-3"><i class="fas fa-plus"></i> Tambah Item</a>
@@ -193,16 +187,6 @@
           <table class="table table-borderless align-items-left table-flush table-header col-md-6">
               <tbody>
                   <tr>
-                      <td>Bagian Penerima</td>
-                      <td>:</td>
-                      <th class="bagian"></th>
-                  </tr>
-                  <tr>
-                      <td>Transaksi</td>
-                      <td>:</td>
-                      <th class="transaksi"><span class="badge badge-default bagian-type">tipe bagian</span></th>
-                  </tr>
-                  <tr>
                       <td>Nomor Bukti</td>
                       <td>:</td>
                       <th class="nomor-bukti">Nomor Bukti</th>
@@ -210,24 +194,27 @@
                   <tr>
                       <td>Tanggal Bukti</td>
                       <td>:</td>
-                      <th class="tanggal-bukti">Tanggal Bukti</th>
+                      <th class="tanggal-bukti">Tanggal</th>
                   </tr>
                   <tr>
-                      <td>Nomor SPK</td>
+                      <td>Gudang Penyimpanan</td>
                       <td>:</td>
-                      <th class="nomor-spk">Nomor SPK</th>
+                      <th class="gudang">Gudang</th>
                   </tr>
               </tbody>
           </table>
 
           <div class="py-2">
             <h5>Informasi Item</h5>
-              <table class="table table-responsive display nowrap" style="width:100%" id="table-bahanmasuk-ringkasan">
+              <table class="table table-responsive display nowrap" style="width:100%" id="table-barangmasuk-ringkasan">
                   <thead>
                       <tr>
                           <th>No</th>
-                          <th class="all">Nama Bahan</th>
-                          <th class="all">Jumlah</th>
+                          <th class="all">Nomor SPK</th>
+                          <th class="all">Nama Barang</th>
+                          <th class="none">Jumlah</th>
+                          <th class="none">KG / Item</th>
+                          <th class="none">Netto</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -243,34 +230,35 @@
   // Collect and display data from Step 1 and Step 2 to Step 3
   function collectAndDisplayData() {
       // Collect data from Step 1
-      var transaksi = $('input[name="transaksi"]:checked').val();
-      var bagian = $("#bagian").select2('data')[0].text;
+      var gudang = $("#gudang").select2('data')[0].text;
       var nomor_bukti = $('input[name="nomor_bukti"]').val();
       var tanggal_bukti = $('input[name="tanggal_bukti"]').val();
-      var nomor_spk = $('input[name="nomor_spk"]').val();
       
       // Update Step 3 fields
-      $('th.bagian').html(bagian);
-      $('th.transaksi').html(`<span class="badge badge-default badge-xl bagian-type">${transaksi}</span>`);
+      $('th.gudang').html(gudang);
       $('th.nomor-bukti').text(nomor_bukti);
       $('th.tanggal-bukti').text(tanggal_bukti);
-      $('th.nomor-spk').text(nomor_spk);
 
       // Collect and display dynamic data from Step 2 (loop through forms)
-      $('#table-bahanmasuk-ringkasan tbody').empty(); // Clear table body
+      $('#table-barangmasuk-ringkasan tbody').empty(); // Clear table body
 
       $('#dynamic-form .form-item').each(function(index) {
-          var bahan = $(this).find(`select[name="bahan[${index}]"]`).select2('data')[0].text;
+          var nomor_spk = $(this).find('input[name="nomor_spk[]"]').val();
+          var barang = $(this).find(`select[name="barang[${index}]"]`).select2('data')[0].text;
           var jumlah = $(this).find('input[name="jumlah[]"]').val();
-          var splitjumlah = jumlah.split(".");
           var satuan = $(this).find('.append-satuan').text();
+          var kg_per_item = $(this).find('input[name="kg_per_item[]"]').val();
+          var netto = $(this).find('input[name="netto[]"]').val();
 
           // Append the collected data to the table in Step 3
-          $('#table-bahanmasuk-ringkasan tbody').append(`
+          $('#table-barangmasuk-ringkasan tbody').append(`
               <tr>
                   <td>${index + 1}</td>
-                  <td>${bahan}</td>
-                  <td>${splitjumlah[0]},<small>${splitjumlah[1]}</small> ${satuan}</td>
+                  <td>${nomor_spk}</td>
+                  <td>${barang}</td>
+                  <td>${jumlah} ${satuan}</td>
+                  <td>${kg_per_item}</td>
+                  <td>${netto}</td>
               </tr>
           `);
       });
@@ -348,15 +336,6 @@
 
   function validateStep1() {
     let kosong = ''
-    let validateTransaksi = $('[name="transaksi"]').val()
-    if (!validateTransaksi) {
-      kosong += '<li>Kolom Transaksi Wajib Diisi</li>'
-    }
-    
-    let validateBagian = $('[name="bagian"]').val()
-    if (!validateBagian) {
-      kosong += '<li>Kolom Bagian Penerima Wajib Diisi</li>'
-    }
 
     let validateNomorBukti = $('[name="nomor_bukti"]').val()
     if (!validateNomorBukti) {
@@ -366,6 +345,11 @@
     let validateTanggalBukti = $('[name="tanggal_bukti"]').val()
     if (!validateTanggalBukti) {
       kosong += '<li>Kolom Tanggal Bukti Wajib Diisi</li>'
+    }
+
+    let validateGudang = $('[name="gudang"]').val()
+    if (!validateGudang) {
+      kosong += '<li>Kolom Gudang Wajib Diisi</li>'
     }
 
 
@@ -386,46 +370,32 @@
   }
 
   function validateStep2() {
-    let kosong = ''  
-    
-    $('#dynamic-form .form-item').each(function (index) {
-      let bahanValue = $(this).find('.form-group select[name="bahan['+index+']"]').val()
+    let kosong = ''       
+    $('[name="bahan[]"]').each(function(index) {
+      let bahanValue = $(this).val(); // Get the value of the current field
+      
       if (!bahanValue) {  // If the field is empty
         kosong += `<li>Kolom Bahan pada data ke - ${index + 1} wajib diisi</li>`;
-      } else {
-        let stok = $(this).find('.form-group #stok-bahan').attr("data-stok");
-        if (parseFloat(stok) < 1) {
-          kosong += `<li>Stok Bahan pada data ke - ${index + 1} belum tersedia</li>`;
-        }
       }
     });
-
 
     $('[name="jumlah[]"]').each(function(index) {
       let jumlahValue = $(this).val(); // Get the value of the current field
       
       if (!jumlahValue) {  // If the field is empty
         kosong += `<li>Kolom Jumlah pada data ke - ${index + 1} wajib diisi</li>`;
-      } else {
-        var maximum = $(this).attr('max')
-        if (parseFloat(jumlahValue) > parseFloat(maximum)) {
-          // $(this).addClass('is-invalid'); 
-          kosong += `<li>Kolom Jumlah pada data ke - ${index + 1} maksimal diisi ${maximum}</li>`;
-        }
       }
-
-
     });
 
-    // $('[name="jumlah_kg[]"]').each(function(index) {
-    //   if ($(this).is(":visible")) {
-    //     let jumlahKgValue = $(this).val(); // Get the value of the current field
+    $('[name="jumlah_kg[]"]').each(function(index) {
+      if ($(this).is(":visible")) {
+        let jumlahKgValue = $(this).val(); // Get the value of the current field
         
-    //     if (!jumlahKgValue) {  // If the field is empty
-    //       kosong += `<li>Kolom Jumlah KG (Netto) pada data ke - ${index + 1} wajib diisi</li>`;
-    //     }
-    //   }
-    // });
+        if (!jumlahKgValue) {  // If the field is empty
+          kosong += `<li>Kolom Jumlah KG (Netto) pada data ke - ${index + 1} wajib diisi</li>`;
+        }
+      }
+    });
 
     $('#response_container').empty()
     if(kosong){
@@ -449,38 +419,6 @@
       static: true,
       dateFormat: "Y-m-d",
     })
-    $('input[name="transaksi"]').on('change', function() {
-        var selectedTransaksi = $(this).val();
-        if (selectedTransaksi == "keluar") {
-          // set produksi
-          // produksi
-          $('[name="bagian"]').val("d23e865a-5de0-4a7b-9815-59cfae604aea").trigger('change');
-        } else {
-          // gudang 
-          $('[name="bagian"]').val("a64ba902-7c3e-46e8-ab13-8abae5ac0283").trigger('change');
-
-        }
-
-    });
-
-    var initialTransaksi = $('input[name="transaksi"]:checked').val();
-    if (initialTransaksi) {
-      let bagian = "{{@$data->bagian_uid}}";
-      if (bagian) {
-        $('[name="bagian"]').val("{{ $data->bagian_uid }}").trigger('change');
-      } else {
-        if (initialTransaksi == "keluar") {
-          // set produksi
-          // produksi
-          $('[name="bagian"]').val("d23e865a-5de0-4a7b-9815-59cfae604aea").trigger('change');
-        } else {
-          // gudang 
-          $('[name="bagian"]').val("a64ba902-7c3e-46e8-ab13-8abae5ac0283").trigger('change');
-  
-        }
-      }
-
-    }
 
     function parseFixed(form, zero) {
       var kursValue = form.val(); // Get the input value
@@ -491,29 +429,57 @@
         form.val(kursFloat.toFixed(zero) || ''); // Use an empty string if it's NaN
       }
     }
+    
 
-    $('.select2-bagian').select2({
-        placeholder: "Pilih Bagian Penerima", // Optional placeholder
-        allowClear: true // Allows the user to clear the selection
-    });
     // step 2
 
-    var formCount = $('#dynamic-form .form-item').length; // Counter for form numbering
+    var formCount = 1; // Counter for form numbering
+
+    function formatResult(res) {
+      if (!res.id) {
+        return res.text;
+      }
+      var $container = $(
+          "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__avatar'><img src='"+ base_url+'img/default-barang.png'+"'/></div>" +
+            "<div class='select2-result-repository__meta'>" +
+              "<div class='select2-result-repository__title'></div>" +
+              "<div class='select2-result-repository__description'></div>" +
+            "</div>" +
+          "</div>"
+        );
+
+        var warna = $(res.element).data('warna');
+        var panjang = $(res.element).data('panjang');
+        var lebar = $(res.element).data('lebar');
+        var tebal = $(res.element).data('tebal');
+        var satuan = $(res.element).data('satuan');
+        $container.find(".select2-result-repository__title").text(res.text || '-');
+        $container.find(".select2-result-repository__description").html(warna ? `Warna : ${warna} <br> Dimensi : ${panjang} x ${lebar} x ${tebal} <br> Satuan : ${satuan}` : '-');
+
+        return $container
+    }
+
+    function formatSelection(res) {
+      return res.text;
+    }
 
     let initializeSelect2 =  function() {
-      $('.select2-bahan').select2({
-          placeholder: "Pilih Bahan", // Optional placeholder
-          allowClear: true // Allows the user to clear the selection
+      $('.select2-barang').select2({
+          placeholder: "Pilih Barang", // Optional placeholder
+          allowClear: true, // Allows the user to clear the selection
+          templateResult: formatResult,  // Custom result format
+          templateSelection: formatSelection // Custom selected item format
       });
 
-      $(".select2-bahan").change(function() {
-          var bahan = $(this).val(); // Get the selected value
-          if (bahan) {
+      $(".select2-barang").change(function() {
+          var barang = $(this).val(); // Get the selected value
+          if (barang) {
               $.ajax({
-                  url: `{{route('bahan.info')}}`,  // Replace with your controller URL
+                  url: `{{route('barang.info')}}`,  // Replace with your controller URL
                   method: 'POST',
                   data: {
-                      'bahan': bahan // Send selected bahan ID to the server
+                      'barang': barang // Send selected bahan ID to the server
                   },
                   headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -525,14 +491,8 @@
                         $(this).closest('.form-item').find('.input-group-append .append-satuan').parent().show();
                         $(this).closest('.form-item').find('.input-group-append .append-satuan').text(res.data.satuan);
                         $(this).closest('.form-item').find('.form-group #stok-bahan').text("Stok : "+res.data.stok+" "+res.data.satuan);
-                        $(this).closest('.form-item').find('.form-group #stok-bahan').attr("data-stok",res.data.stok);
-                        $(this).closest('.form-item').find('input[name="jumlah[]"]').attr("max", res.data.stok);
                         $(this).closest('.form-item').find('.form-group #stok-bahan').slideDown();
-                        if (res.data.satuan.toLowerCase() === "kg") {
-                          $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideUp();
-                        } else {
-                          $(this).closest('.form-item').find('input[name="jumlah_kg[]"]').parent().parent().slideDown();
-                        }
+                        
                       }
                       
                       // Example: Update some input with the value returned from the server
@@ -553,16 +513,37 @@
           }
       });
 
+      $('.select2-gudang').select2({
+          placeholder: "Select an option", // Optional placeholder
+          allowClear: true // Allows the user to clear the selection
+      });
     }
 
-    $(document).on('blur', 'input[name="jumlah_kg[]"]', function () {
+    $(document).on('blur', 'input[name="kg_per_item[]"]', function () {
         parseFixed($(this),3);
     });
-    $(document).on('blur', 'input[name="jumlah[]"]', function () {
+    $(document).on('blur', 'input[name="netto[]"]', function () {
         parseFixed($(this),3);
+    });
+
+    function calculateTotal(form) {
+        // Get values from the current form
+        var jumlah = parseFloat(form.find('input[name="jumlah[]"]').val()) || 0;
+        var kg_per_item = parseFloat(form.find('input[name="kg_per_item[]"]').val()) || 0;
+
+        // Calculate the total value
+        var nilaiTotal = jumlah * kg_per_item;
+
+        // Set the result to the nilai_total input
+        form.find('input[name="netto[]"]').val(nilaiTotal.toFixed(3));  // Format to 2 decimal places
+    }
+
+     // Event listener for changes in nilai, kurs, asuransi, and ongkos
+     $(document).on('input', 'input[name="jumlah[]"], input[name="kg_per_item[]"]', function() {
+        var currentForm = $(this).closest('.form-item');  // Get the current form
+        calculateTotal(currentForm);  // Calculate the total for the current form
     });
     
-
 
 
     // Function to update the form numbers and accordion ids
@@ -599,58 +580,75 @@
       formCount++;
       let newForm = ``;
 
-      newForm = `
-        <div class="form-item card shadow">
-            <div class="card-header" id="heading${formCount}">
-              <div class="d-flex align-items-center">
-                  <span class="ml-2 mr-3 item-number">Item ${formCount}</span>
-                  <hr class="flex-grow-1">
-                  <a href="#collapse${formCount}" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse${formCount}">
-                    <i class="fas fa-window-minimize"></i>
-                  </a>
-                  <a href="javascript:void(0)" class="btn btn-danger btn-sm remove-form"><i class="fas fa-trash"></i></a>
-              </div>
-            </div>
 
-            <div id="collapse${formCount}" class="collapse show" aria-labelledby="heading${formCount}" data-parent="#dynamic-form">
-              <div class="card-body">
-                <div class="row">
-                  
-                  <!-- Bahan -->
+      newForm = `
+      <div class="form-item card shadow">
+          <div class="card-header" id="heading${formCount}">
+            <div class="d-flex align-items-center">
+                <span class="ml-2 mr-3 item-number">Item ${formCount}</span>
+                <hr class="flex-grow-1">
+                <a href="#collapse${formCount}" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse${formCount}">
+                  <i class="fas fa-window-minimize"></i>
+                </a>
+                <a href="javascript:void(0)" class="btn btn-danger btn-sm remove-form"><i class="fas fa-trash"></i></a>
+            </div>
+          </div>
+
+          <div id="collapse${formCount}" class="collapse show" aria-labelledby="heading${formCount}" data-parent="#dynamic-form">
+            <div class="card-body">
+              <div class="row">
+                  <!-- Nomor SPK -->
                   <div class="form-group col-md-12">
-                      <label>Bahan <span class="text-danger">*</span></label>
-                      <select name="bahan[${formCount-1}]" class="form-control select2-bahan">
-                          <option></option>
-                          @foreach ($bahan as $item)
-                              <option value="{{$item->uid}}">{{$item->nama}}</option>
-                          @endforeach
-                      </select>
-                      <small id="stok-bahan" style="display: none" class="form-text text-muted"></small>
+                      <label>Nomor SPK </label>
+                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK">
+                  </div>
+                  <!-- Barang -->
+                  <div class="form-group col-md-12">
+                    <label>Barang <span class="text-danger">*</span></label>
+                    <select name="barang[${formCount-1}]" class="form-control select2-barang">
+                      <option></option>
+                      @foreach ($barang as $item)
+                          <option value="{{$item->uid}}" data-warna="{{$item->warna}}" data-panjang="{{$item->panjang}}" data-lebar="{{$item->lebar}}" data-tebal="{{$item->tebal}}" data-satuan="{{$item->satuan}}">{{$item->nama}} {{$item->warna}} {{$item->panjang}} x {{$item->lebar}} x {{$item->tebal}}</option>
+                      @endforeach
+                    </select>
+                    <small id="stok-bahan" style="display: none" class="form-text text-muted"></small>
                   </div>
                   <!-- Jumlah -->
                   <div class="form-group col-md-12 ">
                       <label>Jumlah <span class="text-danger">*</span></label>
                       <div class="input-group">
-                          <input type="number" step=".001" name="jumlah[]" class="form-control" placeholder="Jumlah">
+                          <input type="number"  name="jumlah[]" class="form-control" placeholder="Jumlah">
                           <div class="input-group-append" style="display: none">
                               <span class="input-group-text append-satuan"></span>
                           </div>
                       </div>
                   </div>
-                  <!-- Jumlah KG (Netto) -->
-                  <div class="form-group col-md-12 jumlah-kg" style="display: none;">
-                      <label>Jumlah KG (Netto) </label>
+                  <!-- Jumlah KG / Item -->
+                  <div class="form-group col-md-6 jumlah-kg" style="">
+                      <label>KG / Item <span class="text-danger">*</span></label>
                       <div class="input-group">
-                          <input type="number" name="jumlah_kg[]" class="form-control" step=".001" placeholder="Jumlah">
+                          <input type="number" name="kg_per_item[]" class="form-control" step=".001" placeholder="KG / Item">
+                          <div class="input-group-append">
+                              <span class="input-group-text">KG</span>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Jumlah KG (Netto) -->
+                  <div class="form-group col-md-6 " style="">
+                      <label>Netto <span class="text-danger">*</span></label>
+                      <div class="input-group">
+                          <input type="number" name="netto[]" class="form-control" step=".001" placeholder="Netto">
                           <div class="input-group-append">
                               <span class="input-group-text">KG</span>
                           </div>
                       </div>
                   </div>
                 </div>
-              </div>
             </div>
-        </div>`;
+          </div>
+      </div>`;
+
       // Append the new form to the dynamic form container
       $('#dynamic-form').append(newForm);
 

@@ -23,8 +23,34 @@ class BarangMasukDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'barangmasuk.action')
-            ->setRowId('id');
+            ->addColumn('action', function ($item) {
+                $html = '';
+                $html = '<div class="btn-group btn-group-sm">';
+                $html .= '<button onclick="edit(\'' . $item->uid . '\')" type="button" class="btn btn-sm btn-info" title="Edit"><i class="fas fa-pen"></i></button>';
+                $html .= '<button onclick="destroy(\'' . $item->uid . '\')" type="button" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash"></i></button>';
+                $html .= '</div>';
+                return $html;
+            })
+            ->addColumn('nomor_bukti', function ($data) {
+                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_bukti . '</a>';
+            })
+            ->filterColumn('nomor_bukti', function ($query, $keyword) {
+                $query->where('nomor_bukti', 'like', "%{$keyword}%");
+            })
+            ->addColumn('gudang', function ($data) {
+                $gudang = "";
+                if (isset($data->gudang)) {
+                    $gudang = $data->gudang->nama;
+                }
+                return $gudang;
+            })
+            ->filterColumn('gudang', function ($query, $keyword) {
+                // Assuming you have a relationship between the user and role (e.g., user->role->name)
+                $query->whereHas('gudang', function ($q) use ($keyword) {
+                    $q->where('nama', 'like', "%{$keyword}%");
+                });
+            })
+            ->rawColumns(['action', 'nomor_bukti']);
     }
 
     /**
@@ -45,21 +71,25 @@ class BarangMasukDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        $button = [];
+        // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
+        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Pemasukan Barang Jadi')->action('function() { create() }');
         return $this->builder()
-                    ->setTableId('barangmasuk-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->parameters([
+                'language' => [
+                    'search' => '<i class="fas fa-search"></i>',
+                    'infoFiltered' => ''
+                ],
+            ])
+            ->setTableId('barangmasuk-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom("<'row'<'col-sm-6'B><'col-sm-3'f><'col-sm-3'l>> <'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>")
+            ->orderBy(1)
+            ->scrollY(350)
+            ->scrollX(false)
+            // ->selectStyleSingle()
+            ->buttons($button);
     }
 
     /**
@@ -71,14 +101,14 @@ class BarangMasukDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
+            Column::make('tanggal_bukti')->title("Tanggal")
+                ->width(80),
+            Column::make('nomor_bukti')->title("Bukti"),
+            Column::make('gudang')->title("Penyimpanan"),
         ];
     }
 

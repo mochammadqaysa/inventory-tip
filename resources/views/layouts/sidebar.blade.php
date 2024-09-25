@@ -71,7 +71,8 @@
       ->sub_item_accordion('Inventory','inventory',['super_admin','exim'],'fas fa-truck-loading')
       ->start_item_accordion('inventory', (
         Request::is('inventory/bahan-masuk') ||
-        Request::is('inventory/bahan-keluar') 
+        Request::is('inventory/bahan-keluar') ||
+        Request::is('inventory/barang-masuk') 
         ))
       ->customIconItem('Pemasukan Bahan Baku', asset('assets/img/brand/import_bahan.svg'), 'inventory/bahan-masuk',Request::is('inventory/bahan-masuk'),['super_admin','exim'])
       ->customIconItem('Pengeluaran Bahan Baku', asset('assets/img/brand/export_bahan.svg'), 'inventory/bahan-keluar',Request::is('inventory/bahan-keluar'),['super_admin','exim'])

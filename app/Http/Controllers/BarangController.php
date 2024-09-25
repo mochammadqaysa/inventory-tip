@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\BarangDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -190,6 +191,27 @@ class BarangController extends Controller
             return response([
                 'status' => false,
                 'message' => 'Terjadi Kesalahan Internal',
+            ], 400);
+        }
+    }
+
+    public function info_barang(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $barang = Barang::find($data['barang']);
+            $stok = Utils::saldoAkhir($barang, 'barang');
+            return response([
+                'status' => true,
+                'data' => [
+                    "satuan" => $barang->satuan,
+                    "stok" => $stok
+                ]
+            ], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            response([
+                'status' => false,
             ], 400);
         }
     }
