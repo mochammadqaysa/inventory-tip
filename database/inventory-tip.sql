@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2024 at 12:02 PM
+-- Generation Time: Sep 26, 2024 at 12:30 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -541,6 +541,14 @@ CREATE TABLE `barang_keluar` (
   `updated_by` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `barang_keluar`
+--
+
+INSERT INTO `barang_keluar` (`uid`, `customer_uid`, `tipe`, `nomor_bukti`, `tanggal_bukti`, `nomor_peb`, `tanggal_peb`, `ppn`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('6912cff0-568c-43c0-9e90-7821d187f610', '2b4a775e-2ba6-4e46-a394-ad5817246b52', 'lokal', 'ASDF', '2024-09-11', NULL, NULL, 11, '2024-09-26 02:19:45', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-26 02:19:45', NULL),
+('cd57991f-5069-4e4f-b95c-1cc35f9744d6', '7c23ee51-d59b-4ba9-be68-795eca559792', 'ekspor', 'SDFFDG', '2024-09-12', 'DSFDS', '2024-09-13', NULL, '2024-09-26 00:44:50', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-26 01:56:58', '10753eb7-45f6-4f8a-a223-a330460f8799');
+
 -- --------------------------------------------------------
 
 --
@@ -564,6 +572,15 @@ CREATE TABLE `barang_keluar_item` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_by` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `barang_keluar_item`
+--
+
+INSERT INTO `barang_keluar_item` (`uid`, `barang_keluar_uid`, `barang_uid`, `jumlah`, `jumlah_sqm`, `bruto`, `netto`, `nilai`, `mata_uang`, `nilai_ppn`, `nilai_total`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('5b0e3bb4-d416-4e6b-9238-c1fe5fd4acf7', '6912cff0-568c-43c0-9e90-7821d187f610', '311e86ff-b01c-4205-9550-603173d5e62d', 100, 297.680, 1234.000, 1234.000, 1234234234.00, 'IDR', 135765765.74, 1369999999.74, '2024-09-26 09:19:45', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-26 09:19:45', NULL),
+('dd66e14a-c1a6-4a77-ac57-0be4129cc809', 'cd57991f-5069-4e4f-b95c-1cc35f9744d6', '311e86ff-b01c-4205-9550-603173d5e62d', 1234, 3673.371, 234.000, 234.000, 53456345.00, 'USD', NULL, 53456345.00, '2024-09-26 07:44:50', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-26 01:57:38', '10753eb7-45f6-4f8a-a223-a330460f8799'),
+('fe532375-2917-4612-80c6-2cdd9beeeebe', 'cd57991f-5069-4e4f-b95c-1cc35f9744d6', 'a24ec1f7-ebe7-4690-bdc0-42545f0d653e', 50, 148.657, 234.000, 230.000, 2345234.00, 'USD', NULL, 2345234.00, '2024-09-26 08:57:38', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-26 08:57:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -972,6 +989,82 @@ INSERT INTO `waste` (`uid`, `nama`, `kode`, `created_at`, `created_by`, `updated
 ('b599a27f-e883-46fc-b635-0647d6a05eb7', 'RCM', 'rcm', '2024-09-12 23:42:17', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-12 23:42:17', NULL),
 ('cae5aef2-a899-4bfb-898b-64b8b938c81f', 'Laminasi', 'laminasi', '2024-09-12 23:41:47', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-12 23:41:47', NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waste_keluar`
+--
+
+CREATE TABLE `waste_keluar` (
+  `uid` varchar(40) NOT NULL,
+  `customer_uid` varchar(40) DEFAULT NULL,
+  `nomor_invoice` varchar(255) DEFAULT NULL,
+  `tanggal_invoice` date DEFAULT NULL,
+  `nomor_sppb` varchar(255) DEFAULT NULL,
+  `tanggal_sppb` date DEFAULT NULL,
+  `jumlah` decimal(10,3) UNSIGNED DEFAULT NULL,
+  `nilai` decimal(15,2) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waste_keluar_item`
+--
+
+CREATE TABLE `waste_keluar_item` (
+  `uid` varchar(40) NOT NULL,
+  `waste_keluar_uid` varchar(40) DEFAULT NULL,
+  `waste_uid` varchar(40) DEFAULT NULL,
+  `jenis` enum('ABS','PMMA','MASKING') DEFAULT NULL,
+  `nomor_pib` varchar(255) DEFAULT NULL,
+  `qty` int(10) UNSIGNED DEFAULT NULL,
+  `nomor_packing` varchar(255) DEFAULT NULL,
+  `jumlah` text DEFAULT NULL,
+  `index` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waste_masuk`
+--
+
+CREATE TABLE `waste_masuk` (
+  `uid` varchar(40) NOT NULL,
+  `nomor_bukti` varchar(255) DEFAULT NULL,
+  `tanggal_bukti` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waste_masuk_item`
+--
+
+CREATE TABLE `waste_masuk_item` (
+  `uid` varchar(40) NOT NULL,
+  `waste_masuk_uid` varchar(40) DEFAULT NULL,
+  `waste_uid` varchar(40) DEFAULT NULL,
+  `jumlah` decimal(10,3) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` varchar(40) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(40) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -1188,6 +1281,43 @@ ALTER TABLE `waste`
   ADD KEY `updated_by` (`updated_by`);
 
 --
+-- Indexes for table `waste_keluar`
+--
+ALTER TABLE `waste_keluar`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `customer_uid` (`customer_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `waste_keluar_item`
+--
+ALTER TABLE `waste_keluar_item`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `waste_keluar_uid` (`waste_keluar_uid`),
+  ADD KEY `waste_uid` (`waste_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `waste_masuk`
+--
+ALTER TABLE `waste_masuk`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- Indexes for table `waste_masuk_item`
+--
+ALTER TABLE `waste_masuk_item`
+  ADD PRIMARY KEY (`uid`),
+  ADD KEY `waste_masuk_uid` (`waste_masuk_uid`),
+  ADD KEY `waste_uid` (`waste_uid`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1345,6 +1475,39 @@ ALTER TABLE `users`
 ALTER TABLE `waste`
   ADD CONSTRAINT `waste_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
   ADD CONSTRAINT `waste_ibfk_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `waste_keluar`
+--
+ALTER TABLE `waste_keluar`
+  ADD CONSTRAINT `waste_keluar_ibfk_1` FOREIGN KEY (`customer_uid`) REFERENCES `customer` (`uid`),
+  ADD CONSTRAINT `waste_keluar_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `waste_keluar_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `waste_keluar_item`
+--
+ALTER TABLE `waste_keluar_item`
+  ADD CONSTRAINT `waste_keluar_item_ibfk_1` FOREIGN KEY (`waste_keluar_uid`) REFERENCES `waste_keluar` (`uid`) ON DELETE CASCADE,
+  ADD CONSTRAINT `waste_keluar_item_ibfk_2` FOREIGN KEY (`waste_uid`) REFERENCES `waste` (`uid`),
+  ADD CONSTRAINT `waste_keluar_item_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `waste_keluar_item_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `waste_masuk`
+--
+ALTER TABLE `waste_masuk`
+  ADD CONSTRAINT `waste_masuk_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `waste_masuk_ibfk_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
+
+--
+-- Constraints for table `waste_masuk_item`
+--
+ALTER TABLE `waste_masuk_item`
+  ADD CONSTRAINT `waste_masuk_item_ibfk_1` FOREIGN KEY (`waste_masuk_uid`) REFERENCES `waste_masuk` (`uid`) ON DELETE CASCADE,
+  ADD CONSTRAINT `waste_masuk_item_ibfk_2` FOREIGN KEY (`waste_uid`) REFERENCES `waste` (`uid`),
+  ADD CONSTRAINT `waste_masuk_item_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`),
+  ADD CONSTRAINT `waste_masuk_item_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `users` (`uid`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
