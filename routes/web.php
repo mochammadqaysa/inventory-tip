@@ -20,6 +20,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WasteController;
+use App\Http\Controllers\WasteKeluarController;
+use App\Http\Controllers\WasteMasukController;
 use App\Http\Middleware\TiaraAuth;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +62,8 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::resources(['bahan-keluar' => BahanKeluarController::class]);
     Route::resources(['barang-masuk' => BarangMasukController::class]);
     Route::resources(['barang-keluar' => BarangKeluarController::class]);
+    Route::resources(['waste-masuk' => WasteMasukController::class]);
+    Route::resources(['waste-keluar' => WasteKeluarController::class]);
 
     Route::post('/info_bahan', [BahanController::class, 'info_bahan'])->name('bahan.info');
     Route::post('/info_barang', [BarangController::class, 'info_barang'])->name('barang.info');
@@ -75,5 +79,6 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::prefix('select2')->group(function () {
         Route::get('/role', [RoleController::class, 'select2'])->name('select2.role');
         Route::get('/supplier', [SupplierController::class, 'select2'])->name('select2.supplier');
+        Route::get('/customer', [CustomerController::class, 'select2'])->name('select2.customer');
     });
 });

@@ -209,7 +209,7 @@ class BarangController extends Controller
                 ]
             ], 200);
         } catch (\Throwable $th) {
-            //throw $th;
+            throw $th;
             response([
                 'status' => false,
             ], 400);

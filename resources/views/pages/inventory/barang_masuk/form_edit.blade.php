@@ -116,7 +116,7 @@
             <input type="hidden" name="barang_item_uid[]" value="{{ $barangItem->uid }}">
             <div class="card-header" id="heading{{$key}}">
               <div class="d-flex align-items-center">
-                  <span class="ml-2 mr-3 item-number">Data {{$key}}</span>
+                  <span class="ml-2 mr-3 item-number">Item {{$key}}</span>
                   <hr class="flex-grow-1">
                   <a href="#collapse1" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse1">
                     <i class="fas fa-window-minimize"></i>

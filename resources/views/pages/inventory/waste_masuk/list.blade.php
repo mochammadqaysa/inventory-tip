@@ -1,14 +1,14 @@
 @extends('layouts.root')
 
-@section('title', 'Pengeluaran Barang Jadi')
+@section('title', 'Pemasukan Waste / Scrap')
 
 @section('breadcrum')
 <div class="col-lg-6 col-7">
   <h6 class="h2 text-white d-inline-block mb-0">Inventory</h6>
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/export_barang.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Pengeluaran Barang Jadi</li>
+      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/import_waste.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Pemasukan Waste / Scrap</li>
     </ol>
   </nav>
 </div>
@@ -35,10 +35,10 @@
 {!! $dataTable->scripts() !!}
 <script>
   let _url = {
-    create: `{{ route('barang-keluar.create') }}`,
-    edit: `{{ route('barang-keluar.edit', ':id') }}`,
-    show: `{{ route('barang-keluar.show', ':id') }}`,
-    destroy: `{{ route('barang-keluar.destroy', ':id') }}`
+    create: `{{ route('waste-masuk.create') }}`,
+    edit: `{{ route('waste-masuk.edit', ':id') }}`,
+    show: `{{ route('waste-masuk.show', ':id') }}`,
+    destroy: `{{ route('waste-masuk.destroy', ':id') }}`
   }
 
   function create(){
@@ -108,7 +108,7 @@
         if($('[name="_method"]').val() == undefined) {
           el_form[0].reset()
         }
-        window.LaravelDataTables["barangkeluar-table"].draw()
+        window.LaravelDataTables["wastemasuk-table"].draw()
         Ryuna.close_modal()
       }
     }).fail((xhr) => {
@@ -160,7 +160,7 @@
             type: 'success',
             confirmButtonColor: '#007bff'
           })
-        window.LaravelDataTables["barangkeluar-table"].draw()
+        window.LaravelDataTables["wastemasuk-table"].draw()
         }).fail((xhr) => {
           Swal.fire({
             title: xhr.responseJSON.message,

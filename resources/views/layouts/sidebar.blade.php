@@ -73,7 +73,9 @@
         Request::is('inventory/bahan-masuk') ||
         Request::is('inventory/bahan-keluar') ||
         Request::is('inventory/barang-masuk') ||
-        Request::is('inventory/barang-keluar')
+        Request::is('inventory/barang-keluar') ||
+        Request::is('inventory/waste-masuk') ||
+        Request::is('inventory/waste-keluar') 
         ))
       ->customIconItem('Pemasukan Bahan Baku', asset('assets/img/brand/import_bahan.svg'), 'inventory/bahan-masuk',Request::is('inventory/bahan-masuk'),['super_admin','exim'])
       ->customIconItem('Pengeluaran Bahan Baku', asset('assets/img/brand/export_bahan.svg'), 'inventory/bahan-keluar',Request::is('inventory/bahan-keluar'),['super_admin','exim'])

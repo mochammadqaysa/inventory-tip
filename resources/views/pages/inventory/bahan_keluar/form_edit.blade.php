@@ -76,7 +76,7 @@
           </div>
           <div class="step-button" data-tab="2">
               <div class="step-header-number">2</div>
-              <div class="step-header-title">Data Bahan</div>
+              <div class="step-header-title">Data Item</div>
           </div>
           <div class="step-button" data-tab="3">
               <div class="step-header-number">3</div>
@@ -132,7 +132,7 @@
             <input type="hidden" name="bahan_item_uid[]" value="{{ $bahanItem->uid }}">
             <div class="card-header" id="heading{{$key}}">
               <div class="d-flex align-items-center">
-                  <span class="ml-2 mr-3 item-number">Data {{$key}}</span>
+                  <span class="ml-2 mr-3 item-number">Item {{$key}}</span>
                   <hr class="flex-grow-1">
                   <a href="#collapse1" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse1">
                     <i class="fas fa-window-minimize"></i>

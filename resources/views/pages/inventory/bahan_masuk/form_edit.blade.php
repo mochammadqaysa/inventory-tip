@@ -151,16 +151,16 @@
             <input type="hidden" name="bahan_item_uid[]" value="{{ $bahanItem->uid }}">
             <div class="card-header" id="heading{{$key}}">
               <div class="d-flex align-items-center">
-                  <span class="ml-2 mr-3 item-number">Data {{$key}}</span>
+                  <span class="ml-2 mr-3 item-number">Item {{$key}}</span>
                   <hr class="flex-grow-1">
-                  <a href="#collapse1" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse1">
+                  <a href="#collapse{{$key}}" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse{{$key}}">
                     <i class="fas fa-window-minimize"></i>
                   </a>
                   <a href="javascript:void(0)" class="btn btn-danger btn-sm remove-form" style="display: none"><i class="fas fa-trash"></i></a>
               </div>
             </div>
   
-            <div id="collapse1" class="collapse show" aria-labelledby="heading{{$key}}" data-parent="#dynamic-form">
+            <div id="collapse{{$key}}" class="collapse show" aria-labelledby="heading{{$key}}" data-parent="#dynamic-form">
               <div class="card-body">
                 <div class="row">
                   <!-- Kode HS -->

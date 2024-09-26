@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\BarangKeluar;
+use App\Models\WasteKeluar;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BarangKeluarDataTable extends DataTable
+class WasteKeluarDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -31,46 +31,22 @@ class BarangKeluarDataTable extends DataTable
                 $html .= '</div>';
                 return $html;
             })
-            ->addColumn('nomor_bukti', function ($data) {
-                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_bukti . '</a>';
+            ->addColumn('nomor_invoice', function ($data) {
+                return '<a href="javascript:show(\'' . $data->uid . '\')">' . $data->nomor_invoice . '</a>';
             })
-            ->filterColumn('nomor_bukti', function ($query, $keyword) {
-                $query->where('nomor_bukti', 'like', "%{$keyword}%");
+            ->filterColumn('nomor_invoice', function ($query, $keyword) {
+                $query->where('nomor_invoice', 'like', "%{$keyword}%");
             })
-            ->addColumn('tipe', function ($data) {
-                if (strtolower($data->tipe) == "ekspor") {
-                    return '<span class="badge badge-lg badge-info">' . $data->tipe . '</span>';
-                } else {
-                    return '<span class="badge badge-lg badge-success">' . $data->tipe . '</span>';
-                }
-            })
-            ->filterColumn('tipe', function ($query, $keyword) {
-                // Apply the filter directly to the `tipe` column
-                $query->where('tipe', 'like', "%{$keyword}%");
-            })
-            ->addColumn('customer', function ($data) {
-                $customer = "";
-                if (isset($data->customer)) {
-                    $customer = $data->customer->nama;
-                }
-                return $customer;
-            })
-            ->filterColumn('customer', function ($query, $keyword) {
-                // Assuming you have a relationship between the user and role (e.g., user->role->name)
-                $query->whereHas('customer', function ($q) use ($keyword) {
-                    $q->where('nama', 'like', "%{$keyword}%");
-                });
-            })
-            ->rawColumns(['action', 'nomor_bukti', 'tipe']);
+            ->rawColumns(['action', 'nomor_invoice']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\BarangKeluar $model
+     * @param \App\Models\WasteKeluar $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(BarangKeluar $model): QueryBuilder
+    public function query(WasteKeluar $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -84,7 +60,7 @@ class BarangKeluarDataTable extends DataTable
     {
         $button = [];
         // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
-        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Pengeluaran Barang Jadi')->action('function() { create() }');
+        $button[] = Button::raw('<i class="fa fa-plus"></i> Create Pengeluaran Waste / Scrap')->action('function() { create() }');
         return $this->builder()
             ->parameters([
                 'language' => [
@@ -92,7 +68,7 @@ class BarangKeluarDataTable extends DataTable
                     'infoFiltered' => ''
                 ],
             ])
-            ->setTableId('barangkeluar-table')
+            ->setTableId('wastekeluar-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom("<'row'<'col-sm-6'B><'col-sm-3'f><'col-sm-3'l>> <'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>")
@@ -119,8 +95,6 @@ class BarangKeluarDataTable extends DataTable
             Column::make('tanggal_bukti')->title("Tanggal")
                 ->width(80),
             Column::make('nomor_bukti')->title("Bukti"),
-            Column::make('customer'),
-            Column::make('tipe'),
         ];
     }
 
@@ -131,6 +105,6 @@ class BarangKeluarDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'BarangKeluar_' . date('YmdHis');
+        return 'WasteKeluar_' . date('YmdHis');
     }
 }

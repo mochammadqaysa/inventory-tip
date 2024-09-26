@@ -114,7 +114,7 @@
           <div class="form-item card shadow">
             <div class="card-header" id="heading1">
               <div class="d-flex align-items-center">
-                  <span class="ml-2 mr-3 item-number">Data 1</span>
+                  <span class="ml-2 mr-3 item-number">Item 1</span>
                   <hr class="flex-grow-1">
                   <a href="#collapse1" class="btn btn-info btn-sm item-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="collapse1">
                     <i class="fas fa-window-minimize"></i>

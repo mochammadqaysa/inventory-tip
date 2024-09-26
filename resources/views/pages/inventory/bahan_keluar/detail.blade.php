@@ -45,7 +45,7 @@ use App\Helpers\Utils;
             <tr>
                 <td></td>
                 <td>{{ $item->bahan->nama }}</td>
-                <td>{!! Utils::decimal($item->jumlah ?? 0 , 3); !!} {{$item->bahan->satuan}} @if(strtolower($item->bahan->satuan) != "kg") <small>( {!! Utils::decimal($item->jumlah_kg, 3) !!} KG )</small> @endif </td>
+                <td>{!! Utils::decimal($item->jumlah ?? 0 , 3); !!} {{$item->bahan->satuan}} @if(strtolower($item->bahan->satuan) != "kg") ( {!! Utils::decimal($item->jumlah_kg, 3) !!} KG ) @endif </td>
             </tr>
             @endforeach
         </tbody>
