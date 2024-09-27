@@ -136,7 +136,7 @@
                   <!-- Barang -->
                   <div class="form-group col-md-12">
                     <label>Barang <span class="text-danger">*</span></label>
-                    <select name="barang[0]" class="form-control select2-barang">
+                    <select name="barang[{{$key}}]" class="form-control select2-barang">
                       <option></option>
                       @foreach ($barang as $item)
                           <option value="{{$item->uid}}" {{ $barangItem->barang_uid == $item->uid ? "selected" : "" }} data-warna="{{$item->warna}}" data-panjang="{{$item->panjang}}" data-lebar="{{$item->lebar}}" data-tebal="{{$item->tebal}}" data-satuan="{{$item->satuan}}">{{$item->nama}} {{$item->warna}} {{$item->panjang}} x {{$item->lebar}} x {{$item->tebal}}</option>
@@ -239,7 +239,7 @@
       
       // Update Step 3 fields
       $('th.gudang').html(gudang);
-      $('th.nomor-bukti').text(nomor_bukti);
+      $('th.nomor-bukti').text(nomor_bukti.toUpperCase());
       $('th.tanggal-bukti').text(tanggal_bukti);
 
       // Collect and display dynamic data from Step 2 (loop through forms)

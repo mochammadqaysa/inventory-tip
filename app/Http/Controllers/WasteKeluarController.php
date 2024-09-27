@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\WasteKeluarDataTable;
+use App\Models\Customer;
+use App\Models\JenisWaste;
+use App\Models\Waste;
 use App\Models\WasteKeluar;
 use Illuminate\Http\Request;
 
@@ -13,7 +16,7 @@ class WasteKeluarController extends Controller
      */
     public function index(WasteKeluarDataTable $dataTable)
     {
-        return $dataTable->render('pages.inventory.waste_masuk.list');
+        return $dataTable->render('pages.inventory.waste_keluar.list');
     }
 
     /**
@@ -21,7 +24,19 @@ class WasteKeluarController extends Controller
      */
     public function create()
     {
-        //
+        $customer = Customer::all();
+        $waste = Waste::all();
+        $jenisWaste = JenisWaste::all();
+        $body = view('pages.inventory.waste_keluar.create', compact('customer', 'waste', 'jenisWaste'))->render();
+        $footer = '<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-prev btn-primary" onclick="prevStep()" style="display: none;">Sebelumnya</button>
+                <button type="button" class="btn btn-next btn-primary" onclick="nextStep()">Lanjut</button>';
+
+        return [
+            'title' => 'Create Pengeluaran Waste / Scrap',
+            'body' => $body,
+            'footer' => $footer
+        ];
     }
 
     /**

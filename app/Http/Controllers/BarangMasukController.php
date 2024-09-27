@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\BarangMasukDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Barang;
 use App\Models\BarangMasuk;
 use App\Models\BarangMasukItem;

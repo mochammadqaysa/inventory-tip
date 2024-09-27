@@ -115,11 +115,11 @@ class Utils
                 $bahanId = $bahan->uid;
 
                 // Retrieve total 'masuk', 'keluar', and 'retur' values
-                // DB::enableQueryLog();
                 $masuk = Utils::totalBarangMasukSampai($bahanId, $now);
+                // DB::enableQueryLog();
+                $keluar = Utils::totalBarangKeluarSampai($bahanId, $now);
                 // $query = DB::getQueryLog();
                 // dd($query);
-                $keluar = Utils::totalBarangKeluarSampai($bahanId, $now);
 
                 // Calculate the total: (masuk + retur) - keluar
                 $total = $masuk - $keluar;

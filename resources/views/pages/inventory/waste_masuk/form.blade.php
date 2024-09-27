@@ -133,8 +133,8 @@
                       <label>Jumlah <span class="text-danger">*</span></label>
                       <div class="input-group">
                           <input type="number" name="jumlah[]" class="form-control" placeholder="Jumlah">
-                          <div class="input-group-append" style="display: none">
-                              <span class="input-group-text append-satuan"></span>
+                          <div class="input-group-append" >
+                              <span class="input-group-text append-satuan">KG</span>
                           </div>
                       </div>
                   </div>
@@ -161,25 +161,17 @@
                       <td>:</td>
                       <th class="tanggal-bukti">Tanggal</th>
                   </tr>
-                  <tr>
-                      <td>Gudang Penyimpanan</td>
-                      <td>:</td>
-                      <th class="gudang">Gudang</th>
-                  </tr>
               </tbody>
           </table>
 
           <div class="py-2">
             <h5>Informasi Item</h5>
-              <table class="table table-responsive display nowrap" style="width:100%" id="table-barangmasuk-ringkasan">
+              <table class="table table-responsive display nowrap" style="width:100%" id="table-wastemasuk-ringkasan">
                   <thead>
                       <tr>
                           <th>No</th>
-                          <th class="all">Nomor SPK</th>
-                          <th class="all">Nama Barang</th>
+                          <th class="all">Nama Waste</th>
                           <th class="none">Jumlah</th>
-                          <th class="none">KG / Item</th>
-                          <th class="none">Netto</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -195,35 +187,26 @@
   // Collect and display data from Step 1 and Step 2 to Step 3
   function collectAndDisplayData() {
       // Collect data from Step 1
-      var gudang = $("#gudang").select2('data')[0].text;
       var nomor_bukti = $('input[name="nomor_bukti"]').val();
       var tanggal_bukti = $('input[name="tanggal_bukti"]').val();
       
       // Update Step 3 fields
-      $('th.gudang').html(gudang);
-      $('th.nomor-bukti').text(nomor_bukti);
+      $('th.nomor-bukti').text(nomor_bukti.toUpperCase());
       $('th.tanggal-bukti').text(tanggal_bukti);
 
       // Collect and display dynamic data from Step 2 (loop through forms)
-      $('#table-barangmasuk-ringkasan tbody').empty(); // Clear table body
+      $('#table-wastemasuk-ringkasan tbody').empty(); // Clear table body
 
       $('#dynamic-form .form-item').each(function(index) {
-          var nomor_spk = $(this).find('input[name="nomor_spk[]"]').val();
-          var barang = $(this).find(`select[name="barang[${index}]"]`).select2('data')[0].text;
+          var waste = $(this).find(`select[name="waste[${index}]"]`).select2('data')[0].text;
           var jumlah = $(this).find('input[name="jumlah[]"]').val();
-          var satuan = $(this).find('.append-satuan').text();
-          var kg_per_item = $(this).find('input[name="kg_per_item[]"]').val();
-          var netto = $(this).find('input[name="netto[]"]').val();
 
           // Append the collected data to the table in Step 3
-          $('#table-barangmasuk-ringkasan tbody').append(`
+          $('#table-wastemasuk-ringkasan tbody').append(`
               <tr>
                   <td>${index + 1}</td>
-                  <td>${nomor_spk}</td>
-                  <td>${barang}</td>
-                  <td>${jumlah} ${satuan}</td>
-                  <td>${kg_per_item}</td>
-                  <td>${netto}</td>
+                  <td>${waste}</td>
+                  <td>${jumlah} KG</td>
               </tr>
           `);
       });
@@ -333,20 +316,14 @@
     $('#dynamic-form .form-item').each(function (index) {
       let barangValue = $(this).find('.form-group select[name="waste['+index+']"]').val()
       if (!barangValue) {  // If the field is empty
-        kosong += `<li>Kolom Barang pada data ke - ${index + 1} wajib diisi</li>`;
-      } else {
-        let stok = $(this).find('.form-group #stok-bahan').attr("data-stok");
-        if (parseFloat(stok) < 1) {
-          kosong += `<li>Stok Barang pada data ke - ${index + 1} belum tersedia</li>`;
-        }
-      }
-    });
-    $('[name="bahan[]"]').each(function(index) {
-      let bahanValue = $(this).val(); // Get the value of the current field
-      
-      if (!bahanValue) {  // If the field is empty
-        kosong += `<li>Kolom Bahan pada data ke - ${index + 1} wajib diisi</li>`;
-      }
+        kosong += `<li>Kolom Waste pada data ke - ${index + 1} wajib diisi</li>`;
+      } 
+      // else {
+      //   let stok = $(this).find('.form-group #stok-bahan').attr("data-stok");
+      //   if (parseFloat(stok) < 1) {
+      //     kosong += `<li>Stok Barang pada data ke - ${index + 1} belum tersedia</li>`;
+      //   }
+      // }
     });
 
     $('[name="jumlah[]"]').each(function(index) {
@@ -354,16 +331,6 @@
       
       if (!jumlahValue) {  // If the field is empty
         kosong += `<li>Kolom Jumlah pada data ke - ${index + 1} wajib diisi</li>`;
-      }
-    });
-
-    $('[name="jumlah_kg[]"]').each(function(index) {
-      if ($(this).is(":visible")) {
-        let jumlahKgValue = $(this).val(); // Get the value of the current field
-        
-        if (!jumlahKgValue) {  // If the field is empty
-          kosong += `<li>Kolom Jumlah KG (Netto) pada data ke - ${index + 1} wajib diisi</li>`;
-        }
       }
     });
 
@@ -411,7 +378,7 @@
       }
       var $container = $(
           "<div class='select2-result-repository clearfix'>" +
-            "<div class='select2-result-repository__avatar'><img src='"+ base_url+'img/default-barang.png'+"'/></div>" +
+            "<div class='select2-result-repository__avatar'><img src='"+ base_url+'img/default-waste.png'+"'/></div>" +
             "<div class='select2-result-repository__meta'>" +
               "<div class='select2-result-repository__title'></div>" +
               "<div class='select2-result-repository__description'></div>" +
@@ -419,13 +386,8 @@
           "</div>"
         );
 
-        var warna = $(res.element).data('warna');
-        var panjang = $(res.element).data('panjang');
-        var lebar = $(res.element).data('lebar');
-        var tebal = $(res.element).data('tebal');
-        var satuan = $(res.element).data('satuan');
         $container.find(".select2-result-repository__title").text(res.text || '-');
-        $container.find(".select2-result-repository__description").html(warna ? `Warna : ${warna} <br> Dimensi : ${panjang} x ${lebar} x ${tebal} <br> Satuan : ${satuan}` : '-');
+        $container.find(".select2-result-repository__description").html('');
 
         return $container
     }
@@ -435,86 +397,18 @@
     }
 
     let initializeSelect2 =  function() {
-      $('.select2-barang').select2({
-          placeholder: "Pilih Barang", // Optional placeholder
+      $('.select2-waste').select2({
+          placeholder: "Pilih Waste", // Optional placeholder
           allowClear: true, // Allows the user to clear the selection
           templateResult: formatResult,  // Custom result format
           templateSelection: formatSelection // Custom selected item format
       });
 
-      $(".select2-barang").change(function() {
-          var barang = $(this).val(); // Get the selected value
-          if (barang) {
-              $.ajax({
-                  url: `{{route('barang.info')}}`,  // Replace with your controller URL
-                  method: 'POST',
-                  data: {
-                      'barang': barang // Send selected bahan ID to the server
-                  },
-                  headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                  },
-                  success: function(res) {
-                      // Handle success response from the server
-                      if (res.status) {
-
-                        $(this).closest('.form-item').find('.input-group-append .append-satuan').parent().show();
-                        $(this).closest('.form-item').find('.input-group-append .append-satuan').text(res.data.satuan);
-                        $(this).closest('.form-item').find('.form-group #stok-bahan').text("Stok : "+res.data.stok+" "+res.data.satuan);
-                        $(this).closest('.form-item').find('.form-group #stok-bahan').slideDown();
-                        
-                      }
-                      
-                      // Example: Update some input with the value returned from the server
-                      // Assuming 'response' contains the value you need
-                      // You might need to target the specific cloned form
-                      // $(this) here refers to the current select element that triggered the change
-                      // $(this).closest('.form-item').find('input[name="some_input_field"]').val(response.someValue);
-                      
-                      // Example of updating some part of the form with the selected value
-                  }.bind(this), // Ensure the correct 'this' context
-                  error: function(xhr, status, error) {
-                      // Handle any errors
-                      console.error('AJAX error:', error);
-                  }
-              });
-          } else {
-            $(this).closest('.form-item').find('.input-group-append .append-satuan').parent().hide();
-          }
-      });
-
-      $('.select2-gudang').select2({
-          placeholder: "Select an option", // Optional placeholder
-          allowClear: true // Allows the user to clear the selection
-      });
     }
 
-    $(document).on('blur', 'input[name="kg_per_item[]"]', function () {
+    $(document).on('blur', 'input[name="jumlah[]"]', function () {
         parseFixed($(this),3);
     });
-    $(document).on('blur', 'input[name="netto[]"]', function () {
-        parseFixed($(this),3);
-    });
-
-    function calculateTotal(form) {
-        // Get values from the current form
-        var jumlah = parseFloat(form.find('input[name="jumlah[]"]').val()) || 0;
-        var kg_per_item = parseFloat(form.find('input[name="kg_per_item[]"]').val()) || 0;
-
-        // Calculate the total value
-        var nilaiTotal = jumlah * kg_per_item;
-
-        // Set the result to the nilai_total input
-        form.find('input[name="netto[]"]').val(nilaiTotal.toFixed(3));  // Format to 2 decimal places
-    }
-
-     // Event listener for changes in nilai, kurs, asuransi, and ongkos
-     $(document).on('input', 'input[name="jumlah[]"], input[name="kg_per_item[]"]', function() {
-        var currentForm = $(this).closest('.form-item');  // Get the current form
-        calculateTotal(currentForm);  // Calculate the total for the current form
-    });
-    
-
 
     // Function to update the form numbers and accordion ids
     function updateFormNumbers() {
@@ -543,7 +437,6 @@
             }
         });
     }
-
 
     // Add new form dynamically
     $('#add-form').click(function () {
@@ -583,8 +476,8 @@
                       <label>Jumlah <span class="text-danger">*</span></label>
                       <div class="input-group">
                           <input type="number"  name="jumlah[]" class="form-control" placeholder="Jumlah">
-                          <div class="input-group-append" style="display: none">
-                              <span class="input-group-text append-satuan"></span>
+                          <div class="input-group-append" >
+                              <span class="input-group-text append-satuan">KG</span>
                           </div>
                       </div>
                   </div>

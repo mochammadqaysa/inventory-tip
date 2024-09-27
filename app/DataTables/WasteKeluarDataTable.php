@@ -92,9 +92,9 @@ class WasteKeluarDataTable extends DataTable
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
-            Column::make('tanggal_bukti')->title("Tanggal")
+            Column::make('tanggal_invoice')->title("Tanggal Invoice")
                 ->width(80),
-            Column::make('nomor_bukti')->title("Bukti"),
+            Column::make('nomor_invoice')->title("Nomor Invoice"),
         ];
     }
 

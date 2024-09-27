@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 26, 2024 at 12:30 PM
+-- Generation Time: Sep 27, 2024 at 12:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -1048,6 +1048,13 @@ CREATE TABLE `waste_masuk` (
   `updated_by` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `waste_masuk`
+--
+
+INSERT INTO `waste_masuk` (`uid`, `nomor_bukti`, `tanggal_bukti`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('376301bc-3db8-4a9b-90e9-a89f5f464007', 'LHPE24202', '2024-09-08', '2024-09-26 18:37:24', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-26 18:37:24', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1064,6 +1071,16 @@ CREATE TABLE `waste_masuk_item` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_by` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `waste_masuk_item`
+--
+
+INSERT INTO `waste_masuk_item` (`uid`, `waste_masuk_uid`, `waste_uid`, `jumlah`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+('031d38a2-e631-4fa1-bf6a-0ae56d80e9a1', '376301bc-3db8-4a9b-90e9-a89f5f464007', '915fdc62-05ff-45f2-98be-7b3f7fc0eca4', 17.900, '2024-09-27 01:37:24', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-27 01:37:24', NULL),
+('97c921d0-3394-4b2b-919b-45233927c09f', '376301bc-3db8-4a9b-90e9-a89f5f464007', '6e99b854-95c1-47f6-9237-eab28654011b', 7.600, '2024-09-27 01:37:24', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-27 01:37:24', NULL),
+('b967d092-4d92-4210-b4da-34e24923568a', '376301bc-3db8-4a9b-90e9-a89f5f464007', '66f68aa4-9ebb-4ad4-bb71-457efb256fbc', 110.620, '2024-09-27 01:37:24', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-27 01:37:24', NULL),
+('de391a01-a4a8-45fa-86ad-4618c239f706', '376301bc-3db8-4a9b-90e9-a89f5f464007', '71b0b0da-bb46-406f-b2bc-b9c0e20ec7c5', 21.500, '2024-09-27 01:37:24', '10753eb7-45f6-4f8a-a223-a330460f8799', '2024-09-27 01:37:24', NULL);
 
 --
 -- Indexes for dumped tables

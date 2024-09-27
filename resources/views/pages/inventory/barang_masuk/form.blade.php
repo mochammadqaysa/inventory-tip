@@ -236,7 +236,7 @@
       
       // Update Step 3 fields
       $('th.gudang').html(gudang);
-      $('th.nomor-bukti').text(nomor_bukti);
+      $('th.nomor-bukti').text(nomor_bukti.toUpperCase());
       $('th.tanggal-bukti').text(tanggal_bukti);
 
       // Collect and display dynamic data from Step 2 (loop through forms)

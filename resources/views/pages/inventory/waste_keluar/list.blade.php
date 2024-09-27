@@ -7,7 +7,7 @@
   <h6 class="h2 text-white d-inline-block mb-0">Inventory</h6>
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/import_waste.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
+      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/export_waste.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
       <li class="breadcrumb-item active" aria-current="page">Pengeluaran Waste / Scrap</li>
     </ol>
   </nav>
