@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\WasteMasukDataTable;
+use App\Models\Waste;
 use App\Models\WasteMasuk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,7 +23,17 @@ class WasteMasukController extends Controller
      */
     public function create()
     {
-        //
+        $waste = Waste::all();
+        $body = view('pages.inventory.waste_masuk.create', compact('waste'))->render();
+        $footer = '<button type="button" class="btn btn-close btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-prev btn-primary" onclick="prevStep()" style="display: none;">Sebelumnya</button>
+                <button type="button" class="btn btn-next btn-primary" onclick="nextStep()">Lanjut</button>';
+
+        return [
+            'title' => 'Create Pemasukan Waste / Scrap',
+            'body' => $body,
+            'footer' => $footer
+        ];
     }
 
     /**

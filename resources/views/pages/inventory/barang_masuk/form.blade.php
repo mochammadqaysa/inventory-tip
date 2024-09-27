@@ -371,12 +371,11 @@
 
   function validateStep2() {
     let kosong = ''       
-    $('[name="bahan[]"]').each(function(index) {
-      let bahanValue = $(this).val(); // Get the value of the current field
-      
-      if (!bahanValue) {  // If the field is empty
-        kosong += `<li>Kolom Bahan pada data ke - ${index + 1} wajib diisi</li>`;
-      }
+    $('#dynamic-form .form-item').each(function (index) {
+      let barangValue = $(this).find('.form-group select[name="barang['+index+']"]').val()
+      if (!barangValue) {  // If the field is empty
+        kosong += `<li>Kolom Barang pada data ke - ${index + 1} wajib diisi</li>`;
+      } 
     });
 
     $('[name="jumlah[]"]').each(function(index) {
@@ -387,15 +386,6 @@
       }
     });
 
-    $('[name="jumlah_kg[]"]').each(function(index) {
-      if ($(this).is(":visible")) {
-        let jumlahKgValue = $(this).val(); // Get the value of the current field
-        
-        if (!jumlahKgValue) {  // If the field is empty
-          kosong += `<li>Kolom Jumlah KG (Netto) pada data ke - ${index + 1} wajib diisi</li>`;
-        }
-      }
-    });
 
     $('#response_container').empty()
     if(kosong){
@@ -441,7 +431,7 @@
       }
       var $container = $(
           "<div class='select2-result-repository clearfix'>" +
-            "<div class='select2-result-repository__avatar'><img src='"+ base_url+'img/default-barang.png'+"'/></div>" +
+            "<div class='select2-result-repository__avatar'><img src='"+ base_url+'img/default-waste.png'+"'/></div>" +
             "<div class='select2-result-repository__meta'>" +
               "<div class='select2-result-repository__title'></div>" +
               "<div class='select2-result-repository__description'></div>" +
@@ -449,13 +439,8 @@
           "</div>"
         );
 
-        var warna = $(res.element).data('warna');
-        var panjang = $(res.element).data('panjang');
-        var lebar = $(res.element).data('lebar');
-        var tebal = $(res.element).data('tebal');
-        var satuan = $(res.element).data('satuan');
         $container.find(".select2-result-repository__title").text(res.text || '-');
-        $container.find(".select2-result-repository__description").html(warna ? `Warna : ${warna} <br> Dimensi : ${panjang} x ${lebar} x ${tebal} <br> Satuan : ${satuan}` : '-');
+        $container.find(".select2-result-repository__description").html('');
 
         return $container
     }
@@ -465,21 +450,21 @@
     }
 
     let initializeSelect2 =  function() {
-      $('.select2-barang').select2({
-          placeholder: "Pilih Barang", // Optional placeholder
+      $('.select2-waste').select2({
+          placeholder: "Pilih Waste", // Optional placeholder
           allowClear: true, // Allows the user to clear the selection
           templateResult: formatResult,  // Custom result format
           templateSelection: formatSelection // Custom selected item format
       });
 
-      $(".select2-barang").change(function() {
-          var barang = $(this).val(); // Get the selected value
-          if (barang) {
+      $(".select2-waste").change(function() {
+          var waste = $(this).val(); // Get the selected value
+          if (waste) {
               $.ajax({
                   url: `{{route('barang.info')}}`,  // Replace with your controller URL
                   method: 'POST',
                   data: {
-                      'barang': barang // Send selected bahan ID to the server
+                      'waste': barang // Send selected bahan ID to the server
                   },
                   headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -513,37 +498,11 @@
           }
       });
 
-      $('.select2-gudang').select2({
-          placeholder: "Select an option", // Optional placeholder
-          allowClear: true // Allows the user to clear the selection
-      });
     }
 
-    $(document).on('blur', 'input[name="kg_per_item[]"]', function () {
+    $(document).on('blur', 'input[name="jumlah[]"]', function () {
         parseFixed($(this),3);
     });
-    $(document).on('blur', 'input[name="netto[]"]', function () {
-        parseFixed($(this),3);
-    });
-
-    function calculateTotal(form) {
-        // Get values from the current form
-        var jumlah = parseFloat(form.find('input[name="jumlah[]"]').val()) || 0;
-        var kg_per_item = parseFloat(form.find('input[name="kg_per_item[]"]').val()) || 0;
-
-        // Calculate the total value
-        var nilaiTotal = jumlah * kg_per_item;
-
-        // Set the result to the nilai_total input
-        form.find('input[name="netto[]"]').val(nilaiTotal.toFixed(3));  // Format to 2 decimal places
-    }
-
-     // Event listener for changes in nilai, kurs, asuransi, and ongkos
-     $(document).on('input', 'input[name="jumlah[]"], input[name="kg_per_item[]"]', function() {
-        var currentForm = $(this).closest('.form-item');  // Get the current form
-        calculateTotal(currentForm);  // Calculate the total for the current form
-    });
-    
 
 
     // Function to update the form numbers and accordion ids
