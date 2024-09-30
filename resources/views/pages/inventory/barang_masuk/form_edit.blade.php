@@ -88,7 +88,7 @@
       <div class="row">
         <div class="form-group col-md-6">
           <label>Nomor Bukti <span class="text-danger">*</span></label>
-          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}">
+          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}" style="text-transform: uppercase">
         </div>
         <div class="form-group col-md-6 ">
           <label>Tanggal Bukti <span class="text-danger">*</span></label>
@@ -131,7 +131,7 @@
                   <!-- Nomor SPK -->
                   <div class="form-group col-md-12">
                       <label>Nomor SPK </label>
-                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK" value="{{ $barangItem->nomor_spk }}">
+                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK" value="{{ $barangItem->nomor_spk }}" style="text-transform: uppercase">
                   </div>
                   <!-- Barang -->
                   <div class="form-group col-md-12">
@@ -234,7 +234,7 @@
   function collectAndDisplayData() {
       // Collect data from Step 1
       var gudang = $("#gudang").select2('data')[0].text;
-      var nomor_bukti = $('input[name="nomor_bukti"]').val();
+      var nomor_bukti = $('input[name="nomor_bukti"]').val().toUpperCase();
       var tanggal_bukti = $('input[name="tanggal_bukti"]').val();
       
       // Update Step 3 fields
@@ -246,7 +246,7 @@
       $('#table-barangmasuk-ringkasan tbody').empty(); // Clear table body
 
       $('#dynamic-form .form-item').each(function(index) {
-          var nomor_spk = $(this).find('input[name="nomor_spk[]"]').val();
+          var nomor_spk = $(this).find('input[name="nomor_spk[]"]').val().toUpperCase();
           var barang = $(this).find(`select[name="barang[${index}]"]`).select2('data')[0].text;
           var jumlah = $(this).find('input[name="jumlah[]"]').val();
           var satuan = $(this).find('.append-satuan').text();
@@ -281,6 +281,9 @@
         isValid = validateStep1();
         if (isValid) {
           $('.btn-prev').show()
+        }
+        if ($(".select2-barang").val()) {
+          $(".select2-barang").trigger('change');
         }
         break;
       case 2:
@@ -517,7 +520,7 @@
       });
 
       $('.select2-gudang').select2({
-          placeholder: "Select an option", // Optional placeholder
+          placeholder: "Pilih Gudang Penyimpanan", // Optional placeholder
           allowClear: true // Allows the user to clear the selection
       });
     }
@@ -603,7 +606,7 @@
                   <!-- Nomor SPK -->
                   <div class="form-group col-md-12">
                       <label>Nomor SPK </label>
-                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK">
+                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK" style="text-transform: uppercase">
                   </div>
                   <!-- Barang -->
                   <div class="form-group col-md-12">

@@ -61,7 +61,7 @@ class BarangMasukController extends Controller
             $insert = [
                 "uid" => Str::uuid()->toString(),
                 "gudang_uid" => $data['gudang'],
-                "nomor_bukti" => $data['nomor_bukti'],
+                "nomor_bukti" => strtoupper($data['nomor_bukti']),
                 "tanggal_bukti" => $data['tanggal_bukti'],
                 'created_by' => $user->uid,
             ];
@@ -71,7 +71,7 @@ class BarangMasukController extends Controller
                 $insertItem[$key]['uid'] = Str::uuid()->toString();
                 $insertItem[$key]['barang_masuk_uid'] = $insert['uid'];
                 $insertItem[$key]['barang_uid'] = $value;
-                $insertItem[$key]['nomor_spk'] = $data['nomor_spk'][$key];
+                $insertItem[$key]['nomor_spk'] = strtoupper($data['nomor_spk'][$key]);
                 $insertItem[$key]['jumlah'] = $data['jumlah'][$key];
                 $barang = Barang::find($value);
                 $sqm = ($barang->panjang * $barang->lebar) / 1000000;
@@ -173,7 +173,7 @@ class BarangMasukController extends Controller
             $user = AuthCommon::getUser();
 
             $barangMasuk->gudang_uid = $data['gudang'];
-            $barangMasuk->nomor_bukti = $data['nomor_bukti'];
+            $barangMasuk->nomor_bukti = strtoupper($data['nomor_bukti']);
             $barangMasuk->tanggal_bukti = $data['tanggal_bukti'];
             $barangMasuk->updated_by = $user->uid;
 
@@ -207,7 +207,7 @@ class BarangMasukController extends Controller
                         $item_uid = $data['barang_item_uid'][$key];
                         $barangMasukItem = BarangMasukItem::find($item_uid);
                         $barangMasukItem->barang_uid = $value;
-                        $barangMasukItem->nomor_spk = $data['nomor_spk'][$key];
+                        $barangMasukItem->nomor_spk = strtoupper($data['nomor_spk'][$key]);
                         $barangMasukItem->jumlah = $data['jumlah'][$key];
                         $barang = Barang::find($value);
                         $sqm = ($barang->panjang * $barang->lebar) / 1000000;
@@ -220,7 +220,7 @@ class BarangMasukController extends Controller
                         $insertItem[$insertIndex]['uid'] = Str::uuid()->toString();
                         $insertItem[$insertIndex]['barang_masuk_uid'] = $barangMasuk->uid;
                         $insertItem[$insertIndex]['barang_uid'] = $value;
-                        $insertItem[$insertIndex]['nomor_spk'] = $data['nomor_spk'][$key];
+                        $insertItem[$insertIndex]['nomor_spk'] = strtoupper($data['nomor_spk'][$key]);
                         $insertItem[$insertIndex]['jumlah'] = $data['jumlah'][$key];
                         $barang = Barang::find($value);
                         $sqm = ($barang->panjang * $barang->lebar) / 1000000;

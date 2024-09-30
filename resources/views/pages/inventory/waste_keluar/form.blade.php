@@ -176,7 +176,7 @@
                       <input type="number" name="qty[]" class="form-control" placeholder="Quantity">
                   </div>
           
-                  <table class="table table-bordered qty-table">
+                  <table class="table table-bordered qty-table" data-index="0">
                       <thead>
                           <tr>
                               <th>Nomor Packing</th>
@@ -287,7 +287,7 @@
           });
 
           var bodyItem = `
-          <div class="card col-md-6">
+          <div class="card shadow col-md-6">
             <div class="card-body">
               <h4>Data ${index+1}</h4>
               <div class="row">
@@ -317,7 +317,8 @@
                         </tr>
                       </tbody>
                     </table>
-                    <table class="table table-bordered qty-table-ringkasan">
+
+                    <table class="table table-bordered table-info table-striped mt-2">
                         <thead>
                             <tr>
                                 <th>Nomor Packing</th>
@@ -692,12 +693,13 @@
         var qty = parseInt($(this).val());
         if (!isNaN(qty) && qty > 0) {
           var table = $(this).closest('.form-group').next('table.qty-table')
+          var dtIndex = table.data('index');
           table.find('tbody').empty();
           for (var i = 0; i < qty; i++) {
             table.find('tbody').append(`
                   <tr>
-                      <td><input type="text" name="nomor_packing[${formCount-1}][${i}]" class="form-control" placeholder="Nomor Packing"></td>
-                      <td><input type="number" step=".01" name="jumlah_kgm[${formCount-1}][${i}]"  class="form-control jumlah-kgm" placeholder="Jumlah (KGM)" ></td>
+                      <td><input type="text" name="nomor_packing[${dtIndex}][${i}]" class="form-control" placeholder="Nomor Packing"></td>
+                      <td><input type="number" step=".01" name="jumlah_kgm[${dtIndex}][${i}]"  class="form-control jumlah-kgm" placeholder="Jumlah (KGM)" ></td>
                   </tr>
               `);
           }
@@ -789,7 +791,7 @@
                       <input type="number" name="qty[]" class="form-control" placeholder="Quantity">
                   </div>
           
-                  <table class="table table-bordered qty-table">
+                  <table class="table table-bordered qty-table" data-index="${formCount-1}">
                       <thead>
                           <tr>
                               <th>Nomor Packing</th>

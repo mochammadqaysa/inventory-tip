@@ -319,11 +319,11 @@
       // Collect data from Step 1
       var customer = $("#customer").select2('data')[0].nama ?? $("#customer").select2('data')[0].text;
       var negara = $("#customer").select2('data')[0].negara;
-      var nomor_bukti = $('input[name="nomor_bukti"]').val();
+      var nomor_bukti = $('input[name="nomor_bukti"]').val().toUpperCase();
       var tipe = $('input[name="tipe"]:checked').val();
       var tanggal_bukti = $('input[name="tanggal_bukti"]').val();
       var ppn = $('input[name="ppn"]').val();
-      var nomor_peb = $('input[name="nomor_peb"]').val();
+      var nomor_peb = $('input[name="nomor_peb"]').val().toUpperCase();
       var tanggal_peb = $('input[name="tanggal_peb"]').val();
       
       // Update Step 3 fields
@@ -402,6 +402,9 @@
         isValid = validateStep1();
         if (isValid) {
           $('.btn-prev').show()
+        }
+        if ($(".select2-barang").val()) {
+          $(".select2-barang").trigger('change');
         }
         break;
       case 2:

@@ -61,10 +61,10 @@ use App\Helpers\Utils;
                 <th class="all">Nama Bahan</th>
                 <th class="{{ @$bahanMasuk->tipe == "impor" ? "none" : "all"}}">Jumlah</th>
                 @if (@$bahanMasuk->tipe == "impor")
-                <th class="none">Nilai</th>
-                <th class="none">Nilai Total</th>
                 <th class="none">Fasilitas</th>
+                <th class="none">Nilai</th>
                 @endif
+                <th class="{{ @$bahanMasuk->tipe == "impor" ? "none" : "all" }}">Nilai Total</th>
                 <th class="{{ @$bahanMasuk->tipe == "impor" ? "none" : "all"}}">Penyimpanan</th>
             </tr>
         </thead>
@@ -80,10 +80,10 @@ use App\Helpers\Utils;
                 <td>{{ $item->bahan->nama }}</td>
                 <td>{!! Utils::decimal($item->jumlah_kg ?? 0 , 3); !!} {{$item->bahan->satuan}}</td>
                 @if (@$bahanMasuk->tipe == "impor")
-                <td>{{ $item->mata_uang }} {!! Utils::decimal($item->nilai ?? 0 , 2); !!}</td>
-                <td>IDR {!! Utils::decimal($item->nilai_total ?? 0, 2) !!}</td>
                 <td>{{ $item->fasilitas == 1 ? "Ya" : "Tidak" }} </td>
+                <td>{{ $item->mata_uang }} {!! Utils::decimal($item->nilai ?? 0 , 2); !!}</td>
                 @endif
+                <td>IDR {!! Utils::decimal($item->nilai_total ?? 0, 2) !!}</td>
                 <td>{{ $item->gudang->nama}} </td>
             </tr>
             @endforeach

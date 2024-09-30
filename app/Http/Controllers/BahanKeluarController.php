@@ -59,11 +59,11 @@ class BahanKeluarController extends Controller
             $user = AuthCommon::getUser();
             $insert = [
                 "uid" => Str::uuid()->toString(),
-                "transaksi" => $data['transaksi'],
-                "nomor_bukti" => $data['nomor_bukti'],
+                "transaksi" => strtoupper($data['transaksi']),
+                "nomor_bukti" => strtoupper($data['nomor_bukti']),
                 "tanggal_bukti" => $data['tanggal_bukti'],
                 "bagian_uid" => $data['bagian'],
-                "nomor_spk" => $data['nomor_spk'],
+                "nomor_spk" => strtoupper($data['nomor_spk']),
                 'created_by' => $user->uid,
             ];
             $insertItem = [];
@@ -177,10 +177,10 @@ class BahanKeluarController extends Controller
             $user = AuthCommon::getUser();
             $data['updated_by'] = $user->uid;
 
-            $bahanKeluar->transaksi = $data['transaksi'];
-            $bahanKeluar->nomor_bukti = $data['nomor_bukti'];
+            $bahanKeluar->transaksi = strtoupper($data['transaksi']);
+            $bahanKeluar->nomor_bukti = strtoupper($data['nomor_bukti']);
             $bahanKeluar->tanggal_bukti = $data['tanggal_bukti'];
-            $bahanKeluar->nomor_spk = $data['nomor_spk'];
+            $bahanKeluar->nomor_spk = strtoupper($data['nomor_spk']);
             $bahanKeluar->bagian_uid = $data['bagian'];
             $bahanKeluar->updated_by = $user->uid;
 

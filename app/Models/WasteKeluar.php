@@ -28,6 +28,11 @@ class WasteKeluar extends Model
         'uid' => 'string',
     ];
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     public function wasteKeluarItems()
     {
         return $this->hasMany(WasteKeluarItem::class);

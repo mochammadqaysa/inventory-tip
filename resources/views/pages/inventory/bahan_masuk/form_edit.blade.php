@@ -109,7 +109,7 @@
         </div>
         <div class="form-group col-md-6">
           <label>Nomor Bukti <span class="text-danger">*</span></label>
-          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}">
+          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}" style="text-transform: uppercase;">
         </div>
         <div class="form-group col-md-6 ">
           <label>Tanggal Bukti <span class="text-danger">*</span></label>
@@ -119,7 +119,7 @@
         </div>
         <div class="form-group col-md-6" id="impor-nomor-pib">
           <label>Nomor PIB</label>
-          <input type="text" name="nomor_pib" class="form-control" placeholder="Nomor PIB" value="{{ @$data->nomor_pib }}">
+          <input type="text" name="nomor_pib" class="form-control" placeholder="Nomor PIB" value="{{ @$data->nomor_pib }}" style="text-transform: uppercase;">
         </div>
         <div class="form-group col-md-6" id="impor-tgl-pib">
           <label>Tanggal PIB</label>
@@ -129,7 +129,7 @@
         </div>
         <div class="form-group col-md-12">
           <label>Nomor PO</label>
-          <input type="text" name="nomor_po" class="form-control" placeholder="Nomor PO" value="{{ @$data->nomor_po }}">
+          <input type="text" name="nomor_po" class="form-control" placeholder="Nomor PO" value="{{ @$data->nomor_po }}" style="text-transform: uppercase;">
         </div>
         <div class="form-group col-md-12" id="impor-kurs">
           <label>Kurs</label>
@@ -166,17 +166,17 @@
                   <!-- Kode HS -->
                   <div class="form-group col-md-4 impor-kode-hs">
                       <label>Kode HS</label>
-                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS" value="{{ $bahanItem->kode_hs }}">
+                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS" value="{{ $bahanItem->kode_hs }}" style="text-transform: uppercase;">
                   </div>
                   <!-- Nomor Seri -->
                   <div class="form-group col-md-4 impor-nomor-seri">
                       <label>Nomor Seri</label>
-                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri" value="{{ $bahanItem->nomor_seri }}">
+                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri" value="{{ $bahanItem->nomor_seri }}" style="text-transform: uppercase;">
                   </div>
                   <!-- Nomor Lot -->
                   <div class="form-group col-md-4">
                       <label>Nomor Lot </label>
-                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot" value="{{ $bahanItem->nomor_lot }}">
+                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot" value="{{ $bahanItem->nomor_lot }}" style="text-transform: uppercase;">
                   </div>
                   <!-- Bahan -->
                   <div class="form-group col-md-12">
@@ -360,9 +360,9 @@
       var tipe = $('input[name="tipe"]:checked').val();
       var supplier = $("#supplier").select2('data')[0].nama ?? $("#supplier").select2('data')[0].text;
       var negara = $("#supplier").select2('data')[0].negara ?? $("#supplier option:selected").attr("data-negara");
-      var nomor_bukti = $('input[name="nomor_bukti"]').val();
-      var nomor_po = $('input[name="nomor_po"]').val();
-      var nomor_pib = $('input[name="nomor_pib"]').val();
+      var nomor_bukti = $('input[name="nomor_bukti"]').val().toUpperCase();
+      var nomor_po = $('input[name="nomor_po"]').val().toUpperCase();
+      var nomor_pib = $('input[name="nomor_pib"]').val().toUpperCase();
       var tanggal_pib = $('input[name="tanggal_pib"]').val();
       
       // Update Step 3 fields
@@ -377,9 +377,9 @@
 
       $('#dynamic-form .form-item').each(function(index) {
           var bahan_item_uid = $(this).find('input[name="bahan_item_uid[]"]').val();
-          var kode_hs = $(this).find('input[name="kode_hs[]"]').val();
-          var nomor_seri = $(this).find('input[name="nomor_seri[]"]').val();
-          var nomor_lot = $(this).find('input[name="nomor_lot[]"]').val();
+          var kode_hs = $(this).find('input[name="kode_hs[]"]').val().toUpperCase();
+          var nomor_seri = $(this).find('input[name="nomor_seri[]"]').val().toUpperCase();
+          var nomor_lot = $(this).find('input[name="nomor_lot[]"]').val().toUpperCase();
           var bahan = $(this).find(`select[name="bahan[${index}]"]`).select2('data')[0].text;
           var jumlah = $(this).find('input[name="jumlah[]"]').val();
           var satuan = $(this).find('.append-satuan').text();
@@ -460,6 +460,9 @@
         isValid = validateStep1();
         if (isValid) {
           $('.btn-prev').show()
+        }
+        if ($(".select2-bahan").val()) {
+          $(".select2-bahan").trigger('change');
         }
         break;
       case 2:
@@ -965,17 +968,17 @@
                   <!-- Kode HS -->
                   <div class="form-group col-md-4 impor-kode-hs">
                       <label>Kode HS</label>
-                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS">
+                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS" style="text-transform: uppercase;">
                   </div>
                   <!-- Nomor Seri -->
                   <div class="form-group col-md-4 impor-nomor-seri">
                       <label>Nomor Seri</label>
-                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri">
+                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri" style="text-transform: uppercase;">
                   </div>
                   <!-- Nomor Lot -->
                   <div class="form-group col-md-4">
                       <label>Nomor Lot </label>
-                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot">
+                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot" style="text-transform: uppercase;">
                   </div>
                   <!-- Bahan -->
                   <div class="form-group col-md-12">
@@ -1099,17 +1102,17 @@
                   <!-- Kode HS -->
                   <div class="form-group col-md-4 impor-kode-hs" style="display: none;">
                       <label>Kode HS</label>
-                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS">
+                      <input type="text" name="kode_hs[]" class="form-control" placeholder="Kode HS" style="text-transform: uppercase;">
                   </div>
                   <!-- Nomor Seri -->
                   <div class="form-group col-md-4 impor-nomor-seri" style="display: none;">
                       <label>Nomor Seri</label>
-                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri">
+                      <input type="text" name="nomor_seri[]" class="form-control" placeholder="Nomor Seri" style="text-transform: uppercase;">
                   </div>
                   <!-- Nomor Lot -->
                   <div class="form-group col-md-12">
                       <label>Nomor Lot </label>
-                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot">
+                      <input type="text" name="nomor_lot[]" class="form-control" placeholder="Nomor Lot" style="text-transform: uppercase;">
                   </div>
                   <!-- Bahan -->
                   <div class="form-group col-md-12">

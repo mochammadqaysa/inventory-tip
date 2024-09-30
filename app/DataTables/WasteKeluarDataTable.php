@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Helpers\Utils;
 use App\Models\WasteKeluar;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -37,7 +38,32 @@ class WasteKeluarDataTable extends DataTable
             ->filterColumn('nomor_invoice', function ($query, $keyword) {
                 $query->where('nomor_invoice', 'like', "%{$keyword}%");
             })
-            ->rawColumns(['action', 'nomor_invoice']);
+            ->addColumn('customer', function ($data) {
+                $customer = "";
+                if (isset($data->customer)) {
+                    $customer = $data->customer->nama;
+                }
+                return $customer;
+            })
+            ->filterColumn('customer', function ($query, $keyword) {
+                // Assuming you have a relationship between the user and role (e.g., user->role->name)
+                $query->whereHas('customer', function ($q) use ($keyword) {
+                    $q->where('nama', 'like', "%{$keyword}%");
+                });
+            })
+            ->addColumn('nilai', function ($data) {
+                return Utils::decimal($data->nilai, 2);
+            })
+            ->filterColumn('nilai', function ($query, $keyword) {
+                $query->where('nilai', 'like', "%{$keyword}%");
+            })
+            ->addColumn('jumlah', function ($data) {
+                return Utils::decimal($data->jumlah, 3);
+            })
+            ->filterColumn('jumlah', function ($query, $keyword) {
+                $query->where('jumlah', 'like', "%{$keyword}%");
+            })
+            ->rawColumns(['action', 'nomor_invoice', 'nilai', 'jumlah']);
     }
 
     /**
@@ -95,6 +121,11 @@ class WasteKeluarDataTable extends DataTable
             Column::make('tanggal_invoice')->title("Tanggal Invoice")
                 ->width(80),
             Column::make('nomor_invoice')->title("Nomor Invoice"),
+            Column::make('nomor_sppb')->title("Nomor SPPB"),
+            Column::make('tanggal_sppb')->title("Tanggal SPPB"),
+            Column::make('jumlah')->title("Jumlah (KG)"),
+            Column::make('nilai')->title("Nilai (IDR)"),
+            Column::make('customer'),
         ];
     }
 

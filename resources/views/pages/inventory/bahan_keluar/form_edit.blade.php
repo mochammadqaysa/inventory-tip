@@ -100,7 +100,7 @@
         </div>
         <div class="form-group col-md-6">
           <label>Nomor Bukti <span class="text-danger">*</span></label>
-          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}">
+          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" value="{{ @$data->nomor_bukti }}" style="text-transform: uppercase">
         </div>
         <div class="form-group col-md-6 ">
           <label>Tanggal Bukti <span class="text-danger">*</span></label>
@@ -110,7 +110,7 @@
         </div>
         <div class="form-group col-md-12">
           <label>Nomor SPK</label>
-          <input type="text" name="nomor_spk" class="form-control" placeholder="Nomor SPK" value="{{ @$data->nomor_spk }}" >
+          <input type="text" name="nomor_spk" class="form-control" placeholder="Nomor SPK" value="{{ @$data->nomor_spk }}" style="text-transform: uppercase">
         </div>
         <div class="form-group col-md-12">
             <label>Bagian Penerima <span class="text-danger">*</span></label>
@@ -245,9 +245,9 @@
       // Collect data from Step 1
       var transaksi = $('input[name="transaksi"]:checked').val();
       var bagian = $("#bagian").select2('data')[0].text;
-      var nomor_bukti = $('input[name="nomor_bukti"]').val();
+      var nomor_bukti = $('input[name="nomor_bukti"]').val().toUpperCase();
       var tanggal_bukti = $('input[name="tanggal_bukti"]').val();
-      var nomor_spk = $('input[name="nomor_spk"]').val();
+      var nomor_spk = $('input[name="nomor_spk"]').val().toUpperCase();
       
       // Update Step 3 fields
       $('th.bagian').html(bagian);
@@ -290,6 +290,9 @@
         isValid = validateStep1();
         if (isValid) {
           $('.btn-prev').show()
+        }
+        if ($(".select2-bahan").val()) {
+          $(".select2-bahan").trigger('change');
         }
         break;
       case 2:

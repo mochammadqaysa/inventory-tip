@@ -313,7 +313,7 @@
       // Collect data from Step 1
       var customer = $("#customer").select2('data')[0].nama;
       var negara = $("#customer").select2('data')[0].negara;
-      var nomor_bukti = $('input[name="nomor_bukti"]').val();
+      var nomor_bukti = $('input[name="nomor_bukti"]').val().toUpperCase();
       var tipe = $('input[name="tipe"]:checked').val();
       var tanggal_bukti = $('input[name="tanggal_bukti"]').val();
       var ppn = $('input[name="ppn"]').val();

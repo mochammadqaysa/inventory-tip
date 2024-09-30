@@ -23,7 +23,7 @@
         <div class="row">
           <div class="col-md-12">
               <div class="alert alert-danger">
-                  <strong>Mohon ikuti intruksi dibawah ini !</strong>
+                  <strong>Mohon ikuti instruksi dibawah ini !</strong>
               </div>
           </div>
             <div class="col-md-12">
@@ -58,7 +58,7 @@
                     <input type="checkbox" id="understand" onchange="change_status(this)">
                     <span class="custom-toggle-slider rounded-circle" data-label-off="" data-label-on=""></span>
                 </label>
-                <span class="ml-2">Saya mengerti dengan ketentuan diatas</span>
+                <span class="ml-2">Saya mengerti dengan instruksi diatas</span>
             </div>
             <div class="form-group col-md-12">
               <form action="{{route('backup-data.upload')}}" method="POST" id="form-upload" enctype="multipart/form-data">

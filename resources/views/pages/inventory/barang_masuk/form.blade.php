@@ -88,7 +88,7 @@
       <div class="row">
         <div class="form-group col-md-6">
           <label>Nomor Bukti <span class="text-danger">*</span></label>
-          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti">
+          <input type="text" name="nomor_bukti" class="form-control" placeholder="Nomor Bukti" style="text-transform: uppercase">
         </div>
         <div class="form-group col-md-6 ">
           <label>Tanggal Bukti <span class="text-danger">*</span></label>
@@ -129,7 +129,7 @@
                   <!-- Nomor SPK -->
                   <div class="form-group col-md-12">
                       <label>Nomor SPK </label>
-                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK">
+                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK" style="text-transform: uppercase">
                   </div>
                   <!-- Barang -->
                   <div class="form-group col-md-12">
@@ -231,7 +231,7 @@
   function collectAndDisplayData() {
       // Collect data from Step 1
       var gudang = $("#gudang").select2('data')[0].text;
-      var nomor_bukti = $('input[name="nomor_bukti"]').val();
+      var nomor_bukti = $('input[name="nomor_bukti"]').val().toUpperCase();
       var tanggal_bukti = $('input[name="tanggal_bukti"]').val();
       
       // Update Step 3 fields
@@ -243,7 +243,7 @@
       $('#table-barangmasuk-ringkasan tbody').empty(); // Clear table body
 
       $('#dynamic-form .form-item').each(function(index) {
-          var nomor_spk = $(this).find('input[name="nomor_spk[]"]').val();
+          var nomor_spk = $(this).find('input[name="nomor_spk[]"]').val().toUpperCase();
           var barang = $(this).find(`select[name="barang[${index}]"]`).select2('data')[0].text;
           var jumlah = $(this).find('input[name="jumlah[]"]').val();
           var satuan = $(this).find('.append-satuan').text();
@@ -424,6 +424,8 @@
     // step 2
 
     var formCount = 1; // Counter for form numbering
+    
+    
 
     function formatResult(res) {
       if (!res.id) {
@@ -431,7 +433,7 @@
       }
       var $container = $(
           "<div class='select2-result-repository clearfix'>" +
-            "<div class='select2-result-repository__avatar'><img src='"+ base_url+'img/default-waste.png'+"'/></div>" +
+            "<div class='select2-result-repository__avatar'><img src='"+ base_url+'img/default-barang.png'+"'/></div>" +
             "<div class='select2-result-repository__meta'>" +
               "<div class='select2-result-repository__title'></div>" +
               "<div class='select2-result-repository__description'></div>" +
@@ -439,8 +441,13 @@
           "</div>"
         );
 
+        var warna = $(res.element).data('warna');
+        var panjang = $(res.element).data('panjang');
+        var lebar = $(res.element).data('lebar');
+        var tebal = $(res.element).data('tebal');
+        var satuan = $(res.element).data('satuan');
         $container.find(".select2-result-repository__title").text(res.text || '-');
-        $container.find(".select2-result-repository__description").html('');
+        $container.find(".select2-result-repository__description").html(warna ? `Warna : ${warna} <br> Dimensi : ${panjang} x ${lebar} x ${tebal} <br> Satuan : ${satuan}` : '-');
 
         return $container
     }
@@ -450,21 +457,21 @@
     }
 
     let initializeSelect2 =  function() {
-      $('.select2-waste').select2({
-          placeholder: "Pilih Waste", // Optional placeholder
+      $('.select2-barang').select2({
+          placeholder: "Pilih Barang", // Optional placeholder
           allowClear: true, // Allows the user to clear the selection
           templateResult: formatResult,  // Custom result format
           templateSelection: formatSelection // Custom selected item format
       });
 
-      $(".select2-waste").change(function() {
-          var waste = $(this).val(); // Get the selected value
-          if (waste) {
+      $(".select2-barang").change(function() {
+          var barang = $(this).val(); // Get the selected value
+          if (barang) {
               $.ajax({
                   url: `{{route('barang.info')}}`,  // Replace with your controller URL
                   method: 'POST',
                   data: {
-                      'waste': barang // Send selected bahan ID to the server
+                      'barang': barang // Send selected bahan ID to the server
                   },
                   headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -496,6 +503,11 @@
           } else {
             $(this).closest('.form-item').find('.input-group-append .append-satuan').parent().hide();
           }
+      });
+
+      $('.select2-gudang').select2({
+          placeholder: "Pilih Gudang Penyimpanan", // Optional placeholder
+          allowClear: true // Allows the user to clear the selection
       });
 
     }
@@ -559,7 +571,7 @@
                   <!-- Nomor SPK -->
                   <div class="form-group col-md-12">
                       <label>Nomor SPK </label>
-                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK">
+                      <input type="text" name="nomor_spk[]" class="form-control" placeholder="Nomor SPK" style="text-transform: uppercase">
                   </div>
                   <!-- Barang -->
                   <div class="form-group col-md-12">
