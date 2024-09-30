@@ -89,9 +89,18 @@
 
       $obj_menu->start_group()
       ->start_accordion()
-      ->sub_item_accordion('Manajemen Data','data-management',['super_admin','exim'],'fas fa-server')
-      ->start_item_accordion('data-management', (Request::is('inventory/backup-data')))
+      ->sub_item_accordion('Laporan','laporan',['super_admin','exim'],'ni ni-archive-2')
+      ->start_item_accordion('laporan', (Request::is('inventory/backup-data')))
       ->item('Backup Data', 'fas fa-digital-tachograph', 'inventory/backup-data', Request::is('inventory/backup-data'),['super_admin','exim'])
+      ->end_item_accordion()
+      ->end_accordion()
+      ->end_group();
+
+      $obj_menu->start_group()
+      ->start_accordion()
+      ->sub_item_accordion('Manajemen Data','data-management',['super_admin','exim','client'],'fas fa-server')
+      ->start_item_accordion('data-management', (Request::is('inventory/backup-data')))
+      ->item('Backup Data', 'fas fa-digital-tachograph', 'inventory/backup-data', Request::is('inventory/backup-data'),['super_admin','exim','client'])
       ->end_item_accordion()
       ->end_accordion()
       ->end_group();

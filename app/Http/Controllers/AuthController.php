@@ -30,7 +30,11 @@ class AuthController extends Controller
             AuthCommon::setUser($user);
             $role = $user->role->slug;
             app('session')->put('role_permit', $role);
-            return redirect('/inventory/dashboard');
+            if ($role == "client") {
+                return redirect('/inventory/backup-data');
+            } else {
+                return redirect('/inventory/dashboard');
+            }
 
             AuthCommon::logout();
         }
