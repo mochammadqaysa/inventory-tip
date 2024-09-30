@@ -44,6 +44,8 @@
   function create(){
     Ryuna.blockUI()
     $.get(_url.create).done((res) => {
+      
+      Ryuna.large_modal()
       Ryuna.modal({
         title: res?.title,
         body: res?.body,

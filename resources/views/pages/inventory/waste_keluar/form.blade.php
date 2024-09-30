@@ -124,6 +124,7 @@
               <input type="number" name="nilai" class="form-control" step=".01" placeholder="Nilai">
           </div>
         </div>
+        
       </div>
     </div>
     <div class="step-body" data-tab="2" style="display: none;">
@@ -234,17 +235,8 @@
 
           <div class="py-2">
             <h5>Informasi Item</h5>
-              <table class="table table-responsive display nowrap" style="width:100%" id="table-wastekeluar-ringkasan">
-                  <thead>
-                      <tr>
-                          <th>No</th>
-                          <th class="all">Nama Waste</th>
-                          <th class="none">Jumlah</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-              </table>
+            <div class="row" id="list-items">
+            </div>
           </div>
       </div>
       
@@ -269,7 +261,8 @@
       $('th.nilai').text(nilai);
 
       // Collect and display dynamic data from Step 2 (loop through forms)
-      $('#table-wastekeluar-ringkasan tbody').empty(); // Clear table body
+      
+      $("#list-items").empty();
 
       $('#dynamic-form .form-item').each(function(index) {
           var jenis_waste = $(this).find(`select[name="jenis_waste[${index}]"]`).select2('data')[0].text;
@@ -278,22 +271,116 @@
           var qty = $(this).find('input[name="qty[]"]').val();
           var nomor_packing = '';
           var jumlah_kgm = '';
+
+          var nomor_packing_data = []; // Store all nomor_packing entries for this row
+          var jumlah_kgm_data = [];    // Store all jumlah_kgm entries for this row
+
+          // Loop through each row of the qty-table to collect nomor_packing and jumlah_kgm
           $(this).find('table.qty-table tbody tr').each(function(jindex) {
-              nomor_packing = $(this).find('input[name="nomor_packing['+index+']['+jindex+']"]').val();
-              jumlah_kgm = $(this).find('input[name="jumlah_kgm['+index+']['+jindex+']"]').val();
-              $('#table-wastekeluar-ringkasan thead tr').append(`
-                <th>Nomor Packing </th>
-              `);
+              var nomor_packing = $(this).find('input[name="nomor_packing[' + index + '][' + jindex + ']"]').val();
+              var jumlah_kgm = $(this).find('input[name="jumlah_kgm[' + index + '][' + jindex + ']"]').val();
+              
+              if (nomor_packing) { // Ensure there's a value before adding
+                  nomor_packing_data.push(nomor_packing);
+                  jumlah_kgm_data.push(jumlah_kgm);
+              }
           });
 
+          var bodyItem = `
+          <div class="card col-md-6">
+            <div class="card-body">
+              <h4>Data ${index+1}</h4>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="table-responsive py-2">
+                    <table class="table align-items-center table-flush table-header" style="width: 100% !important;">
+                      <tbody>
+                        <tr>
+                          <td>Jenis Waste</td>
+                          <td> : </td>
+                          <td> ${jenis_waste} </td>
+                        </tr>
+                        <tr>
+                          <td>Waste</td>
+                          <td> : </td>
+                          <td> ${waste}</td>
+                        </tr>
+                        <tr>
+                          <td>Nomor PIB</td>
+                          <td> : </td>
+                          <td>${nomor_pib}</td>
+                        </tr>
+                        <tr>
+                          <td>Qty</td>
+                          <td> : </td>
+                          <td>${qty}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table class="table table-bordered qty-table-ringkasan">
+                        <thead>
+                            <tr>
+                                <th>Nomor Packing</th>
+                                <th>Jumlah (KGM)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+          `;
+
+          nomor_packing_data.forEach(function(nomor_packing, i) {
+            bodyItem += `<tr>
+              <td>${nomor_packing}</td>
+              <td>${jumlah_kgm_data[i]}</td>
+              </tr>`;
+          });
+
+          bodyItem += `
+                        </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          `;
+
+
+          // $('#table-wastekeluar-ringkasan thead tr').empty(); // Clear existing headers
+          // $('#table-wastekeluar-ringkasan thead tr').append(`
+          //     <th></th>
+          //     <th class="all">Jenis Waste</th>
+          //     <th class="all">Waste</th>
+          //     <th class="all">Nomor PIB</th>
+          //     <th class="all">Qty</th>
+          // `);
+          
+          // // Add headers for each nomor_packing dynamically
+          // nomor_packing_data.forEach(function(nomor_packing, i) {
+          //     $('#table-wastekeluar-ringkasan thead tr').append(`
+          //         <th class="none">Nomor Packing ${nomor_packing} : </th>
+          //     `);
+          // });
+
+          // // Construct the tbody row with collected data
+          // var tbody = `
+          //     <tr>
+          //         <td></td>
+          //         <td>${jenis_waste}</td>
+          //         <td>${waste}</td>
+          //         <td>${nomor_pib}</td>
+          //         <td>${qty}</td>
+          // `;
+
+          // // Append the collected nomor_packing and jumlah_kgm data to the tbody row
+          // jumlah_kgm_data.forEach(function(jumlah_kgm, i) {
+          //     tbody += `<td>${jumlah_kgm} KGM</td>`;
+          // });
+
+          // tbody += `</tr>`;
+
           // Append the collected data to the table in Step 3
-          $('#table-wastekeluar-ringkasan tbody').append(`
-              <tr>
-                  <td>${index + 1}</td>
-                  <td>${waste}</td>
-                  <td>${jumlah} KG</td>
-              </tr>
-          `);
+          // $('#table-wastekeluar-ringkasan tbody').append(tbody);
+          $("#list-items").append(bodyItem)
       });
       
   }
@@ -589,6 +676,7 @@
     $(document).on('blur', 'input[name="nilai"]', function () {
         parseFixed($(this),2);
     });
+
     
 
     // step 2
@@ -609,11 +697,16 @@
             table.find('tbody').append(`
                   <tr>
                       <td><input type="text" name="nomor_packing[${formCount-1}][${i}]" class="form-control" placeholder="Nomor Packing"></td>
-                      <td><input type="text" name="jumlah_kgm[${formCount-1}][${i}]" class="form-control" placeholder="Jumlah (KGM)"></td>
+                      <td><input type="number" step=".01" name="jumlah_kgm[${formCount-1}][${i}]"  class="form-control jumlah-kgm" placeholder="Jumlah (KGM)" ></td>
                   </tr>
               `);
           }
         }
+    });
+
+
+    $(document).on('blur', '.jumlah-kgm', function () {
+        parseFixed($(this), 2);
     });
 
     // Function to update the form numbers and accordion ids
@@ -689,7 +782,7 @@
                   <!-- Nomor PIB -->
                   <div class="form-group col-md-12 ">
                       <label>Nomor PIB <span class="text-danger">*</span></label>
-                      <input type="number" name="nomor_pib[]" class="form-control" placeholder="Nomor PIB">
+                      <input type="text" name="nomor_pib[]" class="form-control" placeholder="Nomor PIB" style="text-transform:uppercase">
                   </div>
                   <div class="form-group col-md-12">
                       <label for="qty">Qty <span class="text-danger">*</span></label>
