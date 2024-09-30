@@ -151,7 +151,7 @@ class WasteKeluarController extends Controller
     {
         $uid = $wasteKeluar->uid;
         $data = $wasteKeluar;
-        $wasteKeluarItems = $wasteKeluar->wasteKeluarItems->sortBy('index');;
+        $wasteKeluarItems = $wasteKeluar->wasteKeluarItems;
         $jenisWaste = JenisWaste::all();
         $waste = Waste::all();
         $customer = Customer::all();
