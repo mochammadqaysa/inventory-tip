@@ -6,11 +6,9 @@ use App\Http\Controllers\BagianController;
 use App\Http\Controllers\BahanController;
 use App\Http\Controllers\BahanKeluarController;
 use App\Http\Controllers\BahanMasukController;
-use App\Http\Controllers\BahanMasukItemController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\BarangMasukController;
-use App\Http\Controllers\BarangMasukItemController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GudangController;
@@ -75,6 +73,12 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.inventory');
     Route::get('/backup-data', [BackupDataController::class, 'index'])->name('backup-data.index');
     Route::post('/upload', [BackupDataController::class, 'upload'])->name('backup-data.upload');
+
+    Route::prefix('report')->group(function () {
+        Route::get('/bahan-masuk', [BahanMasukController::class, 'report'])->name('report.bahan-masuk');
+        Route::get('/bahan-keluar', [BahanKeluarController::class, 'report'])->name('report.bahan-keluar');
+        Route::get('/bdp', [BarangMasukController::class, 'report'])->name('report.bdp');
+    });
 
     Route::prefix('select2')->group(function () {
         Route::get('/role', [RoleController::class, 'select2'])->name('select2.role');

@@ -377,4 +377,9 @@ class BahanMasukController extends Controller
             ]);
         }
     }
+
+    public function report(Request $request)
+    {
+        return view('pages.laporan.bahan_masuk.list');
+    }
 }
