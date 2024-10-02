@@ -18,14 +18,63 @@
 <div class="row">
   <div class="col-xl-12 order-xl-1">
     <div class="card">
-      <div class="card-header border-1">
-        
-      </div>
       <div class="card-body">
-        {{-- @include('admin.alert') --}} 
-        <div class="table-responsive py-2">
-          
-        </div>
+        <form action="{{ route('result-report.bahan-masuk') }}" method="GET" id="myForm">
+          <div class="row align-items-center" id="form-list">
+            <div class="form-group col-md-12">
+              <label>Periode <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="periode" id="periode" style="background-color: white;" placeholder="Pilih Periode" aria-describedby="validationPeriod" />
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="fas fa-calendar"></i>
+                  </span>
+                </div>
+                <div id="validationPeriod" class="invalid-feedback">
+                  Mohon isi periode terlebih dahulu
+                </div>
+              </div>
+            </div>
+
+            <!-- Tipe Radio Buttons -->
+            <div class="form-group col-md-12">
+              <label>Tipe <span class="text-danger">*</span></label><br>
+              @foreach(['semua' => 'Semua', 'lokal' => 'Lokal', 'impor' => 'Impor'] as $value => $label)
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="tipe_{{ $value }}" name="tipe" class="custom-control-input" value="{{ $value }}" {{ $value == 'semua' ? 'checked' : '' }}>
+                <label class="custom-control-label" for="tipe_{{ $value }}">{{ $label }}</label>
+              </div>
+              @endforeach
+            </div>
+
+            <!-- Bahan Dropdown -->
+            <div class="form-group col-md-12">
+              <label>Bahan</label>
+              <select name="bahan" class="form-control select2-bahan">
+                <option></option>
+                @foreach ($bahan as $item)
+                    <option value="{{ $item->uid }}">{{ $item->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <!-- Fasilitas for 'Impor' -->
+            <div class="form-group col-md-12" id="impor-fasilitas" style="display: none;">
+              <label>Fasilitas</label><br>
+              @foreach(['semua' => 'Semua', 'ya' => 'Ya', 'tidak' => 'Tidak'] as $value => $label)
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="fasilitas_{{ $value }}" name="fasilitas" class="custom-control-input" value="{{ $value }}" {{ $value == 'semua' ? 'checked' : '' }}>
+                <label class="custom-control-label" for="fasilitas_{{ $value }}">{{ $label }}</label>
+              </div>
+              @endforeach
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group col-md-12">
+              <button class="btn btn-block bg-diy text-white">Submit <i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -33,167 +82,86 @@
 @endsection
 
 @section('scripts')
-
 <script>
-  let _url = {
-    create: `{{ route('bahan-masuk.create') }}`,
-    edit: `{{ route('bahan-masuk.edit', ':id') }}`,
-    show: `{{ route('bahan-masuk.show', ':id') }}`,
-    destroy: `{{ route('bahan-masuk.destroy', ':id') }}`
+
+  function validateForm() {
+    let ids = [];
+    const periode = $('[name="periode"]').val();
+
+    // Clear previous validation states
+    $('[name="periode"]').removeClass('is-invalid');
+
+    // Validate 'periode' field
+    if (!periode) {
+      ids.push('periode');
+      $('#periode').addClass('is-invalid');
+    }
+
+    if (ids.length > 0) {
+      return false; // Validation failed, stop submission
+    }
+    return true; // Validation passed, allow submission
   }
 
-  function create(){
-    Ryuna.blockUI()
-    $.get(_url.create).done((res) => {
-      Ryuna.large_modal()
-      Ryuna.modal({
-        title: res?.title,
-        body: res?.body,
-        footer: res?.footer
-      })
-      Ryuna.unblockUI()
-    }).fail((xhr) => {
-      Ryuna.unblockUI()
-      Swal.fire({
-        title: 'Whoops!',
-        text: xhr?.responseJSON?.message ? xhr.responseJSON.message : 'Internal Server Error',
-        type: 'error',
-        confirmButtonColor: '#007bff'
-      })
-    })
-  }
-
-  function edit(id){
-    Ryuna.blockUI()
-    $.get(_url.edit.replace(':id', id)).done((res) => {
-      
-      Ryuna.large_modal()
-      Ryuna.modal({
-        title: res?.title,
-        body: res?.body,
-        footer: res?.footer
-      })
-      Ryuna.unblockUI()
-    }).fail((xhr) => {
-      Ryuna.unblockUI()
-      Swal.fire({
-        title: 'Whoops!',
-        text: xhr?.responseJSON?.message ? xhr.responseJSON.message : 'Internal Server Error',
-        type: 'error',
-        confirmButtonColor: '#007bff'
-      })
-    })
-  }
-
-  function save(){
-    $('#response_container').empty();
-    Ryuna.blockElement('.modal-content');
-    let el_form = $('#myForm')
-    let target = el_form.attr('action')
-    let formData = new FormData(el_form[0])
-  
-    $.ajax({
-      url: target,
-      data: formData,
-      processData: false,
-      contentType: false,
-      type: 'POST',
-    }).done((res) => {
-      if(res?.status == true){
-        let html = '<div class="alert alert-success alert-dismissible fade show">'
-        html += `${res?.message}`
-        html += '</div>'
-        Ryuna.noty('success', '', res?.message)
-        $('#response_container').html(html)
-        Ryuna.unblockElement('.modal-content')
-  
-        if($('[name="_method"]').val() == undefined) {
-          el_form[0].reset()
-        }
-        window.LaravelDataTables["bahanmasuk-table"].draw()
-        Ryuna.close_modal()
+  // Bind the validate function to the form's submit event
+  $(document).ready(function() {
+    $('#myForm').on('submit', function(event) {
+      if (!validateForm()) {
+        event.preventDefault(); // Prevent form submission if validation fails
       }
-    }).fail((xhr) => {
-      if(xhr?.status == 422){
-        let errors = xhr.responseJSON.errors
-        let html = '<div class="alert alert-danger alert-dismissible fade show">'
-        html += '<ul>';
-        for(let key in errors){
-          html += `<li>${errors[key]}</li>`;
-        }
-        html += '</ul>'
-        html += '</div>'
-        $('#response_container').html(html)
-        Ryuna.unblockElement('.modal-content')
-      }else{
-        let html = '<div class="alert alert-danger alert-dismissible fade show">'
-        html += `${xhr?.responseJSON?.message}`
-        html += '</div>'
-        Ryuna.noty('error', '', xhr?.responseJSON?.message)
-        $('#response_container').html(html)
-        Ryuna.unblockElement('.modal-content')
-      }
-    })
-  }
-  
-  function destroy(id){
-    Swal.fire({
-      title: 'Apakah anda yakin?',
-      text: "Anda tidak dapat mengembalikan data yang sudah terhapus",
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#dc3545',
-      cancelButtonColor: '#007bff',
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No'
-    }).then((result) => {
-      console.log(result)
-      if (result.value) {
-        $.ajax({
-          url: _url.destroy.replace(':id', id),
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-          type: 'DELETE',
-        }).done((res) => {
-          Swal.fire({
-            title: res.message,
-            text: '',
-            type: 'success',
-            confirmButtonColor: '#007bff'
-          })
-        window.LaravelDataTables["bahanmasuk-table"].draw()
-        }).fail((xhr) => {
-          Swal.fire({
-            title: xhr.responseJSON.message,
-            text: '',
-            type: 'error',
-            confirmButtonColor: '#007bff'
-          })
-        })
-      }
-    })
-  }
+    });
+  });
 
-  function show(id) {
-    Ryuna.blockUI()
-    $.get(_url.show.replace(':id', id)).done((res) => {
-      Ryuna.large_modal()
-      Ryuna.modal({
-        title: res?.title,
-        body: res?.body,
-        footer: res?.footer
-      })
-      Ryuna.unblockUI()
-    }).fail((xhr) => {
-      Ryuna.unblockUI()
-      Swal.fire({
-        title: 'Whoops!',
-        text: xhr?.responseJSON?.message ? xhr.responseJSON.message : 'Internal Server Error',
-        type: 'error',
-        confirmButtonColor: '#007bff'
-      })
-    })
-  }
+
+
+  $(document).ready(() => {
+
+    // Tipe Change Event
+    $('input[name="tipe"]').on('change', function() {
+      const selectedTipe = $(this).val();
+      if (selectedTipe === 'impor') {
+        $('#impor-fasilitas').slideDown();
+      } else {
+        $('#impor-fasilitas').slideUp();
+      }
+    });
+
+    // Flatpickr Initialization
+    $("#periode").flatpickr({
+      mode: "range",
+      dateFormat: "Y-m-d",
+      onChange: (selectedDates, dateStr, instance) => {
+        instance.element.value = dateStr.replace(" to ", " - ");
+      }
+    });
+
+    // Select2 Initialization
+    $('.select2-bahan').select2({
+      placeholder: "Semua Bahan",
+      allowClear: true,
+      templateResult: formatResult,
+      templateSelection: formatSelection
+    });
+
+    // Helper functions for Select2
+    function formatResult(res) {
+      if (!res.id) return res.text;
+      const $container = $(
+        `<div class='select2-result-repository clearfix'>
+          <div class='select2-result-repository__avatar'><img src='${base_url}img/default-bahan.png'/></div>
+          <div class='select2-result-repository__meta'>
+            <div class='select2-result-repository__title'></div>
+            <div class='select2-result-repository__description'></div>
+          </div>
+        </div>`
+      );
+      $container.find(".select2-result-repository__title").text(res.text || '-');
+      return $container;
+    }
+
+    function formatSelection(res) {
+      return res.text;
+    }
+  });
 </script>
 @endsection

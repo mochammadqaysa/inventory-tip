@@ -3,10 +3,21 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Utils
 {
+    public static function formatTanggalIndo($tanggal)
+    {
 
+        $date = Carbon::create($tanggal);
+        $formattedDate = $date->locale('id')->translatedFormat('j F Y');
+        return $formattedDate;
+    }
+    public static function formatTanggalLaporan($tanggal)
+    {
+        return date('d/m/Y', strtotime($tanggal));
+    }
     public static function rupiah($nominal, $decimals = 2)
     {
         return 'Rp ' . number_format((float) $nominal, $decimals, ',', '.');

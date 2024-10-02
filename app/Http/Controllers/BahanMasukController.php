@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\DataTables\BahanMasukDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Bahan;
 use App\Models\BahanMasuk;
 use App\Models\BahanMasukItem;
 use App\Models\Gudang;
 use App\Models\Supplier;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -378,8 +381,114 @@ class BahanMasukController extends Controller
         }
     }
 
-    public function report(Request $request)
+    public function report()
     {
-        return view('pages.laporan.bahan_masuk.list');
+        $bahan = Bahan::all();
+        return view('pages.laporan.bahan_masuk.list', compact('bahan'));
+    }
+
+    public function result_report(Request $request)
+    {
+        $request->validate([
+            'periode' => 'required',
+            'tipe' => 'required',
+        ]);
+        // dd($request->all());
+        $laporan = [];
+        $periode = explode(' - ', $request->periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+        $tipe = $request->tipe;
+        $bahan = $request->bahan;
+        $fasilitas = $request->fasilitas;
+        $bahanMasukItems = BahanMasukItem::with(['bahan', 'bahanMasuk', 'gudang'])
+            ->whereHas('bahanMasuk', function ($query) use ($date1, $date2, $tipe) {
+                $query->where('tanggal_bukti', '>=', $date1)
+                    ->where('tanggal_bukti', '<=', $date2);
+            });
+        if ($tipe != 'semua') {
+            $bahanMasukItems->whereHas('bahanMasuk', function ($query) use ($tipe) {
+                $query->where('tipe', $tipe);
+            });
+            if ($tipe == 'impor') {
+                if ($fasilitas != 'semua') {
+                    $bahanMasukItems->where('fasilitas', $fasilitas == 'ya' ? 1 : 0);
+                }
+            }
+        }
+        if (!is_null($bahan) && $bahan != '') {
+            $bahanMasukItems->where('bahan_uid', $bahan);
+        }
+        $bahanMasukItems = $bahanMasukItems->get();
+
+        $total_jumlah = [];
+        $total_nilai = [];
+        $total_asuransi = [];
+        $total_ongkos = [];
+        $total_nilai_total = '0.00';
+        foreach ($bahanMasukItems as $key => $value) {
+            $jumlah = $value->jumlah;
+            $satuan = $value->bahan->satuan;
+            if (array_key_exists($satuan, $total_jumlah)) {
+                $total_jumlah[$satuan] += $jumlah;
+            } else {
+                $total_jumlah[$satuan] = $jumlah;
+            }
+
+            $nilai = $value->nilai;
+            $asuransi = $value->asuransi;
+            $ongkos = $value->ongkos;
+            $mata_uang = $value->mata_uang;
+            if (!is_null($nilai) && !is_null($mata_uang)) {
+                if (array_key_exists($mata_uang, $total_nilai)) {
+                    $total_nilai[$mata_uang] += $nilai;
+                } else {
+                    $total_nilai[$mata_uang] = $nilai;
+                }
+            }
+            if (!is_null($asuransi) && !is_null($mata_uang)) {
+                if (array_key_exists($mata_uang, $total_asuransi)) {
+                    $total_asuransi[$mata_uang] += $asuransi;
+                } else {
+                    $total_asuransi[$mata_uang] = $asuransi;
+                }
+            }
+            if (!is_null($ongkos) && !is_null($mata_uang)) {
+                if (array_key_exists($mata_uang, $total_ongkos)) {
+                    $total_ongkos[$mata_uang] += $ongkos;
+                } else {
+                    $total_ongkos[$mata_uang] = $ongkos;
+                }
+            }
+
+            $nilai_total = $value->nilai_total;
+            if (!is_null($nilai_total)) {
+                $total_nilai_total += $nilai_total;
+            }
+        }
+
+
+        $stat = [
+            'total_jumlah' => $total_jumlah,
+            'total_nilai' => $total_nilai,
+            'total_asuransi' => $total_asuransi,
+            'total_ongkos' => $total_ongkos,
+            'total_nilai_total' => $total_nilai_total
+        ];
+
+        $from = Utils::formatTanggalIndo($date1);
+        $to = Utils::formatTanggalIndo($date2);
+
+        return view('pages.laporan.bahan_masuk.print', compact('bahanMasukItems', 'stat', 'from', 'to'));
+
+
+        // return redirect()->route('print-report.bahan-masuk', ['bahanMasukItems' => $bahanMasukItems->get()]);
+    }
+
+    public function print_report()
+    {
+        return view('pages.laporan.bahan_masuk.print');
+        // $pdf = FacadePdf::loadView('pages.laporan.bahan_masuk.print')->setPaper('a4', 'landscape');
+        // return $pdf->stream();
     }
 }

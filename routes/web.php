@@ -76,6 +76,8 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
 
     Route::prefix('report')->group(function () {
         Route::get('/bahan-masuk', [BahanMasukController::class, 'report'])->name('report.bahan-masuk');
+        Route::get('/bahan-masuk/result', [BahanMasukController::class, 'result_report'])->name('result-report.bahan-masuk');
+        Route::get('/bahan-masuk/print', [BahanMasukController::class, 'print_report'])->name('print-report.bahan-masuk');
         Route::get('/bahan-keluar', [BahanKeluarController::class, 'report'])->name('report.bahan-keluar');
         Route::get('/bdp', [BarangMasukController::class, 'report'])->name('report.bdp');
     });
