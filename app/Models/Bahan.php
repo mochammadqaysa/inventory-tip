@@ -11,6 +11,8 @@ class Bahan extends Model
 
     protected $table = "bahan";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uid',

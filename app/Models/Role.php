@@ -11,6 +11,8 @@ class Role extends Model
     public $timestamps = false;
     protected $table = "roles";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'uid',
         'name',

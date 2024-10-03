@@ -410,26 +410,6 @@ class Ryuna {
         return String(num).padStart(targetLength, "0");
     }
 
-    // static getSaldo(){
-    //   let url_get_saldo = base_url+'admin/get_saldo'
-    //   $('.saldo-value').html('menyinkronkan ...')
-
-    //   $('.btn-saldo-refresh').addClass('loading')
-    //   setTimeout(() => {
-    //     $.get(url_get_saldo).done((res) => {
-    //       let saldo = res?.data.saldo
-    //       saldo = Ryuna.format_nominal(saldo)
-    //       $('.btn-saldo-refresh').removeClass('loading')
-    //       $('.saldo-value').html(saldo)
-    //     }).fail((xhr) => {
-    //       let saldo = 0
-    //       saldo = Ryuna.format_nominal(saldo)
-    //       $('.btn-saldo-refresh').removeClass('loading')
-    //       $('.saldo-value').html(saldo)
-    //     })
-    //   }, 2000)
-    // }
-
     static noty(type, title, message) {
         title = title && title != null ? `<strong>${title}</strong><br>` : "";
         new Noty({
@@ -514,6 +494,22 @@ class Ryuna {
                 confirmButtonColor: "#007bff",
             });
         }, timems);
+    }
+
+    static tableToString(id) {
+        const table = document.getElementById(id).outerHTML;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(table, "text/html");
+        doc.querySelector(".xls-ignore")?.remove();
+        if ("." === ".") {
+            doc.querySelectorAll(".digit").forEach((span) => {
+                const text = span.textContent
+                    ?.replaceAll(".", "")
+                    .replaceAll(",", ".");
+                span.textContent = text;
+            });
+        }
+        return doc.getElementById(id)?.outerHTML;
     }
 }
 

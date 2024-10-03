@@ -10,6 +10,8 @@ class Gudang extends Model
     use HasFactory;
     protected $table = "gudang";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uid',

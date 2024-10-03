@@ -4,19 +4,22 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class Utils
 {
     public static function formatTanggalIndo($tanggal)
     {
-
         $date = Carbon::create($tanggal);
         $formattedDate = $date->locale('id')->translatedFormat('j F Y');
         return $formattedDate;
     }
     public static function formatTanggalLaporan($tanggal)
     {
-        return date('d/m/Y', strtotime($tanggal));
+        if ($tanggal == null) {
+            return '-';
+        }
+        return date('d/m/Y', strtotime($tanggal)) ?? '-';
     }
     public static function rupiah($nominal, $decimals = 2)
     {
@@ -154,5 +157,44 @@ class Utils
             throw $th;
             return 0;
         }
+    }
+
+    public static function forceDownload($filename = '', $data = null, $setMime = false)
+    {
+        if (empty($filename)) {
+            return response('Filename is required', 400);
+        }
+
+        // Handle file download if no data provided
+        if ($data === null) {
+            // Check if the file exists and is readable
+            if (!File::exists($filename)) {
+                return response('File not found', 404);
+            }
+
+            // Get file mime type if needed
+            $mimeType = $setMime ? File::mimeType($filename) : 'application/octet-stream';
+            $filePath = realpath($filename);
+
+            // Return a file download response
+            return response()->download($filePath, basename($filename), [
+                'Content-Type' => $mimeType,
+                'Cache-Control' => 'private, no-transform, no-store, must-revalidate',
+            ]);
+        }
+
+        // Handle data stream download
+        $mimeType = $setMime ? 'text/plain' : 'application/octet-stream';  // Set default MIME type
+        $filesize = strlen($data);
+        $filename = str_replace(['/', '  '], '-', $filename);  // Sanitize filename
+
+        // Return a raw response with the file data
+        return response($data, 200, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Length' => $filesize,
+            'Cache-Control' => 'private, no-transform, no-store, must-revalidate',
+        ]);
     }
 }

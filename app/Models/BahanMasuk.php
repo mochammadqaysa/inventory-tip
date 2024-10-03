@@ -10,6 +10,9 @@ class BahanMasuk extends Model
     use HasFactory;
     protected $table = "bahan_masuk";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
 
     protected $fillable = [
         'uid',
@@ -32,11 +35,11 @@ class BahanMasuk extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class, 'supplier_uid', 'uid');
     }
 
     public function bahanMasukItems()
     {
-        return $this->hasMany(BahanMasukItem::class);
+        return $this->hasMany(BahanMasukItem::class, 'bahan_masuk_uid', 'uid');
     }
 }

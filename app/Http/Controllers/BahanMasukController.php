@@ -14,7 +14,10 @@ use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtml;
 
 class BahanMasukController extends Controller
 {
@@ -419,7 +422,9 @@ class BahanMasukController extends Controller
         if (!is_null($bahan) && $bahan != '') {
             $bahanMasukItems->where('bahan_uid', $bahan);
         }
-        $bahanMasukItems = $bahanMasukItems->get();
+        $bahanMasukItems = $bahanMasukItems->get()->sortBy(function ($item) {
+            return $item->bahanMasuk->nomor_bukti;
+        });
 
         $total_jumlah = [];
         $total_nilai = [];
@@ -482,13 +487,42 @@ class BahanMasukController extends Controller
         return view('pages.laporan.bahan_masuk.print', compact('bahanMasukItems', 'stat', 'from', 'to'));
 
 
-        // return redirect()->route('print-report.bahan-masuk', ['bahanMasukItems' => $bahanMasukItems->get()]);
+        // return redirect()->route('print-report.bahan-masuk', [
+        //     'stat' => $stat,
+        //     'bahanMasukItem' => $bahanMasukItems,
+        //     'to' => $to
+        // ]);
     }
 
-    public function print_report()
+    public function print_report(Request $request)
     {
+        // dd($request->all());
         return view('pages.laporan.bahan_masuk.print');
         // $pdf = FacadePdf::loadView('pages.laporan.bahan_masuk.print')->setPaper('a4', 'landscape');
         // return $pdf->stream();
+    }
+
+    public function excel_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
 }
