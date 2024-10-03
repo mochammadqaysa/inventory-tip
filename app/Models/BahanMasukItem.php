@@ -10,6 +10,8 @@ class BahanMasukItem extends Model
     use HasFactory;
     protected $table = "bahan_masuk_item";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uid',
@@ -37,16 +39,16 @@ class BahanMasukItem extends Model
 
     public function bahanMasuk()
     {
-        return $this->belongsTo(BahanMasuk::class);
+        return $this->belongsTo(BahanMasuk::class, 'bahan_masuk_uid', 'uid');
     }
 
     public function bahan()
     {
-        return $this->belongsTo(Bahan::class);
+        return $this->belongsTo(Bahan::class, 'bahan_uid', 'uid');
     }
 
     public function gudang()
     {
-        return $this->belongsTo(Gudang::class);
+        return $this->belongsTo(Gudang::class, 'gudang_uid', 'uid');
     }
 }

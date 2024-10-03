@@ -10,6 +10,8 @@ class JenisWaste extends Model
     use HasFactory;
     protected $table = "jenis_waste";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uid',

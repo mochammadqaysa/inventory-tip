@@ -10,6 +10,8 @@ class BarangMasuk extends Model
     use HasFactory;
     protected $table = "barang_masuk";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uid',

@@ -10,6 +10,8 @@ class Waste extends Model
     use HasFactory;
     protected $table = "waste";
     protected $primaryKey = 'uid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uid',
