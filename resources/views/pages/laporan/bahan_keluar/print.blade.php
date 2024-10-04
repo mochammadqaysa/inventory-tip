@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Laporan Pemasukan Bahan Baku | PT. Tiara Indoprima</title>
+    <title>Laporan Pengeluaran Bahan Baku | PT. Tiara Indoprima</title>
     <link rel="icon" href="{{ asset('argon2/assets/img/logo.png') }}" type="image/png">
     <style>
       @font-face {
@@ -77,7 +77,7 @@
   </div>
   <div class="header">
       <div class="title">
-          <h1>LAPORAN PEMASUKAN BAHAN BAKU</h1>
+          <h1>LAPORAN PENGELUARAN BAHAN BAKU</h1>
           <h3>PT. Tiara Indoprima</h3>
       </div>
       <p class="desc">
@@ -90,32 +90,17 @@
       <thead>
           <tr>
               <th rowspan="2">No.</th>
-              <th colspan="2">Bukti Pemasukan</th>
-              @if($req_tipe != "lokal")
-              <th rowspan="2">Jenis Dokumen</th>
-              <th colspan="4">Dokumen Pabean</th>
-              @endif
+              <th colspan="2">Bukti Pengeluaran</th>
               <th rowspan="2">Kode BB</th>
               <th rowspan="2">Nama Bahan</th>
-              <th colspan="2" rowspan="2">QTY</th>
-              {{-- <th colspan="2" rowspan="2">Netto</th> --}}
-              <th colspan="2" rowspan="2">Nilai Bahan</th>
-              {{-- <th colspan="2" rowspan="2">Asuransi</th>
-              <th colspan="2" rowspan="2">Ongkos</th>
-              <th colspan="2" rowspan="2">Nilai Total</th> --}}
-              <th rowspan="2">Gudang</th>
-              <th rowspan="2">Subkontrak</th>
-              <th colspan="2" rowspan="2">Supplier</th>
+              <th colspan="4" >QTY</th>
+              <th rowspan="2">Penerima</th>
           </tr>
           <tr>
               <th>Nomor Bukti</th>
               <th>Tanggal Bukti</th>
-              @if($req_tipe != "lokal")
-              <th>Nomor PIB</th>
-              <th>Tanggal PIB</th>
-              <th>Kode HS</th>
-              <th>Nomor Seri</th>
-              @endif
+              <th colspan="2">Digunakan</th>
+              <th colspan="2">Retur</th>
           </tr>
       </thead>
       <tbody>
@@ -123,96 +108,55 @@
             $lastNomorBukti = null;
             $iteration = 1;
         @endphp
-        @foreach ($bahanMasukItems as $item)
+        @foreach ($bahanKeluarItems as $item)
         <tr>
-          @if($item->bahanMasuk->nomor_bukti != $lastNomorBukti)
+          @if($item->bahanKeluar->nomor_bukti != $lastNomorBukti)
             <td>{{ $iteration }}</td>
-            <td style="text-align: left">{{ $item->bahanMasuk->nomor_bukti }} (PO :{{ $item->bahanMasuk->nomor_po }})</td>
+            <td style="text-align: left">{{ $item->bahanKeluar->nomor_bukti }} </td>
             @php $iteration++; @endphp
             @else
             <td></td>
-            <td style="text-align: left">(PO : {{ $item->bahanMasuk->nomor_po }})</td>
+            <td style="text-align: left"></td>
           @endif
           {{-- @if ($item->bahanMasuk->nomor_bukti != $lastNomorBukti)
           @else
               <td></td>
           @endif --}}
-          <td>{{ Utils::formatTanggalLaporan($item->bahanMasuk->tanggal_bukti) }}</td>
-          @if($req_tipe != "lokal")
-          <td>{{ $item->bahanMasuk->tipe == 'impor' ? 'BC 2.0' : '-' }}</td>
-          <td>{{ $item->bahanMasuk->nomor_pib ?? "-" }}</td>
-          <td>{{ Utils::formatTanggalLaporan($item->bahanMasuk->tanggal_pib) ?? "-" }}</td>
-          <td>{{ $item->kode_hs ?? "-" }}</td>
-          <td>{{ $item->nomor_seri ?? "-" }}</td>
-          @endif
+          <td>{{ Utils::formatTanggalLaporan($item->bahanKeluar->tanggal_bukti) }}</td>
           <td style="text-align: left">{{ $item->bahan->kode }}</td>
           <td style="text-align: left">{{ $item->bahan->nama }}</td>
-          <td style="text-align: right" class="digit">{!! Utils::decimal($item->jumlah,3) !!}</td>
-          <td style="text-align: left" >{{ $item->bahan->satuan }}</td>
-          {{-- <td> $item['netto'] </td> --}}
-          <td>{{ !is_null($item->nilai) && $item->nilai != '0.00' ? $item->mata_uang : '' }}</td>
-          <td style="text-align: right" class="digit">{!! !is_null($item->nilai) && $item->nilai != '0.00' ? Utils::decimal($item->nilai) : '' !!}</td>
-          {{-- <td>{{ !is_null($item->asuransi) && $item->asuransi != '0.00' ? $item->mata_uang : '' }}</td>
-          <td>{{ !is_null($item->asuransi) && $item->asuransi != '0.00' ? $item->asuransi : '' }}</td>
-          <td>{{ !is_null($item->ongkos) && $item->ongkos != '0.00' ? $item->mata_uang : '' }}</td>
-          <td>{{ !is_null($item->ongkos) && $item->ongkos != '0.00' ? $item->ongkos : '' }}</td>
-          <td>{{ !is_null($item->nilai_total) && $item->nilai_total != '0.00' ? 'IDR' : '' }}</td>
-          <td style="text-align: right">{!! !is_null($item->nilai_total) && $item->nilai_total != '0.00' ? Utils::decimal($item->nilai_total) : '' !!}</td> --}}
-          <td>{{ $item->gudang->nama }}</td>
-          <td></td>
-          <td style="text-align: left">{{ $item->bahanMasuk->supplier->nama }}</td>
-          <td style="text-align: left">{{ $item->bahanMasuk->supplier->negara }}</td>
+          <td style="text-align: right" class="digit">{!! $item->bahanKeluar->transaksi == "keluar" ? Utils::decimal($item->jumlah,3) : '' !!}</td>
+          <td style="text-align: left" >{{ $item->bahanKeluar->transaksi == "keluar" ? $item->bahan->satuan : '' }}</td>
+          <td style="text-align: right" class="digit">{!! $item->bahanKeluar->transaksi == "retur" ? Utils::decimal($item->jumlah,3) : '' !!}</td>
+          <td style="text-align: left" >{{ $item->bahanKeluar->transaksi == "retur" ? $item->bahan->satuan : '' }}</td>
+          <td>{{ $item->bahanKeluar->bagian->nama }}</td>
         </tr>
         @php
-            $lastNomorBukti = $item->bahanMasuk->nomor_bukti;
+            $lastNomorBukti = $item->bahanKeluar->nomor_bukti;
         @endphp
         @endforeach
         <tr class="xls-ignore">
-          <td colspan="{{ $req_tipe != "lokal" ? "10" : "5"}}" rowspan="2" class="total" style="text-align: end; font-size: 20px; letter-spacing: 20px">TOTAL</td>
-          <td rowspan="2" class="digit" style="text-align: right;">
-            @foreach($stat['total_jumlah'] as $key => $value)
-              {!! Utils::decimal($value,3) !!}<br>
+            <td colspan="5" rowspan="2" class="total" style="text-align: end; font-size: 20px; letter-spacing: 20px">TOTAL</td>
+            <td rowspan="2" class="digit" style="text-align: right;">
+            @foreach($stat['total_keluar'] as $key => $value)
+                {!! Utils::decimal($value,3) !!}<br>
             @endforeach
-          </td>
-          <td rowspan="2" style="text-align: left">
-            @foreach($stat['total_jumlah'] as $key => $value)
-              {{ $key }}<br>
+            </td>
+            <td rowspan="2" style="text-align: left">
+            @foreach($stat['total_keluar'] as $key => $value)
+                {{ $key }}<br>
             @endforeach
-          </td>
-          <td rowspan="2">
-            @foreach($stat['total_nilai'] as $key => $value)
-              {{ $key }}<br>
+            </td>
+            <td rowspan="2" class="digit" style="text-align: right;">
+            @foreach($stat['total_retur'] as $key => $value)
+                {!! Utils::decimal($value,3) !!}<br>
             @endforeach
-          </td>
-          <td rowspan="2" class="digit" style="text-align: right">
-            @foreach($stat['total_nilai'] as $key => $value)
-              {!! Utils::decimal($value) !!}<br>
+            </td>
+            <td rowspan="2" style="text-align: left">
+            @foreach($stat['total_retur'] as $key => $value)
+                {{ $key }}<br>
             @endforeach
-          </td>
-          {{-- <td rowspan="2" >
-            @foreach($stat['total_asuransi'] as $key => $value)
-              {{ $key }}<br>
-            @endforeach
-          </td>
-          <td rowspan="2" style="text-align: right">
-            @foreach($stat['total_asuransi'] as $key => $value)
-              {{ $value }}<br>
-            @endforeach
-          </td>
-          <td rowspan="2" >
-            @foreach($stat['total_ongkos'] as $key => $value)
-              {{ $key }}<br>
-            @endforeach
-          </td>
-          <td rowspan="2" style="text-align: right">
-            @foreach($stat['total_ongkos'] as $key => $value)
-              {{ $value }}<br>
-            @endforeach
-          </td>
-          <td rowspan="2">IDR</td>
-          <td rowspan="2" style="text-align: right">{!! Utils::decimal($stat['total_nilai_total']) !!}</td>
-          <td rowspan="2" colspan="4"></td> --}}
-          <td rowspan="2" colspan="4"></td>
+            </td>
         </tr>
       </tbody>
   </table>
@@ -223,7 +167,7 @@
 <script>
   function tableToExcel(content, filename) {
       $.ajax({
-          url: "{{ route('excel-report.bahan-masuk') }}",
+          url: "{{ route('excel-report.bahan-keluar') }}",
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
@@ -261,7 +205,7 @@
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    const filename = `LAPORAN-PEMASUKAN-BAHAN-BAKU-${yyyy}${mm}${dd}${h}${i}${s}`; // Add your desired filename here
+    const filename = `LAPORAN-PENGELUARAN-BAHAN-BAKU-${yyyy}${mm}${dd}${h}${i}${s}`; // Add your desired filename here
     tableToExcel(content, filename);
   }
 

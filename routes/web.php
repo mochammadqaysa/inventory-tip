@@ -77,10 +77,23 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
     Route::prefix('report')->group(function () {
         Route::get('/bahan-masuk', [BahanMasukController::class, 'report'])->name('report.bahan-masuk');
         Route::get('/bahan-masuk/result', [BahanMasukController::class, 'result_report'])->name('result-report.bahan-masuk');
-        Route::get('/bahan-masuk/print', [BahanMasukController::class, 'print_report'])->name('print-report.bahan-masuk');
         Route::post('/bahan-masuk/excel', [BahanMasukController::class, 'excel_report'])->name('excel-report.bahan-masuk');
+
         Route::get('/bahan-keluar', [BahanKeluarController::class, 'report'])->name('report.bahan-keluar');
-        Route::get('/bdp', [BarangMasukController::class, 'report'])->name('report.bdp');
+        Route::get('/bahan-keluar/result', [BahanKeluarController::class, 'result_report'])->name('result-report.bahan-keluar');
+        Route::post('/bahan-keluar/excel', [BahanKeluarController::class, 'excel_report'])->name('excel-report.bahan-keluar');
+
+        Route::get('/bdp', [BarangKeluarController::class, 'bdp'])->name('report.bdp');
+        Route::get('/bdp/result', [BarangKeluarController::class, 'bdp_result_report'])->name('result-report.bdp');
+        Route::post('/bdp/excel', [BarangKeluarController::class, 'bdp_excel_report'])->name('excel-report.bdp');
+
+        Route::get('/barang-masuk', [BarangMasukController::class, 'report'])->name('report.barang-masuk');
+        Route::get('/barang-masuk/result', [BarangMasukController::class, 'result_report'])->name('result-report.barang-masuk');
+        Route::post('/barang-masuk/excel', [BarangMasukController::class, 'excel_report'])->name('excel-report.barang-masuk');
+
+        Route::get('/barang-keluar', [BarangKeluarController::class, 'report'])->name('report.barang-keluar');
+        Route::get('/barang-keluar/result', [BarangKeluarController::class, 'result_report'])->name('result-report.barang-keluar');
+        Route::post('/barang-keluar/excel', [BarangKeluarController::class, 'excel_report'])->name('excel-report.barang-keluar');
     });
 
     Route::prefix('select2')->group(function () {

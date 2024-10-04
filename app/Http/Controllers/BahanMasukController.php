@@ -423,7 +423,7 @@ class BahanMasukController extends Controller
             $bahanMasukItems->where('bahan_uid', $bahan);
         }
         $bahanMasukItems = $bahanMasukItems->get()->sortBy(function ($item) {
-            return $item->bahanMasuk->nomor_bukti;
+            return [$item->bahanMasuk->tanggal_bukti, $item->bahanMasuk->nomor_bukti];
         });
 
         $total_jumlah = [];
@@ -473,6 +473,10 @@ class BahanMasukController extends Controller
         }
 
 
+        ksort($total_jumlah);
+        ksort($total_nilai);
+        ksort($total_asuransi);
+        ksort($total_ongkos);
         $stat = [
             'total_jumlah' => $total_jumlah,
             'total_nilai' => $total_nilai,
@@ -483,23 +487,9 @@ class BahanMasukController extends Controller
 
         $from = Utils::formatTanggalIndo($date1);
         $to = Utils::formatTanggalIndo($date2);
+        $req_tipe = $tipe;
 
-        return view('pages.laporan.bahan_masuk.print', compact('bahanMasukItems', 'stat', 'from', 'to'));
-
-
-        // return redirect()->route('print-report.bahan-masuk', [
-        //     'stat' => $stat,
-        //     'bahanMasukItem' => $bahanMasukItems,
-        //     'to' => $to
-        // ]);
-    }
-
-    public function print_report(Request $request)
-    {
-        // dd($request->all());
-        return view('pages.laporan.bahan_masuk.print');
-        // $pdf = FacadePdf::loadView('pages.laporan.bahan_masuk.print')->setPaper('a4', 'landscape');
-        // return $pdf->stream();
+        return view('pages.laporan.bahan_masuk.print', compact('bahanMasukItems', 'stat', 'from', 'to', 'req_tipe'));
     }
 
     public function excel_report(Request $request)

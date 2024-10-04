@@ -18,6 +18,8 @@ class BahanKeluarItem extends Model
         'bahan_keluar_uid',
         'bahan_uid',
         'jumlah',
+        'jumlah_sqm',
+        'bruto',
         'jumlah_kg',
         'created_by',
         'updated_by',

@@ -11,6 +11,8 @@ use App\Models\BarangMasukItem;
 use App\Models\Gudang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtml;
 
 class BarangMasukController extends Controller
 {
@@ -288,5 +290,86 @@ class BarangMasukController extends Controller
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
         }
+    }
+
+    public function report()
+    {
+        $barang = Barang::all();
+        return view('pages.laporan.barang_masuk.list', compact('barang'));
+    }
+
+    public function result_report(Request $request)
+    {
+        $request->validate([
+            'periode' => 'required',
+        ]);
+        $periode = explode(' - ', $request->periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+        $barang = $request->barang;
+        $fasilitas = $request->fasilitas;
+        $barangMasukItems = BarangMasukItem::with(['barang', 'barangMasuk'])
+            ->whereHas('barangMasuk', function ($query) use ($date1, $date2) {
+                $query->where('tanggal_bukti', '>=', $date1)
+                    ->where('tanggal_bukti', '<=', $date2);
+            });
+        if (!is_null($barang) && $barang != '') {
+            $barangMasukItems->where('barang_uid', $barang);
+        }
+        $barangMasukItems = $barangMasukItems->get()->sortBy(function ($item) {
+            return [$item->barangMasuk->tanggal_bukti, $item->barangMasuk->nomor_bukti];
+        });
+
+        $total_jumlah = [];
+        $total_jumlah_sqm = '0.000';
+        $total_netto = '0.000';
+        foreach ($barangMasukItems as $key => $value) {
+            $jumlah = $value->jumlah;
+            $satuan = $value->barang->satuan;
+            if (array_key_exists($satuan, $total_jumlah)) {
+                $total_jumlah[$satuan] += $jumlah;
+            } else {
+                $total_jumlah[$satuan] = $jumlah;
+            }
+
+            $total_jumlah_sqm += $value->jumlah_sqm;
+            $total_netto += $value->netto;
+        }
+
+
+        $stat = [
+            'total_jumlah'     => $total_jumlah,
+            'total_jumlah_sqm' => $total_jumlah_sqm != '0.000' ? $total_jumlah_sqm : null,
+            'total_netto'      => $total_netto != '0.000' ? $total_netto : null,
+        ];
+
+        $from = Utils::formatTanggalIndo($date1);
+        $to = Utils::formatTanggalIndo($date2);
+
+        return view('pages.laporan.barang_masuk.print', compact('barangMasukItems', 'stat', 'from', 'to'));
+    }
+
+    public function excel_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\BarangKeluarDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Barang;
 use App\Models\BarangKeluar;
 use App\Models\BarangKeluarItem;
@@ -11,6 +12,8 @@ use App\Models\Customer;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtml;
 
 class BarangKeluarController extends Controller
 {
@@ -343,5 +346,175 @@ class BarangKeluarController extends Controller
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
         }
+    }
+
+    public function report()
+    {
+        $barang = Barang::all();
+        return view('pages.laporan.barang_keluar.list', compact('barang'));
+    }
+
+    public function result_report(Request $request)
+    {
+        $request->validate([
+            'periode' => 'required',
+            'tipe' => 'required',
+        ]);
+        // dd($request->all());
+        $laporan = [];
+        $periode = explode(' - ', $request->periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+        $tipe = $request->tipe;
+        $barang = $request->barang;
+        $barangKeluarItems = BarangKeluarItem::with(['barang', 'barangKeluar', 'gudang'])
+            ->whereHas('barangKeluar', function ($query) use ($date1, $date2, $tipe) {
+                $query->where('tanggal_bukti', '>=', $date1)
+                    ->where('tanggal_bukti', '<=', $date2);
+            });
+        if ($tipe != 'semua') {
+            $barangKeluarItems->whereHas('barangKeluar', function ($query) use ($tipe) {
+                $query->where('tipe', $tipe);
+            });
+        }
+        if (!is_null($barang) && $barang != '') {
+            $barangKeluarItems->where('barang_uid', $barang);
+        }
+        $barangKeluarItems = $barangKeluarItems->get()->sortBy(function ($item) {
+            return [$item->barangKeluar->tanggal_bukti, $item->barangKeluar->nomor_bukti];
+        });
+
+        $total_jumlah = [];
+        $total_jumlah_sqm = '0.000';
+        $total_bruto = '0.000';
+        $total_netto = '0.000';
+        $total_nilai = [];
+        $total_nilai_ppn = '0.00';
+        $total_nilai_total = [];
+        foreach ($barangKeluarItems as $key => $value) {
+            $jumlah = $value->jumlah;
+            $satuan = $value->barang->satuan;
+            if (array_key_exists($satuan, $total_jumlah)) {
+                $total_jumlah[$satuan] += $jumlah;
+            } else {
+                $total_jumlah[$satuan] = $jumlah;
+            }
+
+            $total_jumlah_sqm += $value->jumlah_sqm;
+            $total_bruto += $value->bruto;
+            $total_netto += $value->netto;
+
+            $nilai = $value->nilai;
+            $mata_uang = $value->mata_uang;
+            if (!is_null($nilai) && !is_null($mata_uang)) {
+                if (array_key_exists($mata_uang, $total_nilai)) {
+                    $total_nilai[$mata_uang] += $nilai;
+                } else {
+                    $total_nilai[$mata_uang] = $nilai;
+                }
+            }
+
+            $nilai_ppn = $value->nilai_ppn;
+            if (!is_null($nilai_ppn)) {
+                $total_nilai_ppn += $nilai_ppn;
+            }
+
+            $nilai_total = $value->nilai_total;
+            if (!is_null($nilai_total) && !is_null($mata_uang)) {
+                if (array_key_exists($mata_uang, $total_nilai_total)) {
+                    $total_nilai_total[$mata_uang] += $nilai_total;
+                } else {
+                    $total_nilai_total[$mata_uang] = $nilai_total;
+                }
+            }
+        }
+
+
+        ksort($total_jumlah);
+        ksort($total_nilai);
+        ksort($total_nilai_total);
+        $stat = [
+            'total_jumlah'      => $total_jumlah,
+            'total_jumlah_sqm'  => $total_jumlah_sqm != "0.000" ? $total_jumlah_sqm : null,
+            'total_bruto'       => $total_bruto != "0.000" ? $total_bruto : null,
+            'total_netto'       => $total_netto != "0.000" ? $total_netto : null,
+            'total_nilai'       => $total_nilai,
+            'total_nilai_ppn'   => $total_nilai_ppn != "0.00" ? $total_nilai_ppn : null,
+            'total_nilai_total' => $total_nilai_total,
+        ];
+
+        $from = Utils::formatTanggalIndo($date1);
+        $to = Utils::formatTanggalIndo($date2);
+        $req_tipe = $tipe;
+
+        return view('pages.laporan.bahan_masuk.print', compact('barangKeluarItems', 'stat', 'from', 'to', 'req_tipe'));
+    }
+
+    public function excel_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
+    }
+
+    public function bdp()
+    {
+        return view('pages.laporan.bdp.list');
+    }
+
+    public function bdp_result_report(Request $request)
+    {
+        $request->validate([
+            'periode' => 'required',
+        ]);
+        // dd($request->all());
+        $periode = explode(' - ', $request->periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+        $from = Utils::formatTanggalIndo($date1);
+        $to = Utils::formatTanggalIndo($date2);
+
+        return view('pages.laporan.bdp.print', compact('from', 'to'));
+    }
+
+    public function bdp_excel_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
 }
