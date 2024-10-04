@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\BahanKeluarDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Bagian;
 use App\Models\Bahan;
 use App\Models\BahanKeluar;
@@ -11,6 +12,8 @@ use App\Models\BahanKeluarItem;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtml;
 
 class BahanKeluarController extends Controller
 {
@@ -295,5 +298,105 @@ class BahanKeluarController extends Controller
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
         }
+    }
+
+    public function report()
+    {
+        $bahan = Bahan::all();
+        return view('pages.laporan.bahan_keluar.list', compact('bahan'));
+    }
+
+    public function result_report(Request $request)
+    {
+        $request->validate([
+            'periode' => 'required',
+            'transaksi' => 'required',
+        ]);
+        // dd($request->all());
+        $laporan = [];
+        $periode = explode(' - ', $request->periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+        $transaksi = $request->transaksi;
+        $bahan = $request->bahan;
+        $fasilitas = $request->fasilitas;
+        $bahanKeluarItems = BahanKeluarItem::with(['bahan', 'bahanKeluar'])
+            ->whereHas('bahanKeluar', function ($query) use ($date1, $date2, $transaksi) {
+                $query->where('tanggal_bukti', '>=', $date1)
+                    ->where('tanggal_bukti', '<=', $date2);
+            });
+        if ($transaksi != 'semua') {
+            $bahanKeluarItems->whereHas('bahanKeluar', function ($query) use ($transaksi) {
+                $query->where('transaksi', $transaksi);
+            });
+        }
+        if (!is_null($bahan) && $bahan != '') {
+            $bahanKeluarItems->where('bahan_uid', $bahan);
+        }
+
+        $bahanKeluarItems = $bahanKeluarItems->get()->sortBy(function ($item) {
+            return [$item->bahanKeluar->tanggal_bukti, $item->bahanKeluar->nomor_bukti];
+        });
+
+        // dd($bahanKeluarItems);
+
+        $total_keluar = [];
+        $total_retur = [];
+        foreach ($bahanKeluarItems as $key => $value) {
+            // dd($value);
+            $transaksi = $value->bahanKeluar->transaksi;
+            $jumlah = $value->jumlah;
+            $satuan = $value->bahan->satuan;
+            if ($transaksi === 'keluar') {
+                if (array_key_exists($satuan, $total_keluar)) {
+                    $total_keluar[$satuan] += $jumlah;
+                } else {
+                    $total_keluar[$satuan] = $jumlah;
+                }
+            }
+            if ($transaksi === 'retur') {
+                if (array_key_exists($satuan, $total_retur)) {
+                    $total_retur[$satuan] += $jumlah;
+                } else {
+                    $total_retur[$satuan] = $jumlah;
+                }
+            }
+        }
+
+        ksort($total_keluar);
+        ksort($total_retur);
+        $stat = [
+            'total_keluar' => $total_keluar,
+            'total_retur' => $total_retur,
+        ];
+
+        $from = Utils::formatTanggalIndo($date1);
+        $to = Utils::formatTanggalIndo($date2);
+
+        return view('pages.laporan.bahan_keluar.print', compact('bahanKeluarItems', 'stat', 'from', 'to'));
+    }
+
+    public function excel_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
 }
