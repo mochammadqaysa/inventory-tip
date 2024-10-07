@@ -367,7 +367,7 @@ class BarangKeluarController extends Controller
         $date2 = date('Y-m-d', strtotime($periode[1]));
         $tipe = $request->tipe;
         $barang = $request->barang;
-        $barangKeluarItems = BarangKeluarItem::with(['barang', 'barangKeluar', 'gudang'])
+        $barangKeluarItems = BarangKeluarItem::with(['barang', 'barangKeluar'])
             ->whereHas('barangKeluar', function ($query) use ($date1, $date2, $tipe) {
                 $query->where('tanggal_bukti', '>=', $date1)
                     ->where('tanggal_bukti', '<=', $date2);
@@ -447,7 +447,7 @@ class BarangKeluarController extends Controller
         $to = Utils::formatTanggalIndo($date2);
         $req_tipe = $tipe;
 
-        return view('pages.laporan.bahan_masuk.print', compact('barangKeluarItems', 'stat', 'from', 'to', 'req_tipe'));
+        return view('pages.laporan.barang_keluar.print', compact('barangKeluarItems', 'stat', 'from', 'to', 'req_tipe'));
     }
 
     public function excel_report(Request $request)

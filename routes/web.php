@@ -94,6 +94,10 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
         Route::get('/barang-keluar', [BarangKeluarController::class, 'report'])->name('report.barang-keluar');
         Route::get('/barang-keluar/result', [BarangKeluarController::class, 'result_report'])->name('result-report.barang-keluar');
         Route::post('/barang-keluar/excel', [BarangKeluarController::class, 'excel_report'])->name('excel-report.barang-keluar');
+
+        Route::get('/waste-masuk', [WasteMasukController::class, 'report'])->name('report.waste-masuk');
+        Route::get('/waste-masuk/result', [WasteMasukController::class, 'result_report'])->name('result-report.waste-masuk');
+        Route::post('/waste-masuk/excel', [WasteMasukController::class, 'excel_report'])->name('excel-report.waste-masuk');
     });
 
     Route::prefix('select2')->group(function () {

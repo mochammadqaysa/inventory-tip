@@ -149,10 +149,10 @@
             @endforeach
             </td>
             <td rowspan="2" style="text-align: right">
-            {!! Utils::decimal($stat['total_jumlah_sqm']) !!}
+            {!! is_null($stat['total_jumlah_sqm']) ? "" : Utils::decimal($stat['total_jumlah_sqm']) !!}
             </td>
             <td rowspan="2" style="text-align: right">
-            {!! Utils::decimal($stat['total_netto']) !!}
+            {!! is_null($stat['total_netto']) ? "" : Utils::decimal($stat['total_netto']) !!}
             </td>
             <td></td>
         </tr>

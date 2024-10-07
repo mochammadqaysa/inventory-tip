@@ -9,6 +9,8 @@ use App\Models\WasteMasuk;
 use App\Models\WasteMasukItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtml;
 
 class WasteMasukController extends Controller
 {
@@ -257,5 +259,11 @@ class WasteMasukController extends Controller
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
         }
+    }
+
+    public function report()
+    {
+        $waste = Waste::all();
+        return view('pages.laporan.waste_masuk.list', compact('waste'));
     }
 }

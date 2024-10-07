@@ -43,8 +43,4 @@ class BarangKeluarItem extends Model
         return $this->belongsTo(Barang::class);
     }
 
-    public function gudang()
-    {
-        return $this->belongsTo(Gudang::class);
-    }
 }

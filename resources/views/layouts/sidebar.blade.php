@@ -95,14 +95,15 @@
         Request::is('inventory/report/bahan-keluar') ||
         Request::is('inventory/report/bdp') ||
         Request::is('inventory/report/barang-masuk') ||
-        Request::is('inventory/report/barang-keluar') 
+        Request::is('inventory/report/barang-keluar') ||
+        Request::is('inventory/report/waste-masuk')
         ))
       ->customIconItem('Pemasukan Bahan Baku', asset('assets/img/brand/file-bahan.svg'), 'inventory/report/bahan-masuk', Request::is('inventory/report/bahan-masuk'),['super_admin','exim'])
       ->customIconItem('Pengeluaran Bahan Baku', asset('assets/img/brand/file-bahan.svg'), 'inventory/report/bahan-keluar', Request::is('inventory/report/bahan-keluar'),['super_admin','exim'])
       ->customIconItem('Pemakaian Barang Dalam Proses', asset('assets/img/brand/pemakaian-barang.svg'), 'inventory/report/bdp', Request::is('inventory/report/bdp'),['super_admin','exim'])
       ->customIconItem('Pemasukan Barang Jadi', asset('assets/img/brand/file-barang.svg'), 'inventory/report/barang-masuk', Request::is('inventory/report/barang-masuk'),['super_admin','exim'])
       ->customIconItem('Pengeluaran Barang Jadi', asset('assets/img/brand/file-barang.svg'), 'inventory/report/barang-keluar', Request::is('inventory/report/barang-keluar'),['super_admin','exim'])
-      ->customIconItem('Pemasukan Waste / Scrap', asset('assets/img/brand/file-waste.svg'), 'inventory/backup-data', Request::is('inventory/backup-data'),['super_admin','exim'])
+      ->customIconItem('Pemasukan Waste / Scrap', asset('assets/img/brand/file-waste.svg'), 'inventory/report/waste-masuk', Request::is('inventory/report/waste-masuk'),['super_admin','exim'])
       ->customIconItem('Pengeluaran Waste / Scrap', asset('assets/img/brand/file-waste.svg'), 'inventory/backup-data', Request::is('inventory/backup-data'),['super_admin','exim'])
       ->customIconItem('Mutasi Bahan Baku', asset('assets/img/brand/file-mutasi.svg'), 'inventory/backup-data', Request::is('inventory/backup-data'),['super_admin','exim'])
       ->customIconItem('Mutasi Barang Jadi', asset('assets/img/brand/file-mutasi.svg'), 'inventory/backup-data', Request::is('inventory/backup-data'),['super_admin','exim'])

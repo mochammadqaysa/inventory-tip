@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Laporan Pemasukan Barang Jadi | PT. Tiara Indoprima</title>
+    <title>Laporan Pengeluaran Barang Jadi | PT. Tiara Indoprima</title>
     <link rel="icon" href="{{ asset('argon2/assets/img/logo.png') }}" type="image/png">
     <style>
       @font-face {
@@ -91,20 +91,60 @@
           <tr>
               <th rowspan="2">No.</th>
               <th colspan="2">Bukti Pemasukan</th>
+              <th colspan="2">Dokumen Pabean</th>
               <th rowspan="2">Kode Barang</th>
               <th rowspan="2">Nama Barang</th>
               <th colspan="2" rowspan="2" >QTY</th>
               <th colspan="2" >Jumlah</th>
-              <th rowspan="2">Penyimpanan</th>
+              <th rowspan="2" colspan="2" >Nilai Barang</th>
+              <th rowspan="2" colspan="2">Pembeli / Penerima</th>
           </tr>
           <tr>
               <th>Nomor Bukti</th>
               <th>Tanggal Bukti</th>
+              <th>Nomor PEB</th>
+              <th>Tanggal PEB</th>
               <th>SQM</th>
               <th>Netto</th>
           </tr>
       </thead>
       <tbody>
+        @php
+            $lastNomorBukti = null;
+            $iteration = 1;
+        @endphp
+        @foreach ($barangKeluarItems as $item)
+        <tr>
+          @if($item->barangKeluar->nomor_bukti != $lastNomorBukti)
+            <td>{{ $iteration }}</td>
+            <td style="text-align: left">{{ $item->barangKeluar->nomor_bukti }} </td>
+            @php $iteration++; @endphp
+            @else
+            <td></td>
+            <td style="text-align: left"></td>
+          @endif
+          {{-- @if ($item->bahanMasuk->nomor_bukti != $lastNomorBukti)
+          @else
+              <td></td>
+          @endif --}}
+          <td>{{ Utils::formatTanggalLaporan($item->barangKeluar->tanggal_bukti) }}</td>
+          <td style="text-align: left">{{ $item->barangKeluar->nomor_peb ?? "-"}}</td>
+          <td style="text-align: left">{{ Utils::formatTanggalLaporan($item->barangKeluar->tanggal_peb) }}</td>
+          <td style="text-align: left">{{ $item->barang->kode }}</td>
+          <td style="text-align: left">{{ $item->barang->nama }} {{ $item->barang->warna }} {{ $item->barang->panjang }} x {{ $item->barang->lebar }} x {{ $item->barang->tebal }}</td>
+          <td style="text-align: right" >{!! $item->jumlah !!}</td>
+          <td style="text-align: left" >{{ $item->barang->satuan }}</td>
+          <td style="text-align: right" class="digit">{!! Utils::decimal($item->jumlah_sqm,3) !!}</td>
+          <td style="text-align: right" class="digit">{!! Utils::decimal($item->netto,3) !!}</td>
+          <td style="text-align: right" class="digit">{!! $item->mata_uang !!}</td>
+          <td style="text-align: right" class="digit">{!! Utils::decimal($item->nilai_total,3) !!}</td>
+          <td>{{ $item->barangKeluar->customer->nama }}</td>
+          <td>{{ $item->barangKeluar->customer->negara }}</td>
+        </tr>
+        @php
+            $lastNomorBukti = $item->barangKeluar->nomor_bukti;
+        @endphp
+        @endforeach
         <tr class="xls-ignore">
             {{-- <td colspan="5" rowspan="2" class="total" style="text-align: end; font-size: 20px; letter-spacing: 20px">TOTAL</td>
             <td rowspan="2" class="digit" style="text-align: right;">
