@@ -98,6 +98,18 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
         Route::get('/waste-masuk', [WasteMasukController::class, 'report'])->name('report.waste-masuk');
         Route::get('/waste-masuk/result', [WasteMasukController::class, 'result_report'])->name('result-report.waste-masuk');
         Route::post('/waste-masuk/excel', [WasteMasukController::class, 'excel_report'])->name('excel-report.waste-masuk');
+
+        Route::get('/waste-keluar', [WasteKeluarController::class, 'report'])->name('report.waste-keluar');
+        Route::get('/waste-keluar/result', [WasteKeluarController::class, 'result_report'])->name('result-report.waste-keluar');
+        Route::post('/waste-keluar/excel', [WasteKeluarController::class, 'excel_report'])->name('excel-report.waste-keluar');
+
+        Route::get('/mutasi-bahan', [BahanController::class, 'report_mutasi'])->name('report.mutasi-bahan');
+        Route::get('/mutasi-bahan/result', [BahanController::class, 'result_mutasi_report'])->name('result-report.mutasi-bahan');
+        Route::post('/mutasi-bahan/excel', [BahanController::class, 'excel_mutasi_report'])->name('excel-report.mutasi-bahan');
+
+        Route::get('/mutasi-barang', [BarangController::class, 'report_mutasi'])->name('report.mutasi-barang');
+        Route::get('/mutasi-barang/result', [BarangController::class, 'result_mutasi_report'])->name('result-report.mutasi-barang');
+        Route::post('/mutasi-barang/excel', [BarangController::class, 'excel_mutasi_report'])->name('excel-report.mutasi-barang');
     });
 
     Route::prefix('select2')->group(function () {

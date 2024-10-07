@@ -90,6 +90,50 @@ class Utils
             ->sum($column);
     }
 
+    public static function totalBahanMasuk($id, $periode, $column = 'jumlah')
+    {
+        $periode = explode(' - ', $periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+
+        return DB::table('bahan_masuk_item')
+            ->join('bahan_masuk', 'bahan_masuk_item.bahan_masuk_uid', "=", 'bahan_masuk.uid')
+            ->where('bahan_masuk_item.bahan_uid', $id)
+            ->where('bahan_masuk.tanggal_bukti', '>=', $date1)
+            ->where('bahan_masuk.tanggal_bukti', '<=', $date2)
+            ->sum($column);
+    }
+
+    public static function totalBahanKeluar($id, $periode, $column = 'jumlah')
+    {
+        $periode = explode(' - ', $periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+
+        return DB::table('bahan_keluar_item')
+            ->join('bahan_keluar', 'bahan_keluar_item.bahan_keluar_uid', "=", 'bahan_keluar.uid')
+            ->where('bahan_keluar_item.bahan_uid', $id)
+            ->where('bahan_keluar.tanggal_bukti', '>=', $date1)
+            ->where('bahan_keluar.tanggal_bukti', '<=', $date2)
+            ->where('bahan_keluar.transaksi', 'keluar')
+            ->sum($column);
+    }
+
+    public static function totalBahanRetur($id, $periode, $column = 'jumlah')
+    {
+        $periode = explode(' - ', $periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+
+        return DB::table('bahan_keluar_item')
+            ->join('bahan_keluar', 'bahan_keluar_item.bahan_keluar_uid', "=", 'bahan_keluar.uid')
+            ->where('bahan_keluar_item.bahan_uid', $id)
+            ->where('bahan_keluar.tanggal_bukti', '>=', $date1)
+            ->where('bahan_keluar.tanggal_bukti', '<=', $date2)
+            ->where('bahan_keluar.transaksi', 'retur')
+            ->sum($column);
+    }
+
     public static function totalBarangMasukSampai($id, $tanggal, $column = 'jumlah', $operator = '<=')
     {
         return DB::table('barang_masuk_item')
@@ -106,6 +150,24 @@ class Utils
             ->where('barang_keluar_item.barang_uid', $id)
             ->where('barang_keluar.tanggal_bukti', $operator, $tanggal)
             ->sum($column);
+    }
+
+    public static function saldoAwal($bahan, $tanggal, $tipe)
+    {
+        try {
+            if ($tipe == "bahan") {
+                $bahanId = $bahan->uid;
+                $masuk = Utils::totalBahanMasukSampai($bahanId, $tanggal);
+                $keluar = Utils::totalBahanKeluarSampai($bahanId, $tanggal);
+                $retur = Utils::totalBahanReturSampai($bahanId, $tanggal);
+                $total = ($masuk + $retur) - $keluar;
+                return $total;
+            } else if ($tipe == "barang") {
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+            return 0;
+        }
     }
 
     public static function saldoAkhir($bahan, $tipe)

@@ -7,7 +7,7 @@
   <h6 class="h2 text-white d-inline-block mb-0">Laporan</h6>
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/file-bahan.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
+      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/file-waste.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
       <li class="breadcrumb-item active" aria-current="page">Pemasukan Waste / Scrap</li>
     </ol>
   </nav>
@@ -19,7 +19,7 @@
   <div class="col-xl-12 order-xl-1">
     <div class="card">
       <div class="card-body">
-        <form action="{{ route('result-report.barang-masuk') }}" method="GET" id="myForm">
+        <form action="{{ route('result-report.waste-masuk') }}" method="GET" id="myForm">
           <div class="row align-items-center" id="form-list">
             <div class="form-group col-md-12">
               <label>Periode <span class="text-danger">*</span></label>
@@ -39,7 +39,7 @@
             <!-- Waste Dropdown -->
             <div class="form-group col-md-12">
               <label>Jenis Waste / Scrap</label>
-              <select name="wwawste" class="form-control select2-waste">
+              <select name="waste" class="form-control select2-waste">
                 <option></option>
                 @foreach ($waste as $item)
                     <option value="{{$item->uid}}" >{{$item->nama}}</option>
@@ -115,8 +115,8 @@
     });
 
     // Select2 Initialization
-    $('.select2-barang').select2({
-      placeholder: "Semua Barang",
+    $('.select2-waste').select2({
+      placeholder: "Semua Waste",
       allowClear: true,
       templateResult: formatResult,
       templateSelection: formatSelection
@@ -127,20 +127,14 @@
       if (!res.id) return res.text;
       const $container = $(
         `<div class='select2-result-repository clearfix'>
-          <div class='select2-result-repository__avatar'><img src='${base_url}img/default-barang.png'/></div>
+          <div class='select2-result-repository__avatar'><img src='${base_url}img/default-waste.png'/></div>
           <div class='select2-result-repository__meta'>
             <div class='select2-result-repository__title'></div>
             <div class='select2-result-repository__description'></div>
           </div>
         </div>`
       );
-      var warna = $(res.element).data('warna');
-      var panjang = $(res.element).data('panjang');
-      var lebar = $(res.element).data('lebar');
-      var tebal = $(res.element).data('tebal');
-      var satuan = $(res.element).data('satuan');
       $container.find(".select2-result-repository__title").text(res.text || '-');
-      $container.find(".select2-result-repository__description").html(warna ? `Warna : ${warna} <br> Dimensi : ${panjang} x ${lebar} x ${tebal} <br> Satuan : ${satuan}` : '-');
       return $container;
     }
 

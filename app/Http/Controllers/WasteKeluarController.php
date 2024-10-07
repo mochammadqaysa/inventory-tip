@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\WasteKeluarDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Customer;
 use App\Models\JenisWaste;
 use App\Models\Waste;
@@ -11,6 +12,8 @@ use App\Models\WasteKeluar;
 use App\Models\WasteKeluarItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtml;
 
 class WasteKeluarController extends Controller
 {
@@ -317,5 +320,80 @@ class WasteKeluarController extends Controller
                 'message' => 'Data Failed, this data is still used in other modules !'
             ]);
         }
+    }
+
+    public function report()
+    {
+        $waste = Waste::all();
+        return view('pages.laporan.waste_keluar.list', compact('waste'));
+    }
+
+    public function result_report(Request $request)
+    {
+        $request->validate([
+            'periode' => 'required',
+        ]);
+        $periode = explode(' - ', $request->periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+        $waste = $request->waste;
+        $wasteKeluarItems = WasteKeluarItem::with(['waste', 'wasteKeluar'])
+            ->whereHas('wasteKeluar', function ($query) use ($date1, $date2) {
+                $query->where('tanggal_sppb', '>=', $date1)
+                    ->where('tanggal_sppb', '<=', $date2);
+            });
+
+        $wasteKeluarItems = $wasteKeluarItems->get()->sortBy(function ($item) {
+            return [$item->wasteKeluar->tanggal_invoice, $item->wasteKeluar->nomor_invoice];
+        });
+
+
+        $total_jumlah = '0';
+        $total_nilai = '0';
+        $waste_keluar_id = '';
+        foreach ($wasteKeluarItems as $key => $value) {
+
+            $total_jumlah += $value->jumlahKg;
+            $value->waste->nama = $value->jenis == 'MASKING' ? '' : $value->waste->nama;
+            if ($waste_keluar_id != $value->waste_keluar_uid) {
+                $total_nilai +=  $value->wasteKeluar->nilai;
+            }
+            $waste_keluar_id = $value->waste_keluar_uid;
+        }
+
+
+        $stat = [
+            'total_jumlah' => $total_jumlah,
+            'total_nilai' => $total_nilai,
+        ];
+
+        $from = Utils::formatTanggalIndo($date1);
+        $to = Utils::formatTanggalIndo($date2);
+
+        return view('pages.laporan.waste_keluar.print', compact('wasteKeluarItems', 'stat', 'from', 'to'));
+    }
+
+    public function excel_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
 }

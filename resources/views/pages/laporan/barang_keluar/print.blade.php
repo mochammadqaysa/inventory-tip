@@ -77,7 +77,7 @@
   </div>
   <div class="header">
       <div class="title">
-          <h1>LAPORAN PEMASUKAN BARANG JADI</h1>
+          <h1>LAPORAN PENGELUARAN BARANG JADI</h1>
           <h3>PT. Tiara Indoprima</h3>
       </div>
       <p class="desc">
@@ -90,8 +90,10 @@
       <thead>
           <tr>
               <th rowspan="2">No.</th>
-              <th colspan="2">Bukti Pemasukan</th>
+              <th colspan="2">Bukti Pengeluaran</th>
+              @if($req_tipe != 'lokal')
               <th colspan="2">Dokumen Pabean</th>
+              @endif
               <th rowspan="2">Kode Barang</th>
               <th rowspan="2">Nama Barang</th>
               <th colspan="2" rowspan="2" >QTY</th>
@@ -102,8 +104,10 @@
           <tr>
               <th>Nomor Bukti</th>
               <th>Tanggal Bukti</th>
+              @if($req_tipe != 'lokal')
               <th>Nomor PEB</th>
               <th>Tanggal PEB</th>
+              @endif
               <th>SQM</th>
               <th>Netto</th>
           </tr>
@@ -128,8 +132,10 @@
               <td></td>
           @endif --}}
           <td>{{ Utils::formatTanggalLaporan($item->barangKeluar->tanggal_bukti) }}</td>
+          @if($req_tipe != 'lokal')
           <td style="text-align: left">{{ $item->barangKeluar->nomor_peb ?? "-"}}</td>
           <td style="text-align: left">{{ Utils::formatTanggalLaporan($item->barangKeluar->tanggal_peb) }}</td>
+          @endif
           <td style="text-align: left">{{ $item->barang->kode }}</td>
           <td style="text-align: left">{{ $item->barang->nama }} {{ $item->barang->warna }} {{ $item->barang->panjang }} x {{ $item->barang->lebar }} x {{ $item->barang->tebal }}</td>
           <td style="text-align: right" >{!! $item->jumlah !!}</td>
@@ -146,10 +152,11 @@
         @endphp
         @endforeach
         <tr class="xls-ignore">
-            {{-- <td colspan="5" rowspan="2" class="total" style="text-align: end; font-size: 20px; letter-spacing: 20px">TOTAL</td>
+            <td colspan="{{ $req_tipe != 'lokal' ? "7" : "5" }}" rowspan="2" class="total" style="text-align: end; font-size: 20px; letter-spacing: 20px">TOTAL</td>
+            
             <td rowspan="2" class="digit" style="text-align: right;">
             @foreach($stat['total_jumlah'] as $key => $value)
-                {!! Utils::decimal($value,3) !!}<br>
+                {!! number_format($value,0,',','.') !!}<br>
             @endforeach
             </td>
             <td rowspan="2" style="text-align: left">
@@ -158,12 +165,22 @@
             @endforeach
             </td>
             <td rowspan="2" style="text-align: right">
-            {!! Utils::decimal($stat['total_jumlah_sqm']) !!}
+            {!! Utils::decimal($stat['total_jumlah_sqm'],3) !!}
             </td>
             <td rowspan="2" style="text-align: right">
-            {!! Utils::decimal($stat['total_netto']) !!}
+            {!! Utils::decimal($stat['total_netto'],3) !!}
             </td>
-            <td></td> --}}
+            <td rowspan="2" style="text-align: right">
+            @foreach($stat['total_nilai_total'] as $key => $value)
+                {{ $key }}<br>
+            @endforeach
+            </td>
+            <td rowspan="2" class="digit" style="text-align: right;">
+            @foreach($stat['total_nilai_total'] as $key => $value)
+                {!! Utils::decimal($value,2) !!}<br>
+            @endforeach
+            </td>
+            <td colspan="2"></td>
         </tr>
       </tbody>
   </table>

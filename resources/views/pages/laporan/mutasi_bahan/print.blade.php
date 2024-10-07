@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>Laporan Pemasukan Waste / Scrap | PT. Tiara Indoprima</title>
+    <title>Laporan Mutasi Bahan Baku | PT. Tiara Indoprima</title>
     <link rel="icon" href="{{ asset('argon2/assets/img/logo.png') }}" type="image/png">
     <style>
       @font-face {
@@ -77,7 +77,7 @@
   </div>
   <div class="header">
       <div class="title">
-          <h1>LAPORAN PEMASUKAN WASTE / SCRAP</h1>
+          <h1>LAPORAN MUTASI BAHAN BAKU</h1>
           <h3>PT. Tiara Indoprima</h3>
       </div>
       <p class="desc">
@@ -89,55 +89,72 @@
   <table id="table">
       <thead>
           <tr>
-              <th rowspan="2">No.</th>
-              <th colspan="2">Bukti Pemasukan</th>
-              <th rowspan="2">Jenis Waste</th>
-              <th rowspan="2" >Jumlah</th>
-          </tr>
-          <tr>
-              <th>Nomor Bukti</th>
-              <th>Tanggal Bukti</th>
+              <th>No.</th>
+              <th>Kode BB</th>
+              <th>Nama Bahan</th>
+              <th>Satuan</th>
+              <th>Saldo Awal</th>
+              <th>Pemasukan</th>
+              <th>Pengeluaran</th>
+              <th>Returan</th>
+              <th>Saldo Akhir</th>
+              <th>Gudang</th>
           </tr>
       </thead>
       <tbody>
-        @php
-            $lastNomorBukti = null;
-            $iteration = 1;
-        @endphp
-        @foreach ($wasteMasukItems as $item)
+        @foreach($laporan as $item)
         <tr>
-          @if($item->wasteMasuk->nomor_bukti != $lastNomorBukti)
-            <td>{{ $iteration }}</td>
-            <td style="text-align: left">{{ $item->wasteMasuk->nomor_bukti }} </td>
-            @php $iteration++; @endphp
-            @else
-            <td></td>
-            <td style="text-align: left"></td>
-          @endif
-          {{-- @if ($item->bahanMasuk->nomor_bukti != $lastNomorBukti)
-          @else
-              <td></td>
-          @endif --}}
-          <td>{{ Utils::formatTanggalLaporan($item->wasteMasuk->tanggal_bukti) }}</td>
-          <td style="text-align: left">{{ $item->waste->nama }}</td>
-          <td style="text-align: right" >{!! $item->jumlah !!}</td>
+            
+            <td>{{ $loop->iteration }}</td>
+            <td style="text-align: left">{{ $item['kode'] }}</td>
+            <td style="text-align: left">{{ $item['nama_bahan'] }}</td>
+            <td>{{ $item['satuan'] }}</td>
+            <td style="text-align: right">{!! !is_null($item['saldo_awal']) && $item['saldo_awal'] != '0.00' ? Utils::decimal($item['saldo_awal'],3) : "" !!}</td>
+            <td style="text-align: right">{!! !is_null($item['jumlah_masuk']) && $item['jumlah_masuk'] != '0.00' ? Utils::decimal($item['jumlah_masuk'],3) : "" !!}</td>
+            <td style="text-align: right">{!! !is_null($item['jumlah_keluar']) && $item['jumlah_keluar'] != '0.00' ? Utils::decimal($item['jumlah_keluar'],3) : "" !!}</td>
+            <td style="text-align: right">{!! !is_null($item['jumlah_retur']) && $item['jumlah_retur'] != '0.00' ? Utils::decimal($item['jumlah_retur'],3) : "" !!}</td>
+            <td style="text-align: right">{!! !is_null($item['saldo_akhir']) && $item['saldo_akhir'] != '0.000' ? Utils::decimal($item['saldo_akhir'],3) : "" !!}</td>
+            <td>{{ $item['gudang'] }}</td>
         </tr>
-        @php
-            $lastNomorBukti = $item->wasteMasuk->nomor_bukti;
-        @endphp
         @endforeach
         <tr class="xls-ignore">
-            <td colspan="3" rowspan="2" class="total" style="text-align: end; font-size: 20px; letter-spacing: 20px">TOTAL</td>
-            <td rowspan="2" style="text-align: left">
-                @foreach($stat['total_jumlah'] as $key => $value)
-                    {{ $key }}<br>
+            <td colspan="4" rowspan="2" class="total" style="text-align: end; font-size: 20px; letter-spacing: 20px">TOTAL</td>
+            <td rowspan="2" style="text-align: right">
+                @foreach($stat['total_saldo_awal'] as $key => $value)
+                {!! Utils::decimal($value,3) !!}&nbsp; {{$key}}<br>
                 @endforeach
-                </td>
-            <td rowspan="2" class="digit" style="text-align: right;">
-            @foreach($stat['total_jumlah'] as $key => $value)
-                {!! Utils::decimal($value,3) !!}<br>
-            @endforeach
             </td>
+            <td rowspan="2" style="text-align: right">
+                @foreach($stat['total_jumlah_masuk'] as $key => $value)
+                {!! Utils::decimal($value,3) !!}&nbsp; {{$key}}<br>
+                @endforeach
+            </td>
+            <td rowspan="2" style="text-align: right">
+                @foreach($stat['total_jumlah_keluar'] as $key => $value)
+                {!! Utils::decimal($value,3) !!}&nbsp; {{$key}}<br>
+                @endforeach
+            </td>
+            <td rowspan="2" style="text-align: right">
+                @foreach($stat['total_jumlah_retur'] as $key => $value)
+                {!! Utils::decimal($value,3) !!}&nbsp; {{$key}}<br>
+                @endforeach
+            </td>
+            <td rowspan="2" style="text-align: right">
+                @foreach($stat['total_saldo_akhir'] as $key => $value)
+                {!! Utils::decimal($value,3) !!}&nbsp; {{$key}}<br>
+                @endforeach
+            </td>
+            <td></td>
+            {{-- <td rowspan="2">
+                @foreach($stat['total_nilai'] as $key => $value)
+                {{ $key }}<br>
+                @endforeach
+            </td> --}}
+            {{-- <td rowspan="2" class="digit" style="text-align: right">
+                @foreach($stat['total_nilai'] as $key => $value)
+                {!! Utils::decimal($value) !!}<br>
+                @endforeach
+            </td> --}}
         </tr>
       </tbody>
   </table>
@@ -148,7 +165,7 @@
 <script>
   function tableToExcel(content, filename) {
       $.ajax({
-          url: "{{ route('excel-report.waste-masuk') }}",
+          url: "{{ route('excel-report.mutasi-bahan') }}",
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
@@ -186,7 +203,7 @@
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    const filename = `LAPORAN-PEMASUKAN-WASTE-SCRAP-${yyyy}${mm}${dd}${h}${i}${s}`; // Add your desired filename here
+    const filename = `LAPORAN-MUTASI-BAHAN-BAKU-${yyyy}${mm}${dd}${h}${i}${s}`; // Add your desired filename here
     tableToExcel(content, filename);
   }
 

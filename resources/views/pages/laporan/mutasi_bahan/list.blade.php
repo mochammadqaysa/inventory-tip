@@ -1,14 +1,14 @@
 @extends('layouts.root')
 
-@section('title', 'Laporan Pemakaian Barang Dalam Proses')
+@section('title', 'Laporan Mutasi Bahan Baku / Scrap')
 
 @section('breadcrum')
 <div class="col-lg-6 col-7">
   <h6 class="h2 text-white d-inline-block mb-0">Laporan</h6>
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/pemakaian-barang.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Pemakaian Barang Dalam Proses</li>
+      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/file-mutasi.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Mutasi Bahan Baku</li>
     </ol>
   </nav>
 </div>
@@ -19,7 +19,7 @@
   <div class="col-xl-12 order-xl-1">
     <div class="card">
       <div class="card-body">
-        <form action="{{ route('result-report.bdp') }}" method="GET" id="myForm">
+        <form action="{{ route('result-report.mutasi-bahan') }}" method="GET" id="myForm">
           <div class="row align-items-center" id="form-list">
             <div class="form-group col-md-12">
               <label>Periode <span class="text-danger">*</span></label>
@@ -35,6 +35,19 @@
                 </div>
               </div>
             </div>
+
+            <!-- Bahan Dropdown -->
+            <div class="form-group col-md-12">
+              <label>Bahan</label>
+              <select name="bahan" class="form-control select2-bahan">
+                  <option></option>
+                  @foreach ($bahan as $item)
+                      <option value="{{ $item->uid }}">{{ $item->nama }}</option>
+                  @endforeach
+              </select>
+            </div>
+
+
 
             <!-- Submit Button -->
             <div class="form-group col-md-12">

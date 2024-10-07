@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\WasteMasukDataTable;
 use App\Helpers\AuthCommon;
+use App\Helpers\Utils;
 use App\Models\Waste;
 use App\Models\WasteMasuk;
 use App\Models\WasteMasukItem;
@@ -265,5 +266,75 @@ class WasteMasukController extends Controller
     {
         $waste = Waste::all();
         return view('pages.laporan.waste_masuk.list', compact('waste'));
+    }
+
+    public function result_report(Request $request)
+    {
+        $request->validate([
+            'periode' => 'required',
+        ]);
+        $periode = explode(' - ', $request->periode);
+        $date1 = date('Y-m-d', strtotime($periode[0]));
+        $date2 = date('Y-m-d', strtotime($periode[1]));
+        $waste = $request->waste;
+        $wasteMasukItems = WasteMasukItem::with(['waste', 'wasteMasuk'])
+            ->whereHas('wasteMasuk', function ($query) use ($date1, $date2) {
+                $query->where('tanggal_bukti', '>=', $date1)
+                    ->where('tanggal_bukti', '<=', $date2);
+            });
+        if (!is_null($waste) && $waste != '') {
+            $wasteMasukItems->where('waste_uid', $waste);
+        }
+        $wasteMasukItems = $wasteMasukItems->get()->sortBy(function ($item) {
+            return [$item->wasteMasuk->tanggal_bukti, $item->wasteMasuk->nomor_bukti];
+        });
+
+
+        $total_jumlah = [];
+
+        foreach ($wasteMasukItems as $key => $value) {
+            $jumlah = $value->jumlah;
+            $nama_waste = $value->waste->nama;
+            if (array_key_exists($nama_waste, $total_jumlah)) {
+                $total_jumlah[$nama_waste] += $jumlah;
+            } else {
+                $total_jumlah[$nama_waste] = $jumlah;
+            }
+        }
+        ksort($total_jumlah);
+
+
+        $stat = [
+            'total_jumlah'     => $total_jumlah,
+        ];
+
+        $from = Utils::formatTanggalIndo($date1);
+        $to = Utils::formatTanggalIndo($date2);
+
+        return view('pages.laporan.waste_masuk.print', compact('wasteMasukItems', 'stat', 'from', 'to'));
+    }
+
+    public function excel_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
 }
