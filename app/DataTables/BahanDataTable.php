@@ -53,7 +53,9 @@ class BahanDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $button = [];
-        // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
+        // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>')->exportOptions([
+        //     'columns' => ':not(:first-child)',
+        // ]);
         $button[] = Button::raw('<i class="fa fa-plus"></i> Create Bahan Baku')->action('function() { create() }');
         return $this->builder()
             ->parameters([
@@ -81,10 +83,10 @@ class BahanDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
                 ->width(60)
-                ->addClass('text-center'),
+                ->addClass('text-center')
+                ->exportable(false)
+                ->printable(false),
             Column::make('kode'),
             Column::make('nama')->title("Nama Bahan"),
             Column::make('satuan'),

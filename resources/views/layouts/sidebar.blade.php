@@ -144,9 +144,11 @@
       ->start_accordion()
       ->sub_item_accordion('Settings','settings',['super_admin', 'exim'], 'fas fa-cogs')
       ->start_item_accordion('settings', (
-      Request::is('inventory/profile')
+      Request::is('inventory/profile') ||
+      Request::is('inventory/log') 
       ))
       ->item('Profile', 'fas fa-id-badge', 'inventory/profile', Request::is('inventory/profile'),['super_admin','exim'])
+      ->item('Log', 'fas fa-user-clock', 'inventory/log', Request::is('inventory/log'),['super_admin','exim'])
       // ->item('Change Password', 'fas fa-key', 'inventory/user', Request::is('inventory/user'),['super_admin'])
       ->end_item_accordion()
       ->end_accordion()
