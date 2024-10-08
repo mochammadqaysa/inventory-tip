@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Brick\Math\BigDecimal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -34,16 +35,22 @@ class Barang extends Model
     public function getSaldoAwal($range1, $column = 'jumlah')
     {
         // DB::enableQueryLog();
-        $masuk = (float) $this->getTotalMasukSampai($range1, $column, '<');
+        $masuk = BigDecimal::of($this->getTotalMasukSampai($range1, $column, '<'));
         // dd(DB::getQueryLog());
-        $keluar = (float) $this->getTotalKeluarSampai($range1, $column, '<');
-        $total = $masuk - $keluar;
-        // dd($total);
-        // if (abs($total) < 0.01) {
-        //     $total = 0.0;
-        // }
-        return $total;
+        $keluar = BigDecimal::of($this->getTotalKeluarSampai($range1, $column, '<'));
+        $total = $masuk->minus($keluar);
+        return $total->toScale(3)->toFloat();
     }
+
+    public function getSaldoAkhir($column = 'jumlah')
+    {
+        $now = now()->toDateString();
+        $masuk = BigDecimal::of($this->getTotalMasukSampai($now, $column));
+        $keluar = BigDecimal::of($this->getTotalKeluarSampai($now, $column));
+        $total = $masuk->minus($keluar);
+        return $total->toScale(3)->toFloat();
+    }
+
     public function getTotalMasukSampai($tanggal, $column = 'jumlah', $operator = '<=')
     {
         return DB::table('barang_masuk_item')

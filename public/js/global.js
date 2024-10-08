@@ -501,6 +501,7 @@ class Ryuna {
         const parser = new DOMParser();
         const doc = parser.parseFromString(table, "text/html");
         doc.querySelector(".xls-ignore")?.remove();
+        doc.querySelectorAll(".row-ignore").forEach((e) => e.remove());
         if ("." === ".") {
             doc.querySelectorAll(".digit").forEach((span) => {
                 const text = span.textContent

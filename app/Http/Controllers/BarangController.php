@@ -10,6 +10,8 @@ use App\Models\BarangMasuk;
 use App\Models\BarangMasukItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtml;
 
 class BarangController extends Controller
 {
@@ -262,25 +264,25 @@ class BarangController extends Controller
             $jumlah_keluar = $value->getTotalKeluar($request->periode);
             $jumlah_keluar_netto = $value->getTotalKeluar($request->periode, 'netto');
 
-            $saldo_akhir = $saldo_awal + $jumlah_masuk - $jumlah_keluar;
+            $saldo_akhir_jumlah = $saldo_awal + $jumlah_masuk - $jumlah_keluar;
             $saldo_akhir_netto = $saldo_awal_netto + $jumlah_masuk_netto - $jumlah_keluar_netto;
 
             $saldo_akhir = [
-                'jumlah' => $saldo_akhir,
+                'jumlah' => $saldo_akhir_jumlah,
                 'netto' => $saldo_akhir_netto,
             ];
 
             $enter = $this->notEmptyKg($saldo_awal) || $this->notEmptyKg($jumlah_masuk) ||
-                $this->notEmptyKg($jumlah_keluar) || $this->notEmptyKg($saldo_akhir) ||
+                $this->notEmptyKg($jumlah_keluar) || $this->notEmptyKg($saldo_akhir_jumlah) ||
                 $this->notEmptyKg($saldo_awal_netto) || $this->notEmptyKg($jumlah_masuk_netto) ||
                 $this->notEmptyKg($jumlah_keluar_netto) || $this->notEmptyKg($saldo_akhir_netto);
 
             $gudang = BarangMasuk::first()->gudang->nama;
             if ($enter) {
                 $laporan[] = [
-                    "barang_id" => $value->barang_id,
+                    "barang_id" => $value->uid,
                     "kode" => $value->kode,
-                    "nama_barang" => $value->nama_barang,
+                    "nama_barang" => "$value->nama $value->warna $value->panjang x $value->lebar x $value->tebal",
                     'satuan' => $satuan,
                     'saldo_awal' => [
                         'jumlah' => $saldo_awal,
@@ -297,89 +299,132 @@ class BarangController extends Controller
                     'saldo_akhir' => $saldo_akhir,
                     'gudang' => $gudang,
                 ];
+
+                $total_saldo_awal['jumlah'][$satuan] = ($total_saldo_awal['jumlah'][$satuan] ?? 0) + $saldo_awal;
+                $total_masuk['jumlah'][$satuan] = ($total_masuk['jumlah'][$satuan] ?? 0) + $jumlah_masuk;
+                $total_keluar['jumlah'][$satuan] = ($total_keluar['jumlah'][$satuan] ?? 0) + $jumlah_keluar;
+                $total_saldo_akhir['jumlah'][$satuan] = ($total_saldo_akhir['jumlah'][$satuan] ?? 0) + $saldo_akhir_jumlah;
+
+                $total_saldo_awal['netto'] += $saldo_awal_netto;
+                $total_masuk['netto'] += $jumlah_masuk_netto;
+                $total_keluar['netto'] += $jumlah_keluar_netto;
+                $total_saldo_akhir['netto'] += $saldo_akhir_netto;
             }
-
-            // $debug = [
-            //     'saldo_awal' => $saldo_awal,
-            //     'jumlah_masuk' => $jumlah_masuk,
-            //     'jumlah_keluar' => $jumlah_keluar,
-            //     'kode' => $value->kode,
-            // ];
-            // if ($value->kode == "7901MF124408") {
-            //     dd($debug);
-            // }
-
-            // $saldo_akhir = $saldo_awal + $jumlah_masuk + $jumlah_retur - $jumlah_keluar;
-            // $enter = $this->notEmptyKg($saldo_awal) || $this->notEmptyKg($jumlah_masuk) ||
-            //     $this->notEmptyKg($jumlah_keluar) || $this->notEmptyKg($jumlah_retur) ||
-            //     $this->notEmptyKg($saldo_akhir);
-
-
-
-            // $gudang = BahanMasukItem::first()->gudang->nama;
-
-            // if ($enter) {
-
-            //     $laporan[] = [
-            //         "bahan_uid" => $value->uid,
-            //         "kode" => $value->kode,
-            //         "nama_bahan" => $value->nama,
-            //         'satuan' => $satuan,
-            //         'saldo_awal' => $saldo_awal,
-            //         'jumlah_masuk' => $jumlah_masuk,
-            //         'jumlah_keluar' => $jumlah_keluar,
-            //         'jumlah_retur' => $jumlah_retur,
-            //         'saldo_akhir' => $saldo_akhir,
-            //         'gudang' => $gudang,
-            //     ];
-
-            //     if (array_key_exists($satuan, $total_saldo_awal)) {
-            //         $total_saldo_awal[$satuan] += $saldo_awal;
-            //     } else {
-            //         $total_saldo_awal[$satuan] = $saldo_awal;
-            //     }
-            //     if (array_key_exists($satuan, $total_jumlah_masuk)) {
-            //         $total_jumlah_masuk[$satuan] += $jumlah_masuk;
-            //     } else {
-            //         $total_jumlah_masuk[$satuan] = $jumlah_masuk;
-            //     }
-            //     if (array_key_exists($satuan, $total_jumlah_keluar)) {
-            //         $total_jumlah_keluar[$satuan] += $jumlah_keluar;
-            //     } else {
-            //         $total_jumlah_keluar[$satuan] = $jumlah_keluar;
-            //     }
-            //     if (array_key_exists($satuan, $total_jumlah_retur)) {
-            //         $total_jumlah_retur[$satuan] += $jumlah_retur;
-            //     } else {
-            //         $total_jumlah_retur[$satuan] = $jumlah_retur;
-            //     }
-            //     if (array_key_exists($satuan, $total_saldo_akhir)) {
-            //         $total_saldo_akhir[$satuan] += $saldo_akhir;
-            //     } else {
-            //         $total_saldo_akhir[$satuan] = $saldo_akhir;
-            //     }
-            // }
         }
 
-        ksort($total_saldo_awal);
-        ksort($total_jumlah_masuk);
-        ksort($total_jumlah_keluar);
-        ksort($total_jumlah_retur);
-        ksort($total_saldo_akhir);
+        ksort($total_saldo_awal['jumlah']);
+        ksort($total_masuk['jumlah']);
+        ksort($total_keluar['jumlah']);
+        ksort($total_saldo_akhir['jumlah']);
 
         $stat = [
-            'total_saldo_awal' => array_filter($total_saldo_awal, [$this, 'notEmptyKg']),
-            'total_jumlah_masuk' => array_filter($total_jumlah_masuk, [$this, 'notEmptyKg']),
-            'total_jumlah_keluar' => array_filter($total_jumlah_keluar, [$this, 'notEmptyKg']),
-            'total_jumlah_retur' => array_filter($total_jumlah_retur, [$this, 'notEmptyKg']),
-            'total_saldo_akhir' => array_filter($total_saldo_akhir, [$this, 'notEmptyKg']),
+            'total_saldo_awal' => array_filter($total_saldo_awal['jumlah'], [$this, 'notEmptyKg']),
+            'netto_saldo_awal' => $this->notEmptyKg($total_saldo_awal['netto']) ? $total_saldo_awal['netto'] : null,
+            'total_masuk' => array_filter($total_masuk['jumlah'], [$this, 'notEmptyKg']),
+            'netto_masuk' => $this->notEmptyKg($total_masuk['netto']) ? $total_masuk['netto'] : null,
+            'total_keluar' => array_filter($total_keluar['jumlah'], [$this, 'notEmptyKg']),
+            'netto_keluar' => $this->notEmptyKg($total_keluar['netto']) ? $total_keluar['netto'] : null,
+            'total_saldo_akhir' => array_filter($total_saldo_akhir['jumlah'], [$this, 'notEmptyKg']),
+            'netto_saldo_akhir' => $this->notEmptyKg($total_saldo_akhir['netto']) ? $total_saldo_akhir['netto'] : null,
         ];
-
-        // dd($stat);
 
         $from = Utils::formatTanggalIndo($date1);
         $to = Utils::formatTanggalIndo($date2);
 
-        return view('pages.laporan.mutasi_bahan.print', compact('laporan', 'stat', 'from', 'to'));
+        return view('pages.laporan.mutasi_barang.print', compact('laporan', 'stat', 'from', 'to'));
+    }
+
+    public function excel_mutasi_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
+    }
+
+    public function report_stok()
+    {
+        $barang = Barang::all();
+        return view('pages.laporan.stok_barang.list', compact('barang'));
+    }
+
+    public function result_stok_report(Request $request)
+    {
+        $req_barang = $request->barang;
+        $barang = Barang::orderBy('nama', 'ASC')->orderBy('warna', 'ASC')
+            ->orderBy('panjang', 'ASC')
+            ->orderBy('lebar', 'ASC')
+            ->orderBy('tebal', 'ASC');
+        if (!is_null($req_barang) && $req_barang != '') {
+            $barang->where('uid', $req_barang);
+        }
+        $barangs = $barang->get();
+
+        $total_jumlah = [];
+        $total_netto = '0';
+        foreach ($barangs as $value) {
+            $saldo_akhir = $value->getSaldoAkhir();
+            $saldo_akhir_netto = $value->getSaldoAkhir('netto');
+            $satuan = $value->satuan;
+
+            if (array_key_exists($satuan, $total_jumlah)) {
+                $total_jumlah[$satuan] += $saldo_akhir;
+            } else {
+                $total_jumlah[$satuan] = $saldo_akhir;
+            }
+            $total_netto += $saldo_akhir_netto;
+        }
+
+        ksort($total_jumlah);
+
+        $stat = [
+            'total_jumlah' => $total_jumlah,
+            'total_netto'  => $total_netto,
+        ];
+
+
+        $today = Utils::formatTanggalIndo(now()->toDateString());
+
+        return view('pages.laporan.stok_barang.print', compact('barangs', 'stat', 'today'));
+    }
+
+    public function excel_stok_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
 }

@@ -348,4 +348,74 @@ class BahanController extends Controller
 
         return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
     }
+
+    public function report_stok()
+    {
+        $bahan = Bahan::all();
+        return view('pages.laporan.stok_bahan.list', compact('bahan'));
+    }
+    public function result_stok_report(Request $request)
+    {
+        // dd($request->all());
+        // $request->validate([
+        //     'periode' => 'required',
+        // ]);
+        // $periode = explode(' - ', $request->periode);
+        // $date1 = date('Y-m-d', strtotime($periode[0]));
+        // $date2 = date('Y-m-d', strtotime($periode[1]));
+        $req_bahan = $request->bahan;
+        $laporan = [];
+        $bahan = Bahan::orderBy('nama');
+        if (!is_null($req_bahan) && $req_bahan != '') {
+            $bahan->where('uid', $req_bahan);
+        }
+        $bahans = $bahan->get();
+
+        $total = [];
+        foreach ($bahans as $value) {
+            $saldo_akhir = $value->getSaldoAkhir();
+            $satuan = $value->satuan;
+
+            if (array_key_exists($satuan, $total)) {
+                $total[$satuan] += $saldo_akhir;
+            } else {
+                $total[$satuan] = $saldo_akhir;
+            }
+        }
+
+        ksort($total);
+
+        $stat = [
+            'total' => array_filter($total, [$this, 'notEmptyKg']),
+        ];
+
+
+        $today = Utils::formatTanggalIndo(now()->toDateString());
+
+        return view('pages.laporan.stok_bahan.print', compact('bahans', 'stat', 'today'));
+    }
+
+    public function excel_stok_report(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'filename' => 'required',
+        ]);
+
+        $reader = new ReaderHtml();
+        $filename = $request->filename;
+        $spreadsheet = $reader->loadFromString($request->content);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $abjad = range('A', 'R');
+        foreach ($abjad as $key => $value) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($value)->setAutoSize(true);
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        $filepath = sys_get_temp_dir() . "/$filename.xls";
+        $writer->save($filepath);
+
+        return response()->download($filepath, $filename . '.xls')->deleteFileAfterSend(true);
+    }
 }

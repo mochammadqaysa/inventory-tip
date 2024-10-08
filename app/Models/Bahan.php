@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Utils;
+use Brick\Math\BigDecimal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -32,14 +33,22 @@ class Bahan extends Model
     public function getSaldoAwal($range1)
     {
         // DB::enableQueryLog();
-        $masuk = (float) $this->getTotalMasukSampai($range1, 'jumlah', '<');
-        $keluar = (float) $this->getTotalKeluarSampai($range1, 'jumlah', '<');
-        $retur = (float) $this->getTotalReturSampai($range1, 'jumlah', '<');
-        $total = ($masuk + $retur) - $keluar;
-        if (abs($total) < 0.01) {
-            $total = 0;
-        }
-        return $total;
+        $masuk = BigDecimal::of($this->getTotalMasukSampai($range1, 'jumlah', '<'));
+        $keluar = BigDecimal::of($this->getTotalKeluarSampai($range1, 'jumlah', '<'));
+        $retur = BigDecimal::of($this->getTotalReturSampai($range1, 'jumlah', '<'));
+        // $total =  ($masuk + $retur) - $keluar;
+        $total = $masuk->plus($retur)->minus($keluar);
+        return $total->toScale(3)->toFloat();
+    }
+
+    public function getSaldoAkhir()
+    {
+        $now = now()->toDateString();
+        $masuk = BigDecimal::of($this->getTotalMasukSampai($now));
+        $keluar = BigDecimal::of($this->getTotalKeluarSampai($now));
+        $retur = BigDecimal::of($this->getTotalReturSampai($now));
+        $total = $masuk->plus($retur)->minus($keluar);
+        return $total->toScale(3)->toFloat();
     }
 
     public function getTotalMasuk($periode, $column = 'jumlah')

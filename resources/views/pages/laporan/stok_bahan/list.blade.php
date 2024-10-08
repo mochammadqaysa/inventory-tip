@@ -1,14 +1,14 @@
 @extends('layouts.root')
 
-@section('title', 'Laporan Mutasi Bahan Baku')
+@section('title', 'Laporan Stok Bahan Baku')
 
 @section('breadcrum')
 <div class="col-lg-6 col-7">
   <h6 class="h2 text-white d-inline-block mb-0">Laporan</h6>
   <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/file-mutasi.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Mutasi Bahan Baku</li>
+      <li class="breadcrumb-item"><a href="#"><object type="image/svg+xml" data="{{asset('assets/img/brand/file-stokbahan.svg')}}" class="custom-icon custom-icon-small custom-icon-white"></object></a></li>
+      <li class="breadcrumb-item active" aria-current="page">Stok Bahan Baku</li>
     </ol>
   </nav>
 </div>
@@ -19,9 +19,9 @@
   <div class="col-xl-12 order-xl-1">
     <div class="card">
       <div class="card-body">
-        <form action="{{ route('result-report.mutasi-bahan') }}" method="GET" id="myForm">
+        <form action="{{ route('result-report.stok-bahan') }}" method="GET" id="myForm">
           <div class="row align-items-center" id="form-list">
-            <div class="form-group col-md-12">
+            {{-- <div class="form-group col-md-12">
               <label>Periode <span class="text-danger">*</span></label>
               <div class="input-group">
                 <input type="text" class="form-control" name="periode" id="periode" style="background-color: white;" placeholder="Pilih Periode" aria-describedby="validationPeriod" />
@@ -34,7 +34,7 @@
                   Mohon isi periode terlebih dahulu
                 </div>
               </div>
-            </div>
+            </div> --}}
 
             <!-- Bahan Dropdown -->
             <div class="form-group col-md-12">
@@ -64,31 +64,13 @@
 @section('scripts')
 <script>
 
-  function validateForm() {
-    let ids = [];
-    const periode = $('[name="periode"]').val();
-
-    // Clear previous validation states
-    $('[name="periode"]').removeClass('is-invalid');
-
-    // Validate 'periode' field
-    if (!periode) {
-      ids.push('periode');
-      $('#periode').addClass('is-invalid');
-    }
-
-    if (ids.length > 0) {
-      return false; // Validation failed, stop submission
-    }
-    return true; // Validation passed, allow submission
-  }
 
   // Bind the validate function to the form's submit event
   $(document).ready(function() {
     $('#myForm').on('submit', function(event) {
-      if (!validateForm()) {
-        event.preventDefault(); // Prevent form submission if validation fails
-      }
+    //     event.preventDefault(); // Prevent form submission if validation fails
+    //   if (!validateForm()) {
+    //   }
     });
   });
 

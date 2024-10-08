@@ -1,6 +1,6 @@
 @extends('layouts.root')
 
-@section('title', 'Laporan Mutasi Barang Jadi / Scrap')
+@section('title', 'Laporan Mutasi Barang Jadi')
 
 @section('breadcrum')
 <div class="col-lg-6 col-7">

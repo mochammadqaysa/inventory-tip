@@ -110,6 +110,14 @@ Route::prefix('inventory')->middleware(TiaraAuth::class)->group(function () {
         Route::get('/mutasi-barang', [BarangController::class, 'report_mutasi'])->name('report.mutasi-barang');
         Route::get('/mutasi-barang/result', [BarangController::class, 'result_mutasi_report'])->name('result-report.mutasi-barang');
         Route::post('/mutasi-barang/excel', [BarangController::class, 'excel_mutasi_report'])->name('excel-report.mutasi-barang');
+
+        Route::get('/stok-bahan', [BahanController::class, 'report_stok'])->name('report.stok-bahan');
+        Route::get('/stok-bahan/result', [BahanController::class, 'result_stok_report'])->name('result-report.stok-bahan');
+        Route::post('/stok-bahan/excel', [BahanController::class, 'excel_stok_report'])->name('excel-report.stok-bahan');
+
+        Route::get('/stok-barang', [BarangController::class, 'report_stok'])->name('report.stok-barang');
+        Route::get('/stok-barang/result', [BarangController::class, 'result_stok_report'])->name('result-report.stok-barang');
+        Route::post('/stok-barang/excel', [BarangController::class, 'excel_stok_report'])->name('excel-report.stok-barang');
     });
 
     Route::prefix('select2')->group(function () {
