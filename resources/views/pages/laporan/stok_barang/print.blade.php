@@ -20,12 +20,13 @@
       body {
           /* font-family: Arial, sans-serif; */
           font-family: 'Heebo', sans-serif;
-          font-size: 12px;
+          font-size: 18px;
           margin: 20px;
       }
       table {
-          width: 100%;
-          border-collapse: collapse;
+        margin-left: 10%;
+        width: 70%;
+        border-collapse: collapse;
       }
       th, td {
           border: 1px solid #9CA3AF;
@@ -36,7 +37,7 @@
           font-weight: bolder;
       }
       h1, h3 {
-          text-align: center;
+        
       }
       .total {
           font-weight: bold;
@@ -54,15 +55,9 @@
       }
 
       .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+        margin-left: 10%;
       }
 
-      .title {
-          margin-left: 500px;
-          text-align: center;
-      }
 
       .desc {
           text-align: right;
@@ -77,15 +72,16 @@
       <button size="small" id="hide" >Sembunyikan Stok Kosong</button>
   </div>
   <div class="header">
-      <div class="title">
-          <h1>LAPORAN STOK BARANG JADI</h1>
-          <h3>PT. Tiara Indoprima</h3>
-      </div>
-      <p class="desc">
-        LAMPIRAN XXII <br> PERATURAN DIREKTUR JENDERAL BEA DAN CUKAI <br> NOMOR PER-5/BC/2023 <br> TENTANG <br> TATA LAKSANA MONITORING DAN EVALUASI TERHADAP <br> PERUSAHAAN PENERIMA FASILITAS KEMUDAHAN IMPOR TUJUAN EKSPOR
+    <p class="desc">
+      LAMPIRAN XXII <br> PERATURAN DIREKTUR JENDERAL BEA DAN CUKAI <br> NOMOR PER-5/BC/2023 <br> TENTANG <br> TATA LAKSANA MONITORING DAN EVALUASI TERHADAP <br> PERUSAHAAN PENERIMA FASILITAS KEMUDAHAN IMPOR TUJUAN EKSPOR
     </p>
+    <div class="title">
+        <h1>LAPORAN STOK BARANG JADI</h1>
+        <h3>PT. Tiara Indoprima</h3>
+    </div>
+      
+    <p>Per Tanggal: {{$today}}</p>
   </div>
-  <p>Per Tanggal: {{$today}}</p>
   @php use App\Helpers\Utils; @endphp
   <table id="table">
       <thead>
