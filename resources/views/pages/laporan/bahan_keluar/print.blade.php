@@ -157,6 +157,7 @@
                 {{ $key }}<br>
             @endforeach
             </td>
+            <td></td>
         </tr>
       </tbody>
   </table>
