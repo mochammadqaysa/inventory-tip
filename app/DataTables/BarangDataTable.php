@@ -53,7 +53,9 @@ class BarangDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $button = [];
-        // $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>');
+        $button[] = Button::make('excel')->text('<span title="Export Excel"><i class="fa fa-file-excel"></i></span>')->exportOptions([
+            'columns' => ':not(:first-child)',
+        ]);
         $button[] = Button::raw('<i class="fa fa-plus"></i> Create Barang Jadi')->action('function() { create() }');
         return $this->builder()
             ->parameters([
